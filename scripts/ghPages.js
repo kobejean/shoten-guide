@@ -3,7 +3,7 @@ const ghpages = require('gh-pages');
 ghpages.publish(
     '__sapper__/export/shouten-guide',
     {
-        branch: 'main',
+        branch: 'gh-pages',
         repo: 'https://github.com/kobejean/shouten-guide.git',
         user: {
             name: 'Jean Atsumi Flaherty',

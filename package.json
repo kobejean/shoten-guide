@@ -3,9 +3,10 @@
   "description": "TODO",
   "version": "0.0.1",
   "scripts": {
+    "deploy": "npm run export && node ./scripts/ghPages.js",
     "dev": "sapper dev",
     "build": "sapper build --legacy",
-    "export": "sapper export --legacy",
+    "export": "sapper export --basepath shouten-guide --legacy",
     "start": "node __sapper__/build"
   },
   "dependencies": {
