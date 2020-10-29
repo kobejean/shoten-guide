@@ -1,38 +1,36 @@
 <script>
-	import { Router, Route, Link } from "svelte-routing";
-	import Home from "./routes/Home.svelte";
-	import About from "./routes/About.svelte";
-	export let url = ""; //This property is necessary declare to avoid ignore the Router
+	import { Router, Route } from "svelte-routing";
+	import { setupI18n, isLoadingLocale } from "./services/i18n/i18n";
+	import { locale, _ } from 'svelte-i18n';
+	import NavigationBar from './components/Layout/NavigationBar/NavigationBar.svelte';
+	import Home from './components/Pages/Home/Home.svelte';
+	import About from './components/Pages/About/About.svelte';
+	import NotFound from './components/Pages/NotFound/NotFound.svelte';
+
+	export let url = ''; // This property is necessary declare to avoid ignore the Router
+
+	setupI18n(url)
+	$: basepath = `/${$locale}`
+
 </script>
-<Router url="{url}">
-	<nav>
-	   <Link to="/">Home</Link>
-	   <Link to="about">About</Link>
-	</nav>
-	<div>
-		<Route path="about" component="{About}" />
-		<Route path="/"><Home /></Route>
-	</div>
-</Router>
+
+{#if !$isLoadingLocale}
+	<Router {basepath} {url}>
+		<NavigationBar />
+		<div>
+			<Route path='about'><About /></Route>
+			<Route path='/'><Home /></Route>
+			<Route><NotFound /></Route>
+		</div>
+	</Router>
+{:else}
+	Loading...
+{/if}
 
 <style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
+	:global(html) {
+		font-family: 'SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif;
 	}
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
+	@media (min-width: 640px) { }
 </style>

@@ -1,10 +1,10 @@
 <script>
-    let pageName="About Page";
+	import { _ } from "svelte-i18n";
 </script>
 
 <main>
-    <h1> {pageName}!</h1>
-    <p>Welcome this is my <b>{pageName}</b></p>
+    <h1>{$_('about.pageName')}</h1>
+    <p>{@html $_('about.welcome')}</p>
 </main>
 
 <style>

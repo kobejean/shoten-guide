@@ -3,6 +3,7 @@ import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
+import json from "@rollup/plugin-json";
 
 const isDev = Boolean(process.env.ROLLUP_WATCH);
 
@@ -14,25 +15,28 @@ export default [
 			sourcemap: true,
 			format: "iife",
 			name: "app",
-			file: "public/bundle.js"
+			file: "public/bundle.js",
+			inlineDynamicImports: true,
+			exports: "auto"
 		},
 		plugins: [
-		svelte({
-			hydratable: true,
-			css: css => {
-				css.write("bundle.css");
-			}
-		}),
-		resolve(),
-		commonjs(),
-		// App.js will be built after bundle.js, so we only need to watch that.
-		// By setting a small delay the Node server has a chance to restart before reloading.
-		isDev &&
-			livereload({
-				watch: "public/App.js",
-				delay: 200
+			json(),
+			svelte({
+				hydratable: true,
+				css: css => {
+					css.write("bundle.css");
+				}
 			}),
-		!isDev && terser()
+			resolve(),
+			commonjs(),
+			// App.js will be built after bundle.js, so we only need to watch that.
+			// By setting a small delay the Node server has a chance to restart before reloading.
+			isDev &&
+				livereload({
+					watch: "public/App.js",
+					delay: 200
+				}),
+			!isDev && terser()
 		]
 	},
 	// Server bundle
@@ -42,15 +46,18 @@ export default [
 			sourcemap: false,
 			format: "cjs",
 			name: "app",
-			file: "public/App.js"
+			file: "public/App.js",
+			inlineDynamicImports: true
 		},
 		plugins: [
-		svelte({
-			generate: "ssr"
-		}),
-		resolve(),
-		commonjs(),
-		!isDev && terser()
+			json(),
+			svelte({
+				hydratable: true,
+				generate: "ssr"
+			}),
+			resolve(),
+			commonjs(),
+			!isDev && terser()
 		]
 	}
 ];

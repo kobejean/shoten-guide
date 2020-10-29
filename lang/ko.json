@@ -1,0 +1,23 @@
+{
+    "about": {
+        "pageName": "페이지 정보",
+        "welcome": "<b>정보 페이지</b>에 오신 것을 환영합니다!"
+    },
+    "home": {
+        "pageName": "홈 페이지",
+        "welcome": "<b>홈페이지</b>에 오신 것을 환영합니다!"
+    },
+    "locale": {
+        "en": "English",
+        "ja": "日本語",
+        "ko": "한국어"
+    },
+    "nav": {
+        "about": "페이지",
+        "home": "홈"
+    },
+    "notFound": {
+        "errorMessage": "죄송합니다,이 페이지를 찾을 수 없습니다.",
+        "linkBackHome": "홈으로"
+    }
+}
