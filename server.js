@@ -1,5 +1,6 @@
 import path from 'path'
 import express from 'express'
+import { getServerSideI18nInitialization } from './src/services/i18n/serverSideData.js'
 import app from './public/App.js'
 
 const server = express();
@@ -8,15 +9,25 @@ server.use(express.static("public"));
 server.use(express.static("lang"));
 
 server.get("*", function(req, res) {
-  const { html } = app.render({ url: req.url });
+  const serverInit = getServerSideI18nInitialization(req)
+
+
+  const { html } = app.render({ serverInit });
+  console.log('serverInit', serverInit)
   
   res.type('html')
   res.write(`
 <!DOCTYPE html>
-<link rel='stylesheet' href='/bundle.css'>
-<link rel="icon" href="/favicon.png">
-<div id="app">${html}</div>
-<script src="/bundle.js"></script>
+<html lang="${serverInit.locale}">
+  <head>
+    <link rel='stylesheet' href='/bundle.css'>
+    <link rel="icon" href="/favicon.png">
+  </head>
+  <body>
+    <div id="app">${html}</div>
+    <script src="/bundle.js"></script>
+  <body>
+</html>
   `);
 
   res.end();
