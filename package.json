@@ -1,6 +1,7 @@
 {
   "name": "shouten-guide",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "start": "run-p watch server",
     "build": "rollup -c",

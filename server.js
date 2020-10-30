@@ -1,11 +1,11 @@
-const path = require("path");
-const express = require("express");
-const app = require("./public/App.js");
+import path from 'path'
+import express from 'express'
+import app from './public/App.js'
 
 const server = express();
 
-server.use(express.static(path.join(__dirname, "public")));
-server.use(express.static(path.join(__dirname, "lang")));
+server.use(express.static("public"));
+server.use(express.static("lang"));
 
 server.get("*", function(req, res) {
   const { html } = app.render({ url: req.url });

@@ -1,11 +1,11 @@
 {
     "about": {
-        "pageName": "페이지 정보",
+        "pageName": "정보 페이지",
         "welcome": "<b>정보 페이지</b>에 오신 것을 환영합니다!"
     },
     "home": {
         "pageName": "홈 페이지",
-        "welcome": "<b>홈페이지</b>에 오신 것을 환영합니다!"
+        "welcome": "<b>홈 페이지</b>에 오신 것을 환영합니다!"
     },
     "locale": {
         "en": "English",

@@ -1,5 +1,3 @@
-'use strict';
-
 function noop() { }
 function run(fn) {
     return fn();
@@ -4510,7 +4508,7 @@ p('ja', () => Promise.resolve().then(function () { return ja$1; }));
 p('ko', () => Promise.resolve().then(function () { return ko$1; }));
 
 let currentDictionary = {};
-i.subscribe(newDictionary => console.log(currentDictionary = newDictionary));
+i.subscribe(newDictionary => currentDictionary = newDictionary);
 
 const setupI18n = async url => {
     // set initial pathname to be used when server side rendering
@@ -4563,15 +4561,14 @@ const getPathname = () => (typeof window !== 'undefined' && window.location.path
 const serverSidePathname = writable();
 
 k.subscribe(newLocale => {
-    console.log('newLocale', newLocale);
     if (newLocale && getAvailableLocaleFromPathname() !== newLocale) {
         const pathname = getPathname();
         const newPath = relativePathToReplaceLocale(pathname, newLocale);
         navigate(newPath, { replace: false });
+
         if (typeof window === 'undefined') {
             serverSidePathname.set(newPath);
         }
-        console.log('navigate', newPath);
     }
 });
 
@@ -4588,13 +4585,6 @@ const LocaleLink = create_ssr_component(($$result, $$props, $$bindings, slots) =
 	if ($$props.getProps === void 0 && $$bindings.getProps && getProps !== void 0) $$bindings.getProps(getProps);
 	$location = get_store_value(location);
 	let to;
-
-	 {
-		{
-			console.log("$location.pathname", $location.pathname, locale, relativePathToReplaceLocale($location.pathname, locale));
-		}
-	}
-
 	to = relativePathToReplaceLocale($location.pathname, locale);
 
 	return `${validate_component(Link, "Link").$$render($$result, { to, getProps }, {}, {
@@ -4782,12 +4772,12 @@ var ja$1 = /*#__PURE__*/Object.freeze({
 });
 
 var about$2 = {
-	pageName: "페이지 정보",
+	pageName: "정보 페이지",
 	welcome: "<b>정보 페이지</b>에 오신 것을 환영합니다!"
 };
 var home$2 = {
 	pageName: "홈 페이지",
-	welcome: "<b>홈페이지</b>에 오신 것을 환영합니다!"
+	welcome: "<b>홈 페이지</b>에 오신 것을 환영합니다!"
 };
 var locale$2 = {
 	en: "English",
@@ -4820,4 +4810,4 @@ var ko$1 = /*#__PURE__*/Object.freeze({
     'default': ko
 });
 
-module.exports = App;
+export default App;

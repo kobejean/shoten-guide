@@ -5305,7 +5305,7 @@
     p('ko', () => Promise.resolve().then(function () { return ko$1; }));
 
     let currentDictionary = {};
-    i.subscribe(newDictionary => console.log(currentDictionary = newDictionary));
+    i.subscribe(newDictionary => currentDictionary = newDictionary);
 
     const setupI18n = async url => {
         // set initial pathname to be used when server side rendering
@@ -5358,15 +5358,14 @@
     const serverSidePathname = writable();
 
     k.subscribe(newLocale => {
-        console.log('newLocale', newLocale);
         if (newLocale && getAvailableLocaleFromPathname() !== newLocale) {
             const pathname = getPathname();
             const newPath = relativePathToReplaceLocale(pathname, newLocale);
             navigate(newPath, { replace: false });
+
             if (typeof window === 'undefined') {
                 serverSidePathname.set(newPath);
             }
-            console.log('navigate', newPath);
         }
     });
 
@@ -5473,7 +5472,8 @@
     	const location = getContext(LOCATION);
     	component_subscribe($$self, location, value => $$invalidate(7, $location = value));
 
-    	function onClick() {
+    	function onClick(event) {
+    		event.preventDefault();
     		k.set(locale);
     	}
 
@@ -5486,12 +5486,6 @@
     	let to;
 
     	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*$location, locale*/ 144) {
-    			 {
-    				console.log("$location.pathname", $location.pathname, locale, relativePathToReplaceLocale($location.pathname, locale));
-    			}
-    		}
-
     		if ($$self.$$.dirty & /*$location, locale*/ 144) {
     			 $$invalidate(1, to = relativePathToReplaceLocale($location.pathname, locale));
     		}
@@ -6556,12 +6550,12 @@
     });
 
     var about$2 = {
-    	pageName: "페이지 정보",
+    	pageName: "정보 페이지",
     	welcome: "<b>정보 페이지</b>에 오신 것을 환영합니다!"
     };
     var home$2 = {
     	pageName: "홈 페이지",
-    	welcome: "<b>홈페이지</b>에 오신 것을 환영합니다!"
+    	welcome: "<b>홈 페이지</b>에 오신 것을 환영합니다!"
     };
     var locale$2 = {
     	en: "English",

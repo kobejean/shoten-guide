@@ -44,7 +44,7 @@ export default [
 		input: "src/App.svelte",
 		output: {
 			sourcemap: false,
-			format: "cjs",
+			format: "es",
 			name: "app",
 			file: "public/App.js",
 			inlineDynamicImports: true

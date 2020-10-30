@@ -20,7 +20,7 @@ register('ja', () => import(`../../../lang/ja.json`))
 register('ko', () => import(`../../../lang/ko.json`))
 
 let currentDictionary = {}
-dictionary.subscribe(newDictionary => console.log(currentDictionary = newDictionary))
+dictionary.subscribe(newDictionary => currentDictionary = newDictionary)
 
 export const setupI18n = async url => {
     // set initial pathname to be used when server side rendering
@@ -73,14 +73,13 @@ const getPathname = () => (typeof window !== 'undefined' && window.location.path
 export const serverSidePathname = writable()
 
 locale.subscribe(newLocale => {
-    console.log('newLocale', newLocale)
     if (newLocale && getAvailableLocaleFromPathname() !== newLocale) {
         const pathname = getPathname()
         const newPath = relativePathToReplaceLocale(pathname, newLocale)
         navigate(newPath, { replace: false })
+
         if (typeof window === 'undefined') {
             serverSidePathname.set(newPath)
         }
-        console.log('navigate', newPath)
     }
 })
