@@ -7,6 +7,9 @@
     export let locale = ""
     export let getProps
     const location = getContext(LOCATION)
+    $: {
+        console.log('$location.pathname', $location.pathname, locale, relativePathToReplaceLocale($location.pathname, locale))
+    }
     $: to = relativePathToReplaceLocale($location.pathname, locale)
 
     function onClick() {

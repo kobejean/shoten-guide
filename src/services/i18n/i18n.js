@@ -7,7 +7,7 @@ import {
     _,
     isLoading,
 } from "svelte-i18n"
-import { derived } from 'svelte/store'
+import { derived, writable } from 'svelte/store'
 import { navigate } from "svelte-routing"
 
 const FALLBACK_LOCAL = 'ja'
@@ -24,7 +24,10 @@ dictionary.subscribe(newDictionary => console.log(currentDictionary = newDiction
 
 export const setupI18n = async url => {
     // set initial pathname to be used when server side rendering
-    if (url && url !== '') initialPathname = url
+    if (url && url !== '') {
+        initialPathname = url
+        serverSidePathname.set(url)
+    }
 
     const initialLocale = getAvailableLocaleFromPathname() || getAvailableLocaleFromNavigator() || FALLBACK_LOCAL
     init({ initialLocale, fallbackLocale: FALLBACK_LOCAL })
@@ -51,8 +54,8 @@ export const relativePathToReplaceLocale = (fromPath, locale) => {
     return relativePath(fromPath, newPath)
 }
 
-const getAvailableLocaleFromPathname = () => {
-    const match = LOCALE_PATHNAME_REGEX.exec(getPathname())
+export const getAvailableLocaleFromPathname = (pathname) => {
+    const match = LOCALE_PATHNAME_REGEX.exec(pathname || getPathname())
     const matchedLocale = match && match[1]
     return currentDictionary[matchedLocale] && matchedLocale
 }
@@ -67,10 +70,17 @@ const getAvailableLocaleFromNavigator = () => {
 let initialPathname;
 const getPathname = () => (typeof window !== 'undefined' && window.location.pathname) || initialPathname
 
+export const serverSidePathname = writable()
+
 locale.subscribe(newLocale => {
+    console.log('newLocale', newLocale)
     if (newLocale && getAvailableLocaleFromPathname() !== newLocale) {
         const pathname = getPathname()
         const newPath = relativePathToReplaceLocale(pathname, newLocale)
-        navigate(newPath, { replace: true })
+        navigate(newPath, { replace: false })
+        if (typeof window === 'undefined') {
+            serverSidePathname.set(newPath)
+        }
+        console.log('navigate', newPath)
     }
 })
