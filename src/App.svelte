@@ -25,16 +25,16 @@
 	</Router>
 {/if}
 
-<style>
+<style lang="scss">
 	:global(html) {
 		font-family: 'SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif;
 	}
 
     main {
-        text-align: center;
-        padding: 1em;
-        max-width: 240px;
-        margin: 0 auto;
+		text-align: center;
+		padding: 1em;
+		max-width: 240px;
+		margin: 0 auto;
     }
 
     @media (min-width: 640px) {

@@ -5,7 +5,7 @@
 <h1>{$_('home.pageName')}</h1>
 <p>{@html $_('home.welcome')}</p>
 
-<style>
+<style lang="scss">
     h1 {
         color: #ff3e00;
         text-transform: uppercase;

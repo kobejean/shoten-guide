@@ -1,4 +1,5 @@
 import svelte from "rollup-plugin-svelte";
+import sveltePreprocess from 'svelte-preprocess'
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
 import livereload from "rollup-plugin-livereload";
@@ -7,10 +8,13 @@ import json from "@rollup/plugin-json";
 
 const isDev = Boolean(process.env.ROLLUP_WATCH);
 
+const preprocess = sveltePreprocess()
+
 const browserBundlePlugins = [
 	json(),
 	svelte({
 		hydratable: true,
+		preprocess,
 		css: css => {
 			css.write("bundle.css");
 		}
@@ -68,6 +72,7 @@ export default [
 			json(),
 			svelte({
 				hydratable: true,
+				preprocess,
 				generate: "ssr"
 			}),
 			resolve(),
