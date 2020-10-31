@@ -5301,23 +5301,21 @@
     ***************************************************************************** */function h(n,e){var t={};for(var o in n)Object.prototype.hasOwnProperty.call(n,o)&&e.indexOf(o)<0&&(t[o]=n[o]);if(null!=n&&"function"==typeof Object.getOwnPropertySymbols){var r=0;for(o=Object.getOwnPropertySymbols(n);r<o.length;r++)e.indexOf(o[r])<0&&Object.prototype.propertyIsEnumerable.call(n,o[r])&&(t[o[r]]=n[o[r]]);}return t}const y={fallbackLocale:null,initialLocale:null,loadingDelay:200,formats:{number:{scientific:{notation:"scientific"},engineering:{notation:"engineering"},compactLong:{notation:"compact",compactDisplay:"long"},compactShort:{notation:"compact",compactDisplay:"short"}},date:{short:{month:"numeric",day:"numeric",year:"2-digit"},medium:{month:"short",day:"numeric",year:"numeric"},long:{month:"long",day:"numeric",year:"numeric"},full:{weekday:"long",month:"long",day:"numeric",year:"numeric"}},time:{short:{hour:"numeric",minute:"numeric"},medium:{hour:"numeric",minute:"numeric",second:"numeric"},long:{hour:"numeric",minute:"numeric",second:"numeric",timeZoneName:"short"},full:{hour:"numeric",minute:"numeric",second:"numeric",timeZoneName:"short"}}},warnOnMissingMessages:!0};function O(){return y}const j=writable(!1);let L;const k=writable(null);function x(n,e){return 0===e.indexOf(n)&&n!==e}function E(n,e){return n===e||x(n,e)||x(e,n)}function D(n){const e=n.lastIndexOf("-");if(e>0)return n.slice(0,e);const{fallbackLocale:t}=O();return t&&!E(n,t)?t:null}function I(n){const e=n.split("-").map((n,e,t)=>t.slice(0,e+1).join("-")),{fallbackLocale:t}=O();return t&&!E(n,t)?e.concat(I(t)):e}function N(){return L}k.subscribe(n=>{L=n,"undefined"!=typeof window&&document.documentElement.setAttribute("lang",n);});const P=k.set;k.set=n=>{if(s(n)&&d(n)){const{loadingDelay:e}=O();let t;return "undefined"!=typeof window&&null!=N()&&e?t=window.setTimeout(()=>j.set(!0),e):j.set(!0),b(n).then(()=>{P(n);}).finally(()=>{clearTimeout(t),j.set(!1);})}return P(n)},k.update=n=>P(n(L));const Z={},C=(n,e)=>{if(null==e)return null;const t=l(e,n);return t||C(n,D(e))},J=(n,e)=>{if(e in Z&&n in Z[e])return Z[e][n];const t=C(n,e);return t?((n,e,t)=>t?(e in Z||(Z[e]={}),n in Z[e]||(Z[e][n]=t),t):t)(n,e,t):null},U=n=>{const e=Object.create(null);return t=>{const o=JSON.stringify(t);return o in e?e[o]:e[o]=n(t)}},_=(n,e)=>{const{formats:t}=O();if(n in t&&e in t[n])return t[n][e];throw new Error(`[svelte-i18n] Unknown "${e}" ${n} format.`)},q=U(n=>{var{locale:e,format:t}=n,o=h(n,["locale","format"]);if(null==e)throw new Error('[svelte-i18n] A "locale" must be set to format numbers');return t&&(o=_("number",t)),new Intl.NumberFormat(e,o)}),B=U(n=>{var{locale:e,format:t}=n,o=h(n,["locale","format"]);if(null==e)throw new Error('[svelte-i18n] A "locale" must be set to format dates');return t?o=_("date",t):0===Object.keys(o).length&&(o=_("date","short")),new Intl.DateTimeFormat(e,o)}),G=U(n=>{var{locale:e,format:t}=n,o=h(n,["locale","format"]);if(null==e)throw new Error('[svelte-i18n] A "locale" must be set to format time values');return t?o=_("time",t):0===Object.keys(o).length&&(o=_("time","short")),new Intl.DateTimeFormat(e,o)}),H=(n={})=>{var{locale:e=N()}=n,t=h(n,["locale"]);return q(Object.assign({locale:e},t))},K=(n={})=>{var{locale:e=N()}=n,t=h(n,["locale"]);return B(Object.assign({locale:e},t))},Q=(n={})=>{var{locale:e=N()}=n,t=h(n,["locale"]);return G(Object.assign({locale:e},t))},R=U((n,e=N())=>new IntlMessageFormat(n,e,O().formats)),V=(n,e={})=>{"object"==typeof n&&(n=(e=n).id);const{values:t,locale:o=N(),default:r}=e;if(null==o)throw new Error("[svelte-i18n] Cannot format a message without first setting the initial locale.");const i=J(n,o);return i?t?R(i,o).format(t):i:(O().warnOnMissingMessages&&console.warn(`[svelte-i18n] The message "${n}" was not found in "${I(o).join('", "')}".${d(N())?"\n\nNote: there are at least one loader still registered to this locale that wasn't executed.":""}`),r||n)},W=(n,e)=>Q(e).format(n),X=(n,e)=>K(e).format(n),Y=(n,e)=>H(e).format(n),nn=derived([k,i],()=>V),en=derived([k],()=>W),tn=derived([k],()=>X),on=derived([k],()=>Y);
 
     const FALLBACK_LOCAL = 'ja';
-    const LOCALE_PATHNAME_REGEX = /^\/(.*?)([/]|$)/;
-    const SUPPORTED_LOCALE = {
-        en: true,
-        ja: true,
-        ko: true,
-    };
+    // NOTE: do not forget to register locales manually in i18n.js with `register('en', () => import(`../../../lang/en.json`))` etc
+    const SUPPORTED_LOCALE = new Set(['en', 'ja', 'ko']);
 
-    const getAvailableLocaleFromPathname = (pathname) => {
+    const LOCALE_PATHNAME_REGEX = /^\/(.*?)([/]|$)/;
+
+    const getAvailableLocaleFromPathname = pathname => {
         const match = LOCALE_PATHNAME_REGEX.exec(pathname);
         const matchedLocale = match && match[1];
-        return SUPPORTED_LOCALE[matchedLocale] && matchedLocale
+        return SUPPORTED_LOCALE.has(matchedLocale) && matchedLocale
     };
 
-    const getAvailableLocaleFromNavigator = (lang) => {
+    const getAvailableLocaleFromNavigator = lang => {
         // just use prefix to keep simple
         lang = lang && lang.split('-')[0].toLocaleLowerCase();
-        return SUPPORTED_LOCALE[lang] && lang
+        return SUPPORTED_LOCALE.has(lang) && lang
     };
 
     const getPathname = (req) => (typeof window !== 'undefined' && location.pathname) || (req && req.url);
@@ -5345,35 +5343,51 @@
         return relativePath(fromPath, newPath)
     };
 
+    const IS_SERVER_SIDE = typeof window === 'undefined';
+
     // register languages
     p('en', () => Promise.resolve().then(function () { return en$2; }));
     p('ja', () => Promise.resolve().then(function () { return ja$1; }));
     p('ko', () => Promise.resolve().then(function () { return ko$1; }));
 
     const setupI18n = (serverInit) => {
+
+        if (IS_SERVER_SIDE && !get_store_value(k)) {
+            // load all languages on first load
+            preloadLanguageData();
+        }
+
         const initialLocale = (serverInit && serverInit.locale) || getInitialLocale();
         k.set(initialLocale);
 
-        const requestPathname = writable(typeof window === 'undefined' ? serverInit.pathname : null);
-        onDestroy(k.subscribe(handleLocaleChange(requestPathname)));
+        const serverStore = writable(IS_SERVER_SIDE ? serverInit : {});
+        onDestroy(k.subscribe(handleLocaleChange(serverStore)));
 
-        return { requestPathname, locale: k }
+        return { serverStore, locale: k }
     };
 
-    const handleLocaleChange = requestPathname => newLocale => {
+    const preloadLanguageData = () => {
+        if (get_store_value(k)) return // 
+        console.log('Preloading language data...');
+        SUPPORTED_LOCALE.forEach(_locale => k.set(_locale));
+    };
+
+    const handleLocaleChange = serverStore => newLocale => {
         if (newLocale) {
-            const basePath = (typeof window !== 'undefined' && location.pathname) || get_store_value(requestPathname);
+            const basePath = (!IS_SERVER_SIDE && location.pathname) || get_store_value(serverStore).pathname;
             const newRelativePath = relativePathToReplaceLocale(basePath, newLocale);
             navigate(newRelativePath, { replace: false });
 
-            if (typeof window === 'undefined') {
-                requestPathname.set(resolve(newRelativePath, basePath));
+            if (IS_SERVER_SIDE) {
+                // update server store if server side
+                const pathname = resolve(newRelativePath, basePath);
+                serverStore.set({ pathname, locale: newLocale });
             }
         }
     };
 
-    const isLoadingLocale = derived([j, k, i], ([$isLoading, $locale, $dictionary]) => {
-        return typeof $locale !== 'string' || $isLoading || !$dictionary || !$dictionary[$locale]
+    const isLoadingLocale = derived([j, k], ([$isLoading, $locale]) => {
+        return typeof $locale !== 'string' || $isLoading
     });
 
     /* src/components/Shared/LocaleLink.svelte generated by Svelte v3.29.4 */
@@ -6067,7 +6081,7 @@
     	router = new Router({
     			props: {
     				basepath: /*basepath*/ ctx[1],
-    				url: /*$requestPathname*/ ctx[4],
+    				url: /*$serverStore*/ ctx[4].pathname,
     				$$slots: { default: [create_default_slot$3] },
     				$$scope: { ctx }
     			}
@@ -6087,7 +6101,7 @@
     		p(ctx, dirty) {
     			const router_changes = {};
     			if (dirty & /*basepath*/ 2) router_changes.basepath = /*basepath*/ ctx[1];
-    			if (dirty & /*$requestPathname*/ 16) router_changes.url = /*$requestPathname*/ ctx[4];
+    			if (dirty & /*$serverStore*/ 16) router_changes.url = /*$serverStore*/ ctx[4].pathname;
 
     			if (dirty & /*$$scope*/ 128) {
     				router_changes.$$scope = { dirty, ctx };
@@ -6206,7 +6220,7 @@
     	};
     }
 
-    // (18:1) <Router {basepath} url={$requestPathname} >
+    // (18:1) <Router {basepath} url={$serverStore.pathname} >
     function create_default_slot$3(ctx) {
     	let navigationbar;
     	let t0;
@@ -6336,6 +6350,7 @@
     	let t0;
     	let t1;
     	let t2;
+    	let t3_value = /*$serverStore*/ ctx[4].pathname + "";
     	let t3;
     	let t4;
     	let t5;
@@ -6363,7 +6378,7 @@
     			t0 = text("\nbasepath: ");
     			t1 = text(/*basepath*/ ctx[1]);
     			t2 = text("\n$serverSidePathname: ");
-    			t3 = text(/*$requestPathname*/ ctx[4]);
+    			t3 = text(t3_value);
     			t4 = text("\n$locale: ");
     			t5 = text(/*$locale*/ ctx[2]);
     			t6 = text("\nserverInit: ");
@@ -6376,7 +6391,7 @@
     			t0 = claim_text(nodes, "\nbasepath: ");
     			t1 = claim_text(nodes, /*basepath*/ ctx[1]);
     			t2 = claim_text(nodes, "\n$serverSidePathname: ");
-    			t3 = claim_text(nodes, /*$requestPathname*/ ctx[4]);
+    			t3 = claim_text(nodes, t3_value);
     			t4 = claim_text(nodes, "\n$locale: ");
     			t5 = claim_text(nodes, /*$locale*/ ctx[2]);
     			t6 = claim_text(nodes, "\nserverInit: ");
@@ -6424,7 +6439,7 @@
     			}
 
     			if (!current || dirty & /*basepath*/ 2) set_data(t1, /*basepath*/ ctx[1]);
-    			if (!current || dirty & /*$requestPathname*/ 16) set_data(t3, /*$requestPathname*/ ctx[4]);
+    			if ((!current || dirty & /*$serverStore*/ 16) && t3_value !== (t3_value = /*$serverStore*/ ctx[4].pathname + "")) set_data(t3, t3_value);
     			if (!current || dirty & /*$locale*/ 4) set_data(t5, /*$locale*/ ctx[2]);
     			if ((!current || dirty & /*serverInit*/ 1) && t7_value !== (t7_value = (/*serverInit*/ ctx[0] && /*serverInit*/ ctx[0].pathname) + "")) set_data(t7, t7_value);
     			if ((!current || dirty & /*serverInit*/ 1) && t9_value !== (t9_value = (/*serverInit*/ ctx[0] && /*serverInit*/ ctx[0].locale) + "")) set_data(t9, t9_value);
@@ -6457,11 +6472,11 @@
     function instance$8($$self, $$props, $$invalidate) {
     	let $locale;
     	let $isLoadingLocale;
-    	let $requestPathname;
+    	let $serverStore;
     	component_subscribe($$self, isLoadingLocale, $$value => $$invalidate(3, $isLoadingLocale = $$value));
     	let { serverInit } = $$props; // This property is necessary declare to avoid ignore the Router
-    	const { requestPathname, locale } = setupI18n(serverInit);
-    	component_subscribe($$self, requestPathname, value => $$invalidate(4, $requestPathname = value));
+    	const { serverStore, locale } = setupI18n(serverInit);
+    	component_subscribe($$self, serverStore, value => $$invalidate(4, $serverStore = value));
     	component_subscribe($$self, locale, value => $$invalidate(2, $locale = value));
 
     	$$self.$$set = $$props => {
@@ -6481,8 +6496,8 @@
     		basepath,
     		$locale,
     		$isLoadingLocale,
-    		$requestPathname,
-    		requestPathname,
+    		$serverStore,
+    		serverStore,
     		locale
     	];
     }

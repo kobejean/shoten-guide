@@ -1,10 +1,5 @@
-export const FALLBACK_LOCAL = 'ja'
+import { FALLBACK_LOCAL, SUPPORTED_LOCALE } from './localeDefinition.js'
 const LOCALE_PATHNAME_REGEX = /^\/(.*?)([/]|$)/
-const SUPPORTED_LOCALE = {
-    en: true,
-    ja: true,
-    ko: true,
-}
 
 export const getServerSideI18nInitialization = (req) => {
     const locale = getInitialLocale(req)
@@ -14,16 +9,16 @@ export const getServerSideI18nInitialization = (req) => {
     }
 }
 
-export const getAvailableLocaleFromPathname = (pathname) => {
+const getAvailableLocaleFromPathname = pathname => {
     const match = LOCALE_PATHNAME_REGEX.exec(pathname)
     const matchedLocale = match && match[1]
-    return SUPPORTED_LOCALE[matchedLocale] && matchedLocale
+    return SUPPORTED_LOCALE.has(matchedLocale) && matchedLocale
 }
 
-export const getAvailableLocaleFromNavigator = (lang) => {
+const getAvailableLocaleFromNavigator = lang => {
     // just use prefix to keep simple
     lang = lang && lang.split('-')[0].toLocaleLowerCase()
-    return SUPPORTED_LOCALE[lang] && lang
+    return SUPPORTED_LOCALE.has(lang) && lang
 }
 
 const getPathname = (req) => (typeof window !== 'undefined' && location.pathname) || (req && req.url)

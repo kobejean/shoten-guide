@@ -8,14 +8,14 @@
 
 	export let serverInit; // This property is necessary declare to avoid ignore the Router
 
-	const { requestPathname, locale } = setupI18n(serverInit)
+	const { serverStore, locale } = setupI18n(serverInit)
 
 	$: basepath = '/' + ($locale || '')
 
 </script>
 
 {#if !$isLoadingLocale}
-	<Router {basepath} url={$requestPathname} >
+	<Router {basepath} url={$serverStore.pathname} >
 		<NavigationBar />
 		<main>
 			<Route path='about'><About /></Route>
@@ -27,7 +27,7 @@
 	Loading...
 {/if}
 basepath: {basepath}
-$serverSidePathname: {$requestPathname}
+$serverSidePathname: {$serverStore.pathname}
 $locale: {$locale}
 serverInit: {serverInit && serverInit.pathname} {serverInit && serverInit.locale}
 

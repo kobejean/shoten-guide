@@ -4499,23 +4499,21 @@ PERFORMANCE OF THIS SOFTWARE.
 ***************************************************************************** */function h(n,e){var t={};for(var o in n)Object.prototype.hasOwnProperty.call(n,o)&&e.indexOf(o)<0&&(t[o]=n[o]);if(null!=n&&"function"==typeof Object.getOwnPropertySymbols){var r=0;for(o=Object.getOwnPropertySymbols(n);r<o.length;r++)e.indexOf(o[r])<0&&Object.prototype.propertyIsEnumerable.call(n,o[r])&&(t[o[r]]=n[o[r]]);}return t}const y={fallbackLocale:null,initialLocale:null,loadingDelay:200,formats:{number:{scientific:{notation:"scientific"},engineering:{notation:"engineering"},compactLong:{notation:"compact",compactDisplay:"long"},compactShort:{notation:"compact",compactDisplay:"short"}},date:{short:{month:"numeric",day:"numeric",year:"2-digit"},medium:{month:"short",day:"numeric",year:"numeric"},long:{month:"long",day:"numeric",year:"numeric"},full:{weekday:"long",month:"long",day:"numeric",year:"numeric"}},time:{short:{hour:"numeric",minute:"numeric"},medium:{hour:"numeric",minute:"numeric",second:"numeric"},long:{hour:"numeric",minute:"numeric",second:"numeric",timeZoneName:"short"},full:{hour:"numeric",minute:"numeric",second:"numeric",timeZoneName:"short"}}},warnOnMissingMessages:!0};function O(){return y}const j=writable(!1);let L;const k=writable(null);function x(n,e){return 0===e.indexOf(n)&&n!==e}function E(n,e){return n===e||x(n,e)||x(e,n)}function D(n){const e=n.lastIndexOf("-");if(e>0)return n.slice(0,e);const{fallbackLocale:t}=O();return t&&!E(n,t)?t:null}function I(n){const e=n.split("-").map((n,e,t)=>t.slice(0,e+1).join("-")),{fallbackLocale:t}=O();return t&&!E(n,t)?e.concat(I(t)):e}function N(){return L}k.subscribe(n=>{L=n,"undefined"!=typeof window&&document.documentElement.setAttribute("lang",n);});const P=k.set;k.set=n=>{if(s(n)&&d(n)){const{loadingDelay:e}=O();let t;return "undefined"!=typeof window&&null!=N()&&e?t=window.setTimeout(()=>j.set(!0),e):j.set(!0),b(n).then(()=>{P(n);}).finally(()=>{clearTimeout(t),j.set(!1);})}return P(n)},k.update=n=>P(n(L));const Z={},C=(n,e)=>{if(null==e)return null;const t=l(e,n);return t||C(n,D(e))},J=(n,e)=>{if(e in Z&&n in Z[e])return Z[e][n];const t=C(n,e);return t?((n,e,t)=>t?(e in Z||(Z[e]={}),n in Z[e]||(Z[e][n]=t),t):t)(n,e,t):null},U=n=>{const e=Object.create(null);return t=>{const o=JSON.stringify(t);return o in e?e[o]:e[o]=n(t)}},_=(n,e)=>{const{formats:t}=O();if(n in t&&e in t[n])return t[n][e];throw new Error(`[svelte-i18n] Unknown "${e}" ${n} format.`)},q=U(n=>{var{locale:e,format:t}=n,o=h(n,["locale","format"]);if(null==e)throw new Error('[svelte-i18n] A "locale" must be set to format numbers');return t&&(o=_("number",t)),new Intl.NumberFormat(e,o)}),B=U(n=>{var{locale:e,format:t}=n,o=h(n,["locale","format"]);if(null==e)throw new Error('[svelte-i18n] A "locale" must be set to format dates');return t?o=_("date",t):0===Object.keys(o).length&&(o=_("date","short")),new Intl.DateTimeFormat(e,o)}),G=U(n=>{var{locale:e,format:t}=n,o=h(n,["locale","format"]);if(null==e)throw new Error('[svelte-i18n] A "locale" must be set to format time values');return t?o=_("time",t):0===Object.keys(o).length&&(o=_("time","short")),new Intl.DateTimeFormat(e,o)}),H=(n={})=>{var{locale:e=N()}=n,t=h(n,["locale"]);return q(Object.assign({locale:e},t))},K=(n={})=>{var{locale:e=N()}=n,t=h(n,["locale"]);return B(Object.assign({locale:e},t))},Q=(n={})=>{var{locale:e=N()}=n,t=h(n,["locale"]);return G(Object.assign({locale:e},t))},R=U((n,e=N())=>new IntlMessageFormat(n,e,O().formats)),V=(n,e={})=>{"object"==typeof n&&(n=(e=n).id);const{values:t,locale:o=N(),default:r}=e;if(null==o)throw new Error("[svelte-i18n] Cannot format a message without first setting the initial locale.");const i=J(n,o);return i?t?R(i,o).format(t):i:(O().warnOnMissingMessages&&console.warn(`[svelte-i18n] The message "${n}" was not found in "${I(o).join('", "')}".${d(N())?"\n\nNote: there are at least one loader still registered to this locale that wasn't executed.":""}`),r||n)},W=(n,e)=>Q(e).format(n),X=(n,e)=>K(e).format(n),Y=(n,e)=>H(e).format(n),nn=derived([k,i],()=>V),en=derived([k],()=>W),tn=derived([k],()=>X),on=derived([k],()=>Y);
 
 const FALLBACK_LOCAL = 'ja';
-const LOCALE_PATHNAME_REGEX = /^\/(.*?)([/]|$)/;
-const SUPPORTED_LOCALE = {
-    en: true,
-    ja: true,
-    ko: true,
-};
+// NOTE: do not forget to register locales manually in i18n.js with `register('en', () => import(`../../../lang/en.json`))` etc
+const SUPPORTED_LOCALE = new Set(['en', 'ja', 'ko']);
 
-const getAvailableLocaleFromPathname = (pathname) => {
+const LOCALE_PATHNAME_REGEX = /^\/(.*?)([/]|$)/;
+
+const getAvailableLocaleFromPathname = pathname => {
     const match = LOCALE_PATHNAME_REGEX.exec(pathname);
     const matchedLocale = match && match[1];
-    return SUPPORTED_LOCALE[matchedLocale] && matchedLocale
+    return SUPPORTED_LOCALE.has(matchedLocale) && matchedLocale
 };
 
-const getAvailableLocaleFromNavigator = (lang) => {
+const getAvailableLocaleFromNavigator = lang => {
     // just use prefix to keep simple
     lang = lang && lang.split('-')[0].toLocaleLowerCase();
-    return SUPPORTED_LOCALE[lang] && lang
+    return SUPPORTED_LOCALE.has(lang) && lang
 };
 
 const getPathname = (req) => (typeof window !== 'undefined' && location.pathname) || (req && req.url);
@@ -4543,35 +4541,51 @@ const relativePathToReplaceLocale = (fromPath, locale) => {
     return relativePath(fromPath, newPath)
 };
 
+const IS_SERVER_SIDE = typeof window === 'undefined';
+
 // register languages
 p('en', () => Promise.resolve().then(function () { return en$2; }));
 p('ja', () => Promise.resolve().then(function () { return ja$1; }));
 p('ko', () => Promise.resolve().then(function () { return ko$1; }));
 
 const setupI18n = (serverInit) => {
+
+    if (IS_SERVER_SIDE && !get_store_value(k)) {
+        // load all languages on first load
+        preloadLanguageData();
+    }
+
     const initialLocale = (serverInit && serverInit.locale) || getInitialLocale();
     k.set(initialLocale);
 
-    const requestPathname = writable(typeof window === 'undefined' ? serverInit.pathname : null);
-    onDestroy(k.subscribe(handleLocaleChange(requestPathname)));
+    const serverStore = writable(IS_SERVER_SIDE ? serverInit : {});
+    onDestroy(k.subscribe(handleLocaleChange(serverStore)));
 
-    return { requestPathname, locale: k }
+    return { serverStore, locale: k }
 };
 
-const handleLocaleChange = requestPathname => newLocale => {
+const preloadLanguageData = () => {
+    if (get_store_value(k)) return // 
+    console.log('Preloading language data...');
+    SUPPORTED_LOCALE.forEach(_locale => k.set(_locale));
+};
+
+const handleLocaleChange = serverStore => newLocale => {
     if (newLocale) {
-        const basePath = (typeof window !== 'undefined' && location.pathname) || get_store_value(requestPathname);
+        const basePath = (!IS_SERVER_SIDE && location.pathname) || get_store_value(serverStore).pathname;
         const newRelativePath = relativePathToReplaceLocale(basePath, newLocale);
         navigate(newRelativePath, { replace: false });
 
-        if (typeof window === 'undefined') {
-            requestPathname.set(resolve(newRelativePath, basePath));
+        if (IS_SERVER_SIDE) {
+            // update server store if server side
+            const pathname = resolve(newRelativePath, basePath);
+            serverStore.set({ pathname, locale: newLocale });
         }
     }
 };
 
-const isLoadingLocale = derived([j, k, i], ([$isLoading, $locale, $dictionary]) => {
-    return typeof $locale !== 'string' || $isLoading || !$dictionary || !$dictionary[$locale]
+const isLoadingLocale = derived([j, k], ([$isLoading, $locale]) => {
+    return typeof $locale !== 'string' || $isLoading
 });
 
 /* src/components/Shared/LocaleLink.svelte generated by Svelte v3.29.4 */
@@ -4661,26 +4675,26 @@ ${validate_component(Link, "Link").$$render($$result, { to: "/" }, {}, {
 
 const css$2 = {
 	code: "html{font-family:'SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif}main.svelte-pkpcqp{text-align:center;padding:1em;max-width:240px;margin:0 auto}@media(min-width: 640px){main.svelte-pkpcqp{max-width:none}}",
-	map: "{\"version\":3,\"file\":\"App.svelte\",\"sources\":[\"App.svelte\"],\"sourcesContent\":[\"<script>\\n\\timport { Router, Route } from \\\"svelte-routing\\\";\\n\\timport { setupI18n, isLoadingLocale } from \\\"./services/i18n/i18n\\\";\\n\\timport NavigationBar from './components/Layout/NavigationBar/NavigationBar.svelte';\\n\\timport Home from './components/Pages/Home/Home.svelte';\\n\\timport About from './components/Pages/About/About.svelte';\\n\\timport NotFound from './components/Pages/NotFound/NotFound.svelte';\\n\\n\\texport let serverInit; // This property is necessary declare to avoid ignore the Router\\n\\n\\tconst { requestPathname, locale } = setupI18n(serverInit)\\n\\n\\t$: basepath = '/' + ($locale || '')\\n\\n</script>\\n\\n{#if !$isLoadingLocale}\\n\\t<Router {basepath} url={$requestPathname} >\\n\\t\\t<NavigationBar />\\n\\t\\t<main>\\n\\t\\t\\t<Route path='about'><About /></Route>\\n\\t\\t\\t<Route path='/'><Home /></Route>\\n\\t\\t\\t<Route><NotFound /></Route>\\n\\t\\t</main>\\n\\t</Router>\\n{:else}\\n\\tLoading...\\n{/if}\\nbasepath: {basepath}\\n$serverSidePathname: {$requestPathname}\\n$locale: {$locale}\\nserverInit: {serverInit && serverInit.pathname} {serverInit && serverInit.locale}\\n\\n<style>\\n\\t:global(html) {\\n\\t\\tfont-family: 'SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif;\\n\\t}\\n\\n    main {\\n        text-align: center;\\n        padding: 1em;\\n        max-width: 240px;\\n        margin: 0 auto;\\n    }\\n\\n    @media (min-width: 640px) {\\n        main {\\n            max-width: none;\\n        }\\n    }\\n</style>\"],\"names\":[],\"mappings\":\"AAkCS,IAAI,AAAE,CAAC,AACd,WAAW,CAAE,aAAa,CAAC,cAAc,CAAC,gBAAgB,CAAC,WAAW,CAAC,OAAO,CAAC,UAAU,AAC1F,CAAC,AAEE,IAAI,cAAC,CAAC,AACF,UAAU,CAAE,MAAM,CAClB,OAAO,CAAE,GAAG,CACZ,SAAS,CAAE,KAAK,CAChB,MAAM,CAAE,CAAC,CAAC,IAAI,AAClB,CAAC,AAED,MAAM,AAAC,YAAY,KAAK,CAAC,AAAC,CAAC,AACvB,IAAI,cAAC,CAAC,AACF,SAAS,CAAE,IAAI,AACnB,CAAC,AACL,CAAC\"}"
+	map: "{\"version\":3,\"file\":\"App.svelte\",\"sources\":[\"App.svelte\"],\"sourcesContent\":[\"<script>\\n\\timport { Router, Route } from \\\"svelte-routing\\\";\\n\\timport { setupI18n, isLoadingLocale } from \\\"./services/i18n/i18n\\\";\\n\\timport NavigationBar from './components/Layout/NavigationBar/NavigationBar.svelte';\\n\\timport Home from './components/Pages/Home/Home.svelte';\\n\\timport About from './components/Pages/About/About.svelte';\\n\\timport NotFound from './components/Pages/NotFound/NotFound.svelte';\\n\\n\\texport let serverInit; // This property is necessary declare to avoid ignore the Router\\n\\n\\tconst { serverStore, locale } = setupI18n(serverInit)\\n\\n\\t$: basepath = '/' + ($locale || '')\\n\\n</script>\\n\\n{#if !$isLoadingLocale}\\n\\t<Router {basepath} url={$serverStore.pathname} >\\n\\t\\t<NavigationBar />\\n\\t\\t<main>\\n\\t\\t\\t<Route path='about'><About /></Route>\\n\\t\\t\\t<Route path='/'><Home /></Route>\\n\\t\\t\\t<Route><NotFound /></Route>\\n\\t\\t</main>\\n\\t</Router>\\n{:else}\\n\\tLoading...\\n{/if}\\nbasepath: {basepath}\\n$serverSidePathname: {$serverStore.pathname}\\n$locale: {$locale}\\nserverInit: {serverInit && serverInit.pathname} {serverInit && serverInit.locale}\\n\\n<style>\\n\\t:global(html) {\\n\\t\\tfont-family: 'SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif;\\n\\t}\\n\\n    main {\\n        text-align: center;\\n        padding: 1em;\\n        max-width: 240px;\\n        margin: 0 auto;\\n    }\\n\\n    @media (min-width: 640px) {\\n        main {\\n            max-width: none;\\n        }\\n    }\\n</style>\"],\"names\":[],\"mappings\":\"AAkCS,IAAI,AAAE,CAAC,AACd,WAAW,CAAE,aAAa,CAAC,cAAc,CAAC,gBAAgB,CAAC,WAAW,CAAC,OAAO,CAAC,UAAU,AAC1F,CAAC,AAEE,IAAI,cAAC,CAAC,AACF,UAAU,CAAE,MAAM,CAClB,OAAO,CAAE,GAAG,CACZ,SAAS,CAAE,KAAK,CAChB,MAAM,CAAE,CAAC,CAAC,IAAI,AAClB,CAAC,AAED,MAAM,AAAC,YAAY,KAAK,CAAC,AAAC,CAAC,AACvB,IAAI,cAAC,CAAC,AACF,SAAS,CAAE,IAAI,AACnB,CAAC,AACL,CAAC\"}"
 };
 
 const App = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $locale;
 	let $isLoadingLocale = get_store_value(isLoadingLocale);
-	let $requestPathname;
+	let $serverStore;
 	let { serverInit } = $$props; // This property is necessary declare to avoid ignore the Router
-	const { requestPathname, locale } = setupI18n(serverInit);
-	$requestPathname = get_store_value(requestPathname);
+	const { serverStore, locale } = setupI18n(serverInit);
+	$serverStore = get_store_value(serverStore);
 	$locale = get_store_value(locale);
 	if ($$props.serverInit === void 0 && $$bindings.serverInit && serverInit !== void 0) $$bindings.serverInit(serverInit);
 	$$result.css.add(css$2);
 	$locale = get_store_value(locale);
-	$requestPathname = get_store_value(requestPathname);
+	$serverStore = get_store_value(serverStore);
 	let basepath;
 	basepath = "/" + ($locale || "");
 
 	return `${!$isLoadingLocale
-	? `${validate_component(Router, "Router").$$render($$result, { basepath, url: $requestPathname }, {}, {
+	? `${validate_component(Router, "Router").$$render($$result, { basepath, url: $serverStore.pathname }, {}, {
 			default: () => `${validate_component(NavigationBar, "NavigationBar").$$render($$result, {}, {}, {})}
 		<main class="${"svelte-pkpcqp"}">${validate_component(Route, "Route").$$render($$result, { path: "about" }, {}, {
 				default: () => `${validate_component(About, "About").$$render($$result, {}, {}, {})}`
@@ -4694,7 +4708,7 @@ const App = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 		})}`
 	: `Loading...`}
 basepath: ${escape(basepath)}
-$serverSidePathname: ${escape($requestPathname)}
+$serverSidePathname: ${escape($serverStore.pathname)}
 $locale: ${escape($locale)}
 serverInit: ${escape(serverInit && serverInit.pathname)} ${escape(serverInit && serverInit.locale)}`;
 });
