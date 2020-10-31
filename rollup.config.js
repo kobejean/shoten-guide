@@ -36,6 +36,8 @@ export default [
 			sourcemap: true,
 			format: "es",
 			dir: "public/module",
+			// file: "public/module/main.js",
+			// inlineDynamicImports: true,
 		},
 		plugins: browserBundlePlugins
 	},
@@ -47,6 +49,8 @@ export default [
 			sourcemap: true,
 			format: "system",
 			dir: "public/nomodule",
+			// file: "public/nomodule/main.js",
+			// inlineDynamicImports: true,
 		},
 		plugins: browserBundlePlugins
 	},

@@ -2,6 +2,12 @@ import express from 'express'
 import { getServerSideI18nInitialization } from './src/services/i18n/serverSideData.js'
 import app from './public/App.js'
 
+const LOCALE_FILES = {
+  en: '/module/en-750d0d02.js',
+  ja: '/module/ja-485d054a.js',
+  ko: '/module/ko-9f08339f.js',
+}
+
 const server = express();
 
 // static paths
@@ -18,6 +24,7 @@ server.get('*', function(req, res) {
 <!DOCTYPE html>
 <html lang="${serverInit.locale}">
   <head>
+    <link rel="modulepreload" href="${LOCALE_FILES[serverInit.locale]}">
     <link rel='stylesheet' href='/module/bundle.css'>
     <link rel="icon" href="data:,">
   </head>

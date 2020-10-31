@@ -4557,7 +4557,7 @@ Object.entries(LOCALE_IMPORTS).forEach(([locale, importFunction]) => p(locale, i
 const setupI18n = (serverInit) => {
     // get initial locale and set it
     const initialLocale = (serverInit && serverInit.locale) || getInitialLocale();
-    preloadLanguageData(initialLocale);
+    preloadLanguageData();
     k.set(initialLocale);
 
     // create server store to keep a reactive/updatable store to keep track of our server side data
@@ -4575,10 +4575,6 @@ const preloadLanguageData = initialLocale => {
         // server side preloading
         console.log('Preloading language data...');
         SUPPORTED_LOCALE.forEach(_locale => k.set(_locale));
-    } else {
-        // client side preloading
-        LOCALE_IMPORTS[initialLocale](); // prioritize initial locale
-        Object.values(LOCALE_IMPORTS).forEach((importFunction) => importFunction());
     }
 };
 

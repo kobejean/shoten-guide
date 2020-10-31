@@ -40,8 +40,8 @@ const preloadLanguageData = initialLocale => {
         SUPPORTED_LOCALE.forEach(_locale => locale.set(_locale))
     } else {
         // client side preloading
-        LOCALE_IMPORTS[initialLocale]() // prioritize initial locale
-        Object.values(LOCALE_IMPORTS).forEach((importFunction) => importFunction())
+        // LOCALE_IMPORTS[initialLocale]() // prioritize initial locale
+        // Object.values(LOCALE_IMPORTS).forEach((importFunction) => importFunction())
     }
 }
 
