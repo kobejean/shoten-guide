@@ -1,15 +1,14 @@
 import {
     locale,
     register,
-    isLoading,
-    dictionary
+    isLoading
 } from 'svelte-i18n'
 export { locale, _ } from 'svelte-i18n'
 import { derived, writable, get } from 'svelte/store'
 import { onDestroy } from 'svelte'
 import { navigate, routerUtils } from 'svelte-routing'
-import { getInitialLocale } from './serverSideData'
-import { SUPPORTED_LOCALE, LOCALE_IMPORTS } from './localeDefinition'
+import { getInitialLocale } from './initialization'
+import { SUPPORTED_LOCALE, LOCALE_IMPORTS } from './constants'
 import { relativePathToReplaceLocale } from '../../utils/path'
 
 const IS_SERVER_SIDE = typeof window === 'undefined'

@@ -1,5 +1,5 @@
 import express from 'express'
-import { getServerSideI18nInitialization } from './src/services/i18n/serverSideData.js'
+import { getServerSideI18nInitialization } from './src/services/i18n/initialization.js'
 import app from './public/App.js'
 
 const LOCALE_FILES = {

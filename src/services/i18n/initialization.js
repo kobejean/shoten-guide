@@ -1,4 +1,4 @@
-import { FALLBACK_LOCAL, SUPPORTED_LOCALE } from './localeDefinition.js'
+import { FALLBACK_LOCAL, SUPPORTED_LOCALE } from './constants.js'
 const LOCALE_PATHNAME_REGEX = /^\/(.*?)([/]|$)/
 
 const getAvailableLocaleFromPathname = pathname => {
