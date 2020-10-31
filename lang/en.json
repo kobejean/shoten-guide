@@ -1,0 +1,23 @@
+{
+    "about": {
+        "pageName": "About Page",
+        "welcome": "Welcome to the <b>About Page</b>!"
+    },
+    "home": {
+        "pageName": "Home Page",
+        "welcome": "Welcome to the <b>Home Page</b>!"
+    },
+    "locale": {
+        "en": "English",
+        "ja": "日本語",
+        "ko": "한국어"
+    },
+    "nav": {
+        "about": "About",
+        "home": "Home"
+    },
+    "notFound": {
+        "errorMessage": "Sorry this page could not be found.",
+        "linkBackHome": "Back to Home"
+    }
+}
