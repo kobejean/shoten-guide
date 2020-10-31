@@ -7,39 +7,48 @@ import json from "@rollup/plugin-json";
 
 const isDev = Boolean(process.env.ROLLUP_WATCH);
 
+const browserBundlePlugins = [
+	json(),
+	svelte({
+		hydratable: true,
+		css: css => {
+			css.write("bundle.css");
+		}
+	}),
+	resolve(),
+	commonjs(),
+	// App.js will be built after bundle.js, so we only need to watch that.
+	// By setting a small delay the Node server has a chance to restart before reloading.
+	isDev &&
+		livereload({
+			watch: "public/App.js",
+			delay: 300
+		}),
+	!isDev && terser()
+]
+
 export default [
-	// Browser bundle
+	// Browser module bundle
 	{
 		input: "src/main.js",
 		output: {
+			name: "app",
 			sourcemap: true,
 			format: "es",
-			name: "app",
-			dir: "public/bundle",
-			/* // disable "dir" and enable these two to disable code splitting
-			file: "public/bundle/main.js",
-			inlineDynamicImports: true,
-			*/
+			dir: "public/module",
 		},
-		plugins: [
-			json(),
-			svelte({
-				hydratable: true,
-				css: css => {
-					css.write("bundle.css");
-				}
-			}),
-			resolve(),
-			commonjs(),
-			// App.js will be built after bundle.js, so we only need to watch that.
-			// By setting a small delay the Node server has a chance to restart before reloading.
-			isDev &&
-				livereload({
-					watch: "public/App.js",
-					delay: 200
-				}),
-			!isDev && terser()
-		]
+		plugins: browserBundlePlugins
+	},
+	// Browser nomodule bundle
+	{
+		input: "src/main.js",
+		output: {
+			name: "app",
+			sourcemap: true,
+			format: "system",
+			dir: "public/nomodule",
+		},
+		plugins: browserBundlePlugins
 	},
 	// Server bundle
 	{

@@ -1,12 +1,10 @@
+import { routerUtils } from 'svelte-routing'
 
 export const relativePath = (fromPath, toPath) => {
     if (!fromPath || fromPath === '/' || fromPath === '') return toPath
-
-    let extraSlashesCount = 0
-    if (fromPath.slice(0, 1) === '/') extraSlashesCount += 1
-    if (fromPath.slice(-1) === '/') extraSlashesCount += 1
-    const dirCount = fromPath.split('/').length - extraSlashesCount
-    return '../'.repeat(dirCount) + toPath
+    fromPath = routerUtils.stripSlashes(fromPath)
+    const dirCount = fromPath.split('/').length
+    return '../'.repeat(dirCount) + routerUtils.stripSlashes(toPath)
 }
 
 const LOCALE_PATHNAME_REPLACE_REGEX = /^.+?([/]|$)/

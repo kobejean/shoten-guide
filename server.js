@@ -18,12 +18,13 @@ server.get('*', function(req, res) {
 <!DOCTYPE html>
 <html lang="${serverInit.locale}">
   <head>
-    <link rel='stylesheet' href='/bundle/bundle.css'>
+    <link rel='stylesheet' href='/module/bundle.css'>
     <link rel="icon" href="data:,">
   </head>
   <body>
     <div id="app">${html}</div>
-    <script src="/bundle/main.js"></script>
+    <script type="module" src="/module/main.js"></script>
+    <script nomodule src="/nomodule/main.js"></script>
   <body>
 </html>
   `);

@@ -1,5 +1,7 @@
 
 (function(l, r) { if (l.getElementById('livereloadscript')) return; r = l.createElement('script'); r.async = 1; r.src = '//' + (window.location.host || 'localhost').split(':')[0] + ':35729/livereload.js?snipver=1'; r.id = 'livereloadscript'; l.getElementsByTagName('head')[0].appendChild(r) })(window.document);
+function e({modulePath:e=".",importFunctionName:t="__import__"}={}){try{self[t]=new Function("u","return import(u)");}catch(o){const r=new URL(e,location),n=e=>{URL.revokeObjectURL(e.src),e.remove();};self[t]=e=>new Promise((o,a)=>{const c=new URL(e,r);if(self[t].moduleMap[c])return o(self[t].moduleMap[c]);const l=new Blob([`import * as m from '${c}';`,`${t}.moduleMap['${c}']=m;`],{type:"text/javascript"}),m=Object.assign(document.createElement("script"),{type:"module",src:URL.createObjectURL(l),onerror(){a(new Error(`Failed to import: ${e}`)),n(m);},onload(){o(self[t].moduleMap[c]),n(m);}});document.head.appendChild(m);}),self[t].moduleMap={};}}var t=Object.freeze({initialize:e});
+
 function noop() { }
 function assign(tar, src) {
     // @ts-ignore
@@ -5326,12 +5328,9 @@ const getInitialLocale = (req) => {
 
 const relativePath = (fromPath, toPath) => {
     if (!fromPath || fromPath === '/' || fromPath === '') return toPath
-
-    let extraSlashesCount = 0;
-    if (fromPath.slice(0, 1) === '/') extraSlashesCount += 1;
-    if (fromPath.slice(-1) === '/') extraSlashesCount += 1;
-    const dirCount = fromPath.split('/').length - extraSlashesCount;
-    return '../'.repeat(dirCount) + toPath
+    fromPath = stripSlashes(fromPath);
+    const dirCount = fromPath.split('/').length;
+    return '../'.repeat(dirCount) + stripSlashes(toPath)
 };
 
 const LOCALE_PATHNAME_REPLACE_REGEX = /^.+?([/]|$)/;
@@ -6418,6 +6417,11 @@ class App extends SvelteComponent {
 		init(this, options, instance$8, create_fragment$8, safe_not_equal, { serverInit: 5 });
 	}
 }
+
+t.initialize({
+	modulePath: '/public/module', // Defaults to '.'
+	importFunctionName: '$$import' // Defaults to '__import__'
+});
 
 new App({
 	target: document.getElementById("app"),

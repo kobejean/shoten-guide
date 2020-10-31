@@ -1,0 +1,16 @@
+{
+  "version": 3,
+  "file": "bundle.css",
+  "sources": [
+    "App.svelte",
+    "About.svelte",
+    "Home.svelte"
+  ],
+  "sourcesContent": [
+    "<script>\n\timport { Router, Route } from \"svelte-routing\";\n\timport { setupI18n, isLoadingLocale } from \"./services/i18n/i18n\";\n\timport NavigationBar from './components/Layout/NavigationBar/NavigationBar.svelte';\n\timport Home from './components/Pages/Home/Home.svelte';\n\timport About from './components/Pages/About/About.svelte';\n\timport NotFound from './components/Pages/NotFound/NotFound.svelte';\n\n\texport let serverInit; // This property is necessary declare to avoid ignore the Router\n\n\tconst { serverStore, locale } = setupI18n(serverInit)\n\n\t$: basepath = '/' + ($locale || '')\n\n</script>\n\n{#if !$isLoadingLocale}\n\t<Router {basepath} url={$serverStore.pathname} >\n\t\t<NavigationBar />\n\t\t<main>\n\t\t\t<Route path='about'><About /></Route>\n\t\t\t<Route path='/'><Home /></Route>\n\t\t\t<Route><NotFound /></Route>\n\t\t</main>\n\t</Router>\n{/if}\n\n<style>\n\t:global(html) {\n\t\tfont-family: 'SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif;\n\t}\n\n    main {\n        text-align: center;\n        padding: 1em;\n        max-width: 240px;\n        margin: 0 auto;\n    }\n\n    @media (min-width: 640px) {\n        main {\n            max-width: none;\n        }\n    }\n</style>",
+    "<script>\n\timport { _ } from \"svelte-i18n\";\n</script>\n\n<h1>{$_('about.pageName')}</h1>\n<p>{@html $_('about.welcome')}</p>\n\n<style>\n    h1 {\n        color: #ff3e00;\n        text-transform: uppercase;\n        font-size: 4em;\n        font-weight: 100;\n    }\n</style>",
+    "<script>\n\timport { _ } from \"svelte-i18n\";\n</script>\n\n<h1>{$_('home.pageName')}</h1>\n<p>{@html $_('home.welcome')}</p>\n\n<style>\n    h1 {\n        color: #ff3e00;\n        text-transform: uppercase;\n        font-size: 4em;\n        font-weight: 100;\n    }\n</style>"
+  ],
+  "names": [],
+  "mappings": "AA4BS,IAAI,AAAE,CAAC,AACd,WAAW,CAAE,aAAa,CAAC,cAAc,CAAC,gBAAgB,CAAC,WAAW,CAAC,OAAO,CAAC,UAAU,AAC1F,CAAC,AAEE,IAAI,cAAC,CAAC,AACF,UAAU,CAAE,MAAM,CAClB,OAAO,CAAE,GAAG,CACZ,SAAS,CAAE,KAAK,CAChB,MAAM,CAAE,CAAC,CAAC,IAAI,AAClB,CAAC,AAED,MAAM,AAAC,YAAY,KAAK,CAAC,AAAC,CAAC,AACvB,IAAI,cAAC,CAAC,AACF,SAAS,CAAE,IAAI,AACnB,CAAC,AACL,CAAC;ACnCD,EAAE,eAAC,CAAC,AACA,KAAK,CAAE,OAAO,CACd,cAAc,CAAE,SAAS,CACzB,SAAS,CAAE,GAAG,CACd,WAAW,CAAE,GAAG,AACpB,CAAC;ACLD,EAAE,eAAC,CAAC,AACA,KAAK,CAAE,OAAO,CACd,cAAc,CAAE,SAAS,CACzB,SAAS,CAAE,GAAG,CACd,WAAW,CAAE,GAAG,AACpB,CAAC"
+}
