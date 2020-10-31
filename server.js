@@ -10,10 +10,7 @@ server.use(express.static("lang"));
 
 server.get("*", function(req, res) {
   const serverInit = getServerSideI18nInitialization(req)
-
-
-  const { html } = app.render({ serverInit });
-  console.log('serverInit', serverInit)
+  const { html } = app.render({ serverInit })
   
   res.type('html')
   res.write(`

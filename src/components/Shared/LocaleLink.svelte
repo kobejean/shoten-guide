@@ -1,7 +1,7 @@
 <script>
     import { Link, LOCATION } from "svelte-routing"
     import { getContext } from 'svelte'
-    import { relativePathToReplaceLocale } from "../../services/i18n/i18n"
+    import { relativePathToReplaceLocale } from '../../utils/path'
     import { locale as localeStore } from "svelte-i18n"
   
     export let locale = ""

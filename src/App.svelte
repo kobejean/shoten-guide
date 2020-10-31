@@ -1,7 +1,6 @@
 <script>
 	import { Router, Route } from "svelte-routing";
-	import { setupI18n, isLoadingLocale, serverSidePathname } from "./services/i18n/i18n";
-	import { locale, _ } from 'svelte-i18n';
+	import { setupI18n, isLoadingLocale } from "./services/i18n/i18n";
 	import NavigationBar from './components/Layout/NavigationBar/NavigationBar.svelte';
 	import Home from './components/Pages/Home/Home.svelte';
 	import About from './components/Pages/About/About.svelte';
@@ -9,15 +8,14 @@
 
 	export let serverInit; // This property is necessary declare to avoid ignore the Router
 
-	setupI18n(serverInit)
-	$: {console.log('$locale', $locale)}
+	const { requestPathname, locale } = setupI18n(serverInit)
 
 	$: basepath = '/' + ($locale || '')
 
 </script>
 
 {#if !$isLoadingLocale}
-	<Router {basepath} url={$serverSidePathname} >
+	<Router {basepath} url={$requestPathname} >
 		<NavigationBar />
 		<main>
 			<Route path='about'><About /></Route>
@@ -29,7 +27,7 @@
 	Loading...
 {/if}
 basepath: {basepath}
-$serverSidePathname: {$serverSidePathname}
+$serverSidePathname: {$requestPathname}
 $locale: {$locale}
 serverInit: {serverInit && serverInit.pathname} {serverInit && serverInit.locale}
 
