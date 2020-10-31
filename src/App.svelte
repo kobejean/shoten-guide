@@ -6,7 +6,7 @@
 	import About from './components/Pages/About/About.svelte';
 	import NotFound from './components/Pages/NotFound/NotFound.svelte';
 
-	export let serverInit; // This property is necessary declare to avoid ignore the Router
+	export let serverInit; // This property is necessary to pass server data and ensure smooth hydration
 
 	const { serverStore, locale } = setupI18n(serverInit)
 

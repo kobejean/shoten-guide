@@ -5317,8 +5317,13 @@ const getAvailableLocaleFromNavigator = lang => {
     return SUPPORTED_LOCALE.has(lang) && lang
 };
 
-const getPathname = (req) => (typeof window !== 'undefined' && location.pathname) || (req && req.url);
-const getAcceptedLanguage = (req) => (typeof window !== 'undefined' && (navigator.language || navigator.userLanguage)) || (req && req.headers["accept-language"]);
+const getClientPathname = () => typeof window !== 'undefined' && location.pathname;
+const getServerPathname = req => req && req.url;
+const getPathname = req => getClientPathname() || getServerPathname(req);
+
+const getClientAcceptedLanguage  = () => typeof window !== 'undefined' && (navigator.language || navigator.userLanguage);
+const getServerAcceptedLanguage = req => req && req.headers["accept-language"];
+const getAcceptedLanguage = req => getClientAcceptedLanguage() || getServerAcceptedLanguage(req);
 
 const getInitialLocale = (req) => {
     const pathname = getPathname(req);
@@ -6387,7 +6392,7 @@ function instance$8($$self, $$props, $$invalidate) {
 	let $isLoadingLocale;
 	let $serverStore;
 	component_subscribe($$self, isLoadingLocale, $$value => $$invalidate(1, $isLoadingLocale = $$value));
-	let { serverInit } = $$props; // This property is necessary declare to avoid ignore the Router
+	let { serverInit } = $$props; // This property is necessary to pass server data and ensure smooth hydration
 	const { serverStore, locale } = setupI18n(serverInit);
 	component_subscribe($$self, serverStore, value => $$invalidate(2, $serverStore = value));
 	component_subscribe($$self, locale, value => $$invalidate(6, $locale = value));

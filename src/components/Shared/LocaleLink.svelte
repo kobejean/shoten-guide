@@ -28,6 +28,6 @@
 </script>
   
 <a href="{href}" aria-current="{ariaCurrent}" on:click="{onClick}" >
-    <slot></slot>
+    <slot />
 </a>
   

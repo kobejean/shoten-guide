@@ -4527,8 +4527,13 @@ const getAvailableLocaleFromNavigator = lang => {
     return SUPPORTED_LOCALE.has(lang) && lang
 };
 
-const getPathname = (req) => (typeof window !== 'undefined' && location.pathname) || (req && req.url);
-const getAcceptedLanguage = (req) => (typeof window !== 'undefined' && (navigator.language || navigator.userLanguage)) || (req && req.headers["accept-language"]);
+const getClientPathname = () => typeof window !== 'undefined' && location.pathname;
+const getServerPathname = req => req && req.url;
+const getPathname = req => getClientPathname() || getServerPathname(req);
+
+const getClientAcceptedLanguage  = () => typeof window !== 'undefined' && (navigator.language || navigator.userLanguage);
+const getServerAcceptedLanguage = req => req && req.headers["accept-language"];
+const getAcceptedLanguage = req => getClientAcceptedLanguage() || getServerAcceptedLanguage(req);
 
 const getInitialLocale = (req) => {
     const pathname = getPathname(req);
@@ -4694,14 +4699,14 @@ ${validate_component(Link, "Link").$$render($$result, { to: "/" }, {}, {
 
 const css$2 = {
 	code: "html{font-family:'SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif}main.svelte-pkpcqp{text-align:center;padding:1em;max-width:240px;margin:0 auto}@media(min-width: 640px){main.svelte-pkpcqp{max-width:none}}",
-	map: "{\"version\":3,\"file\":\"App.svelte\",\"sources\":[\"App.svelte\"],\"sourcesContent\":[\"<script>\\n\\timport { Router, Route } from \\\"svelte-routing\\\";\\n\\timport { setupI18n, isLoadingLocale } from \\\"./services/i18n/i18n\\\";\\n\\timport NavigationBar from './components/Layout/NavigationBar/NavigationBar.svelte';\\n\\timport Home from './components/Pages/Home/Home.svelte';\\n\\timport About from './components/Pages/About/About.svelte';\\n\\timport NotFound from './components/Pages/NotFound/NotFound.svelte';\\n\\n\\texport let serverInit; // This property is necessary declare to avoid ignore the Router\\n\\n\\tconst { serverStore, locale } = setupI18n(serverInit)\\n\\n\\t$: basepath = '/' + ($locale || '')\\n\\n</script>\\n\\n{#if !$isLoadingLocale}\\n\\t<Router {basepath} url={$serverStore.pathname} >\\n\\t\\t<NavigationBar />\\n\\t\\t<main>\\n\\t\\t\\t<Route path='about'><About /></Route>\\n\\t\\t\\t<Route path='/'><Home /></Route>\\n\\t\\t\\t<Route><NotFound /></Route>\\n\\t\\t</main>\\n\\t</Router>\\n{/if}\\n\\n<style>\\n\\t:global(html) {\\n\\t\\tfont-family: 'SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif;\\n\\t}\\n\\n    main {\\n        text-align: center;\\n        padding: 1em;\\n        max-width: 240px;\\n        margin: 0 auto;\\n    }\\n\\n    @media (min-width: 640px) {\\n        main {\\n            max-width: none;\\n        }\\n    }\\n</style>\"],\"names\":[],\"mappings\":\"AA4BS,IAAI,AAAE,CAAC,AACd,WAAW,CAAE,aAAa,CAAC,cAAc,CAAC,gBAAgB,CAAC,WAAW,CAAC,OAAO,CAAC,UAAU,AAC1F,CAAC,AAEE,IAAI,cAAC,CAAC,AACF,UAAU,CAAE,MAAM,CAClB,OAAO,CAAE,GAAG,CACZ,SAAS,CAAE,KAAK,CAChB,MAAM,CAAE,CAAC,CAAC,IAAI,AAClB,CAAC,AAED,MAAM,AAAC,YAAY,KAAK,CAAC,AAAC,CAAC,AACvB,IAAI,cAAC,CAAC,AACF,SAAS,CAAE,IAAI,AACnB,CAAC,AACL,CAAC\"}"
+	map: "{\"version\":3,\"file\":\"App.svelte\",\"sources\":[\"App.svelte\"],\"sourcesContent\":[\"<script>\\n\\timport { Router, Route } from \\\"svelte-routing\\\";\\n\\timport { setupI18n, isLoadingLocale } from \\\"./services/i18n/i18n\\\";\\n\\timport NavigationBar from './components/Layout/NavigationBar/NavigationBar.svelte';\\n\\timport Home from './components/Pages/Home/Home.svelte';\\n\\timport About from './components/Pages/About/About.svelte';\\n\\timport NotFound from './components/Pages/NotFound/NotFound.svelte';\\n\\n\\texport let serverInit; // This property is necessary to pass server data and ensure smooth hydration\\n\\n\\tconst { serverStore, locale } = setupI18n(serverInit)\\n\\n\\t$: basepath = '/' + ($locale || '')\\n\\n</script>\\n\\n{#if !$isLoadingLocale}\\n\\t<Router {basepath} url={$serverStore.pathname} >\\n\\t\\t<NavigationBar />\\n\\t\\t<main>\\n\\t\\t\\t<Route path='about'><About /></Route>\\n\\t\\t\\t<Route path='/'><Home /></Route>\\n\\t\\t\\t<Route><NotFound /></Route>\\n\\t\\t</main>\\n\\t</Router>\\n{/if}\\n\\n<style>\\n\\t:global(html) {\\n\\t\\tfont-family: 'SF Pro Text','SF Pro Icons','Helvetica Neue','Helvetica','Arial',sans-serif;\\n\\t}\\n\\n    main {\\n        text-align: center;\\n        padding: 1em;\\n        max-width: 240px;\\n        margin: 0 auto;\\n    }\\n\\n    @media (min-width: 640px) {\\n        main {\\n            max-width: none;\\n        }\\n    }\\n</style>\"],\"names\":[],\"mappings\":\"AA4BS,IAAI,AAAE,CAAC,AACd,WAAW,CAAE,aAAa,CAAC,cAAc,CAAC,gBAAgB,CAAC,WAAW,CAAC,OAAO,CAAC,UAAU,AAC1F,CAAC,AAEE,IAAI,cAAC,CAAC,AACF,UAAU,CAAE,MAAM,CAClB,OAAO,CAAE,GAAG,CACZ,SAAS,CAAE,KAAK,CAChB,MAAM,CAAE,CAAC,CAAC,IAAI,AAClB,CAAC,AAED,MAAM,AAAC,YAAY,KAAK,CAAC,AAAC,CAAC,AACvB,IAAI,cAAC,CAAC,AACF,SAAS,CAAE,IAAI,AACnB,CAAC,AACL,CAAC\"}"
 };
 
 const App = create_ssr_component(($$result, $$props, $$bindings, slots) => {
 	let $locale;
 	let $isLoadingLocale = get_store_value(isLoadingLocale);
 	let $serverStore;
-	let { serverInit } = $$props; // This property is necessary declare to avoid ignore the Router
+	let { serverInit } = $$props; // This property is necessary to pass server data and ensure smooth hydration
 	const { serverStore, locale } = setupI18n(serverInit);
 	$serverStore = get_store_value(serverStore);
 	$locale = get_store_value(locale);
