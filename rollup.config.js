@@ -13,11 +13,13 @@ export default [
 		input: "src/main.js",
 		output: {
 			sourcemap: true,
-			format: "iife",
+			format: "es",
 			name: "app",
-			file: "public/bundle.js",
+			dir: "public/bundle",
+			/* // disable "dir" and enable these two to disable code splitting
+			file: "public/bundle/main.js",
 			inlineDynamicImports: true,
-			exports: "auto"
+			*/
 		},
 		plugins: [
 			json(),

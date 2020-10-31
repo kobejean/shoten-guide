@@ -1,3 +1,9 @@
 export const FALLBACK_LOCAL = 'ja'
-// NOTE: do not forget to register locales manually in i18n.js with `register('en', () => import(`../../../lang/en.json`))` etc
-export const SUPPORTED_LOCALE = new Set(['en', 'ja', 'ko'])
+
+export const LOCALE_IMPORTS = {
+    en: () => import(`../../../lang/en.json`),
+    ja: () => import(`../../../lang/ja.json`),
+    ko: () => import(`../../../lang/ko.json`),
+}
+
+export const SUPPORTED_LOCALE = new Set(Object.keys(LOCALE_IMPORTS))

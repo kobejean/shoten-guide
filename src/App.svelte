@@ -23,13 +23,7 @@
 			<Route><NotFound /></Route>
 		</main>
 	</Router>
-{:else}
-	Loading...
 {/if}
-basepath: {basepath}
-$serverSidePathname: {$serverStore.pathname}
-$locale: {$locale}
-serverInit: {serverInit && serverInit.pathname} {serverInit && serverInit.locale}
 
 <style>
 	:global(html) {

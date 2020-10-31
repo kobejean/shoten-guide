@@ -1,14 +1,15 @@
-import path from 'path'
 import express from 'express'
 import { getServerSideI18nInitialization } from './src/services/i18n/serverSideData.js'
 import app from './public/App.js'
 
 const server = express();
 
-server.use(express.static("public"));
-server.use(express.static("lang"));
+// static paths
+server.use(express.static('public'));
+server.use(express.static('lang'));
 
-server.get("*", function(req, res) {
+// all others map to svelte
+server.get('*', function(req, res) {
   const serverInit = getServerSideI18nInitialization(req)
   const { html } = app.render({ serverInit })
   
@@ -17,12 +18,12 @@ server.get("*", function(req, res) {
 <!DOCTYPE html>
 <html lang="${serverInit.locale}">
   <head>
-    <link rel='stylesheet' href='/bundle.css'>
-    <link rel="icon" href="/favicon.png">
+    <link rel='stylesheet' href='/bundle/bundle.css'>
+    <link rel="icon" href="data:,">
   </head>
   <body>
     <div id="app">${html}</div>
-    <script src="/bundle.js"></script>
+    <script src="/bundle/main.js"></script>
   <body>
 </html>
   `);
