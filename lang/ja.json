@@ -1,23 +1,23 @@
 {
-    "about": {
-        "pageName": "情報ページ",
-        "welcome": "<b>情報ページ</b>へようこそ！"
-    },
-    "home": {
-        "pageName": "ホームページ",
-        "welcome": "<b>ホームページ</b>へようこそ！"
-    },
-    "locale": {
-        "en": "English",
-        "ja": "日本語",
-        "ko": "한국어"
-    },
-    "nav": {
-        "about": "情報",
-        "home": "ホーム"
-    },
-    "notFound": {
-        "errorMessage": "ページが見つかりませんでした。",
-        "linkBackHome": "ホームへ"
-    }
+  "about": {
+    "pageName": "情報ページ",
+    "welcome": "<b>情報ページ</b>へようこそ！"
+  },
+  "home": {
+    "pageName": "ホームページ",
+    "welcome": "<b>ホームページ</b>へようこそ！"
+  },
+  "locale": {
+    "en": "English",
+    "ja": "日本語",
+    "ko": "한국어"
+  },
+  "nav": {
+    "about": "情報",
+    "home": "ホーム"
+  },
+  "notFound": {
+    "errorMessage": "ページが見つかりませんでした。",
+    "linkBackHome": "ホームへ"
+  }
 }

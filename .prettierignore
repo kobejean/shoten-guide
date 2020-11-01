@@ -1,0 +1,5 @@
+/node_modules/
+/public/module/
+/public/nomodule/
+/public/App.js
+/submodules/
