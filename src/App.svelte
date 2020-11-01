@@ -1,5 +1,6 @@
 <script>
   import { Router, Route } from 'svelte-routing'
+  import { _ } from 'svelte-i18n'
   import { setupI18n, isLoadingLocale } from './services/i18n/client'
   import NavigationBar from './components/Layout/NavigationBar/NavigationBar.svelte'
   import Home from './components/Pages/Home/Home.svelte'

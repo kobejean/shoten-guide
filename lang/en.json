@@ -1,9 +1,11 @@
 {
   "about": {
+    "title": "Shouten Guide | About",
     "pageName": "About Page",
     "welcome": "Welcome to the <b>About Page</b>!"
   },
   "home": {
+    "title": "Shouten Guide | Home",
     "pageName": "Home Page",
     "welcome": "Welcome to the <b>Home Page</b>!"
   },
@@ -17,6 +19,7 @@
     "home": "Home"
   },
   "notFound": {
+    "title": "Shouten Guide | 404",
     "errorMessage": "Sorry this page could not be found.",
     "linkBackHome": "Back to Home"
   }

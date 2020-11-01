@@ -1,9 +1,11 @@
 {
   "about": {
+    "title": "商店ガイド｜情報",
     "pageName": "情報ページ",
     "welcome": "<b>情報ページ</b>へようこそ！"
   },
   "home": {
+    "title": "商店ガイド｜ホーム",
     "pageName": "ホームページ",
     "welcome": "<b>ホームページ</b>へようこそ！"
   },
@@ -17,6 +19,7 @@
     "home": "ホーム"
   },
   "notFound": {
+    "title": "商店ガイド｜４０４",
     "errorMessage": "ページが見つかりませんでした。",
     "linkBackHome": "ホームへ"
   }
