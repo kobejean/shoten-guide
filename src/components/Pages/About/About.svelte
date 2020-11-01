@@ -2,6 +2,10 @@
   import { _ } from 'svelte-i18n'
 </script>
 
+<svelte:head>
+  <title>{$_('about.title')}</title>
+</svelte:head>
+
 <h1>{$_('about.pageName')}</h1>
 <p>
   {@html $_('about.welcome')}

@@ -1,9 +1,11 @@
 {
   "about": {
+    "title": "상가 가이드 | 정보",
     "pageName": "정보 페이지",
     "welcome": "<b>정보 페이지</b>에 오신 것을 환영합니다!"
   },
   "home": {
+    "title": "상가 가이드 | 홈",
     "pageName": "홈 페이지",
     "welcome": "<b>홈 페이지</b>에 오신 것을 환영합니다!"
   },
@@ -17,6 +19,7 @@
     "home": "홈"
   },
   "notFound": {
+    "title": "상가 가이드 | 404",
     "errorMessage": "죄송합니다,이 페이지를 찾을 수 없습니다.",
     "linkBackHome": "홈으로"
   }
