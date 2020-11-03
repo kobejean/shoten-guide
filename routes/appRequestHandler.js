@@ -16,8 +16,8 @@ export default (req, res) => {
       <link rel='stylesheet' href='/module/bundle.css'>
       <link rel="icon" href="data:,">
     </head>
-    <body>
-      <div id="app">${html}</div>
+    <body id="app">
+      ${html}
       <script type="module" src="/module/main.js"></script>
       <script nomodule src="/nomodule/main.js"></script>
     <body>

@@ -6,10 +6,12 @@
   <title>{$_('home.title')}</title>
 </svelte:head>
 
-<h1>{$_('home.pageName')}</h1>
-<p>
-  {@html $_('home.welcome')}
-</p>
+<main>
+  <h1>{$_('home.pageName')}</h1>
+  <p>
+    {@html $_('home.welcome')}
+  </p>
+</main>
 
 <style lang="scss">
   h1 {

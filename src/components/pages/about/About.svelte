@@ -7,11 +7,13 @@
   <title>{$_('about.title')}</title>
 </svelte:head>
 
-<h1>{$_('about.pageName')}</h1>
-<p>
-  {@html $_('about.welcome')}
-</p>
-<Map />
+<main>
+  <h1>{$_('about.pageName')}</h1>
+  <p>
+    {@html $_('about.welcome')}
+  </p>
+  <Map />
+</main>
 
 <style lang="scss">
   h1 {

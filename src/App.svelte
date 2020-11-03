@@ -17,11 +17,10 @@
 {#if !$isLoadingLocale}
   <Router {basepath} url={$serverStore.pathname}>
     <NavigationBar />
-    <main>
-      <Route path="about" component={About} />
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
-    </main>
+    <!-- One of these route components will display depending on the path-->
+    <Route path="about" component={About} />
+    <Route path="/" component={Home} />
+    <Route component={NotFound} />
   </Router>
 {/if}
 
@@ -31,7 +30,7 @@
       'Arial', sans-serif;
   }
 
-  main {
+  :global(main) {
     text-align: center;
     padding: 1em;
     max-width: 240px;
@@ -39,7 +38,7 @@
   }
 
   @media (min-width: 640px) {
-    main {
+    :global(main) {
       max-width: none;
     }
   }

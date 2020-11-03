@@ -13,3 +13,9 @@
   <LocaleLink locale="ja">{$_('locale.ja')}</LocaleLink>
   <LocaleLink locale="ko">{$_('locale.ko')}</LocaleLink>
 </nav>
+
+<style lang="scss">
+  nav :global(a[aria-current]) {
+    color: red;
+  }
+</style>
