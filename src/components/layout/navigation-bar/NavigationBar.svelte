@@ -1,12 +1,12 @@
 <script>
-  import { Link } from 'svelte-routing'
   import LocaleLink from '../../shared/LocaleLink.svelte'
+  import NavigationLink from './NavigationLink.svelte'
   import { _ } from 'svelte-i18n'
 </script>
 
 <nav>
-  <Link to="/">{$_('nav.home')}</Link>
-  <Link to="about">{$_('nav.about')}</Link>
+  <NavigationLink to="/">{$_('nav.home')}</NavigationLink>
+  <NavigationLink to="about">{$_('nav.about')}</NavigationLink>
 </nav>
 <nav>
   <LocaleLink locale="en">{$_('locale.en')}</LocaleLink>

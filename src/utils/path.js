@@ -37,5 +37,6 @@ export const relativePath = (basePath, toPath) => {
 
 export const relativePathToReplaceLocale = (basePath, locale) => {
   const newPath = basePath.replace(LOCALE_PATHNAME_REPLACE_REGEX, locale + '/')
-  return relativePath(basePath, newPath)
+  const newRelativePath = relativePath(basePath, newPath)
+  return routerUtils.stripSlashes(newRelativePath)
 }
