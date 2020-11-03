@@ -2,10 +2,10 @@
   import { Router, Route } from 'svelte-routing'
   import { _ } from 'svelte-i18n'
   import { setupI18n, isLoadingLocale } from './services/i18n/client'
-  import NavigationBar from './components/Layout/NavigationBar/NavigationBar.svelte'
-  import Home from './components/Pages/Home/Home.svelte'
-  import About from './components/Pages/About/About.svelte'
-  import NotFound from './components/Pages/NotFound/NotFound.svelte'
+  import NavigationBar from './components/layout/navigation-bar/NavigationBar.svelte'
+  import Home from './components/pages/home/Home.svelte'
+  import About from './components/pages/about/About.svelte'
+  import NotFound from './components/pages/not-found/NotFound.svelte'
 
   export let serverInit // This property is necessary to pass server data and ensure smooth hydration
 

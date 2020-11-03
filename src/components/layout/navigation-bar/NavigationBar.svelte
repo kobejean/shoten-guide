@@ -1,6 +1,6 @@
 <script>
   import { Link } from 'svelte-routing'
-  import LocaleLink from '../../Shared/LocaleLink.svelte'
+  import LocaleLink from '../../shared/LocaleLink.svelte'
   import { _ } from 'svelte-i18n'
 </script>
 

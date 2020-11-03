@@ -1,5 +1,6 @@
 <script>
   import { _ } from 'svelte-i18n'
+  import Map from '../../shared/map/Map.svelte'
 </script>
 
 <svelte:head>
@@ -10,6 +11,7 @@
 <p>
   {@html $_('about.welcome')}
 </p>
+<Map />
 
 <style lang="scss">
   h1 {

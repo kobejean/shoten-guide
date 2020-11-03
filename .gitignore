@@ -2,5 +2,5 @@
 /public/module/
 /public/nomodule/
 /public/App.js
-
+/routes/jwt/mapkit-token/private.p8
 .DS_Store
