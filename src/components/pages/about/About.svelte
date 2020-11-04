@@ -1,15 +1,19 @@
 <script>
   import { _ } from 'svelte-i18n'
+  import Map from '../../shared/map/Map.svelte'
 </script>
 
 <svelte:head>
-  <title>{$_('home.title')}</title>
+  <title>{$_('about.title')}</title>
 </svelte:head>
 
-<h1>{$_('home.pageName')}</h1>
-<p>
-  {@html $_('home.welcome')}
-</p>
+<main>
+  <h1>{$_('about.pageName')}</h1>
+  <p>
+    {@html $_('about.welcome')}
+  </p>
+  <Map />
+</main>
 
 <style lang="scss">
   h1 {

@@ -10,12 +10,11 @@
   const location = getContext(LOCATION)
   const dispatch = createEventDispatcher()
 
-  let href, isPartiallyCurrent, isCurrent
+  let href, isCurrent
   $: to = relativePathToReplaceLocale($location.pathname, locale)
   $: href = to === '/' ? $base.uri : routerUtils.resolve(to, $base.uri)
-  $: isPartiallyCurrent = routerUtils.startsWith($location.pathname, href)
-  $: isCurrent = href === $location.pathname
-  $: ariaCurrent = isCurrent || isPartiallyCurrent ? 'page' : undefined
+  $: isCurrent = routerUtils.startsWith($location.pathname, href)
+  $: ariaCurrent = isCurrent ? 'page' : undefined
 
   function onClick(event) {
     dispatch('click', event)

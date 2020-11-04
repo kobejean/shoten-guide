@@ -3,13 +3,15 @@
 </script>
 
 <svelte:head>
-  <title>{$_('about.title')}</title>
+  <title>{$_('home.title')}</title>
 </svelte:head>
 
-<h1>{$_('about.pageName')}</h1>
-<p>
-  {@html $_('about.welcome')}
-</p>
+<main>
+  <h1>{$_('home.pageName')}</h1>
+  <p>
+    {@html $_('home.welcome')}
+  </p>
+</main>
 
 <style lang="scss">
   h1 {
