@@ -28,12 +28,13 @@ export const preloadLocale = async (preloadMethods, page, session) => {
 
   preloadAllLanguageData(locale)
 
+  if (!SUPPORTED_LOCALE.has(locale)) {
+    return
+    // preloadMethods.error(404, 'Not found')
+  }
+
   if (!currentLocale) {
     // if locale is currently null we probably missed initialization
     init({ fallbackLocale: FALLBACK_LOCAL, initialLocale: locale })
-  }
-
-  if (!SUPPORTED_LOCALE.has(locale)) {
-    preloadMethods.error(404, 'Not found')
   }
 }
