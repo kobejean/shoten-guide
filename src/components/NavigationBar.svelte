@@ -47,7 +47,8 @@
       <li>
         <a
           aria-current={_locale === $locale ? 'page' : undefined}
-          href={pathWithReplacedLocale($page.path, _locale)}>{$_(`locale.${_locale}`)}</a>
+          href={pathWithReplacedLocale($page.path, _locale)}
+          sapper:noscroll>{$_(`locale.${_locale}`)}</a>
       </li>
     {/each}
   </ul>
