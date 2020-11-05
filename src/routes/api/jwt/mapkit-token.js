@@ -15,7 +15,7 @@ const CERT = fs.readFileSync(join(ROOT_DIRECTORY, './certificates/mapkit.p8'))
 /**
  * Handles the requests for fetching mapkit json tokens.
  */
-export default (req, res) => {
+export function get(req, res, next) {
   const timestamp = Date.now() / 1000
   const payload = {
     iss: 'Q74A2VY23K',
