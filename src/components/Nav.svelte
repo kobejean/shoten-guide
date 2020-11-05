@@ -1,5 +1,9 @@
 <script>
   import { locale, locales, _ } from 'svelte-i18n'
+  import { pathWithReplacedLocale } from '../utils/path.js'
+  import { stores } from '@sapper/app'
+  const { page } = stores()
+
   export let segment
 </script>
 
@@ -8,12 +12,12 @@
     <li>
       <a
         aria-current={segment === undefined ? 'page' : undefined}
-        href={$locale}>{$_('nav.home')}</a>
+        href="{$locale}/">{$_('nav.home')}</a>
     </li>
     <li>
       <a
         aria-current={segment === 'about' ? 'page' : undefined}
-        href="{$locale}/about">{$_('nav.about')}</a>
+        href="{$locale}/about/">{$_('nav.about')}</a>
     </li>
 
     <!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
@@ -22,7 +26,7 @@
       <a
         rel="prefetch"
         aria-current={segment === 'blog' ? 'page' : undefined}
-        href="{$locale}/blog">{$_('nav.blog')}</a>
+        href="{$locale}/blog/">{$_('nav.blog')}</a>
     </li>
   </ul>
   <ul>
@@ -30,7 +34,7 @@
       <li>
         <a
           aria-current={_locale === $locale ? 'page' : undefined}
-          href={_locale}>{$_(`locale.${_locale}`)}</a>
+          href={pathWithReplacedLocale($page.path, _locale)}>{$_(`locale.${_locale}`)}</a>
       </li>
     {/each}
   </ul>

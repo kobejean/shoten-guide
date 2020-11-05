@@ -8,17 +8,14 @@ import {
 
 let hasPreloaded = false
 
-const preloadLanguageData = locale => {
+const preloadAllLanguageData = locale => {
   if (hasPreloaded) return
-  hasPreloaded = true
+
   if (typeof window === 'undefined') {
     // server side preloading
     console.log('Preloading language data...')
     SUPPORTED_LOCALE.forEach(_locale => localeStore.set(_locale))
-  } else {
-    // client side preloading
-    // LOCALE_IMPORTS[locale]() // prioritize initial locale
-    // Object.values(LOCALE_IMPORTS).forEach((importFunction) => importFunction())
+    hasPreloaded = true
   }
 }
 
@@ -26,17 +23,14 @@ export const setLocale = async (preloadMethods, page, session) => {
   const currentLocale = get(localeStore)
   const { locale } = page.params
 
-  preloadLanguageData(locale)
+  preloadAllLanguageData(locale)
+
+  if (!currentLocale) {
+    // if locale is currently null we probably missed initialization
+    init({ fallbackLocale: FALLBACK_LOCAL, initialLocale: locale })
+  }
 
   if (!SUPPORTED_LOCALE.has(locale)) {
     preloadMethods.error(404, 'Not found')
-  }
-
-  if (!currentLocale) {
-    // if locale is currently null
-    init({ fallbackLocale: FALLBACK_LOCAL, initialLocale: locale })
-  } else if (currentLocale !== locale) {
-    // if locale has changed
-    localeStore.set(locale)
   }
 }

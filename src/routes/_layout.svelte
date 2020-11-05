@@ -1,6 +1,6 @@
 <script context="module">
   export async function preload(page, session) {
-    if (page.path === '/') return this.redirect(302, 'en')
+    if (page.path === '/') return this.redirect(302, session.locale + '/')
     return {}
   }
 </script>

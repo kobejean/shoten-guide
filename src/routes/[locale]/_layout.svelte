@@ -1,7 +1,7 @@
 <script context="module">
   import { setLocale } from '../../services/i18n/setup.js'
   import { LOCALE_IMPORTS } from '../../services/i18n/constants.js'
-  import { register, waitLocale, isLoading, init, locale } from 'svelte-i18n'
+  import { register, waitLocale, locale } from 'svelte-i18n'
 
   // register locale lifes
   Object.entries(LOCALE_IMPORTS).forEach(([locale, fn]) => register(locale, fn))
@@ -14,18 +14,22 @@
 
 <script>
   import Nav from '../../components/Nav.svelte'
+  import { stores } from '@sapper/app'
+  const { page } = stores()
 
   export let segment
+
+  // keep svelte-i18n locale store updated when locale url param changes
+  page.subscribe(({ params }) => locale.set(params.locale))
 </script>
 
-{#if typeof $locale === 'string' && !$isLoading}
-  <Nav {segment} />
-
+<Nav {segment} />
+<main>
   <slot />
-{/if}
+</main>
 
 <style>
-  :global(main) {
+  main {
     position: relative;
     max-width: 56em;
     background-color: white;

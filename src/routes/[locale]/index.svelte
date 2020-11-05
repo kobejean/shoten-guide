@@ -7,15 +7,14 @@
   <title>{$_('home.title')}</title>
 </svelte:head>
 
-<main>
-  <h1>{$_('home.pageName')}</h1>
-  <figure>
-    <img alt="Success Kid" src={terresaBiker} />
-    <figcaption>
-      {@html $_('home.welcome')}
-    </figcaption>
-  </figure>
-</main>
+<h1>{$_('home.pageName')}</h1>
+<p />
+<figure>
+  <img alt="Terresa Biker" src={terresaBiker} />
+  <figcaption>
+    {@html $_('home.welcome')}
+  </figcaption>
+</figure>
 
 <style lang="scss">
   h1,
