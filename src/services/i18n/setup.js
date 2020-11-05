@@ -1,10 +1,13 @@
 import { get } from 'svelte/store'
-import { locale as localeStore, init, locales } from 'svelte-i18n'
+import { locale as localeStore, init, register } from 'svelte-i18n'
 import {
   SUPPORTED_LOCALE,
   LOCALE_IMPORTS,
   FALLBACK_LOCAL,
 } from './constants.js'
+
+// register locale lifes
+Object.entries(LOCALE_IMPORTS).forEach(([locale, fn]) => register(locale, fn))
 
 let hasPreloaded = false
 
@@ -19,7 +22,7 @@ const preloadAllLanguageData = locale => {
   }
 }
 
-export const setLocale = async (preloadMethods, page, session) => {
+export const preloadLocale = async (preloadMethods, page, session) => {
   const currentLocale = get(localeStore)
   const { locale } = page.params
 

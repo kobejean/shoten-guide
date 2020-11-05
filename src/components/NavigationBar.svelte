@@ -4,30 +4,43 @@
   import { stores } from '@sapper/app'
   const { page } = stores()
 
+  const navTabs = [
+    {
+      localizationKey: 'nav.home',
+      href: `${$locale}/`,
+      segment: undefined,
+    },
+    {
+      localizationKey: 'nav.locations',
+      href: `${$locale}/locations/`,
+      segment: 'locations',
+    },
+    {
+      localizationKey: 'nav.about',
+      href: `${$locale}/about/`,
+      segment: 'about',
+    },
+    {
+      localizationKey: 'nav.blog',
+      href: `${$locale}/blog/`,
+      segment: 'blog',
+      prefetch: true,
+    },
+  ]
+
   export let segment
 </script>
 
 <nav>
   <ul>
-    <li>
-      <a
-        aria-current={segment === undefined ? 'page' : undefined}
-        href="{$locale}/">{$_('nav.home')}</a>
-    </li>
-    <li>
-      <a
-        aria-current={segment === 'about' ? 'page' : undefined}
-        href="{$locale}/about/">{$_('nav.about')}</a>
-    </li>
-
-    <!-- for the blog link, we're using rel=prefetch so that Sapper prefetches
-		     the blog data when we hover over the link or tap it on a touchscreen -->
-    <li>
-      <a
-        rel="prefetch"
-        aria-current={segment === 'blog' ? 'page' : undefined}
-        href="{$locale}/blog/">{$_('nav.blog')}</a>
-    </li>
+    {#each navTabs as tab}
+      <li>
+        <a
+          rel={tab.prefetch ? 'prefetch' : undefined}
+          aria-current={segment === tab.segment ? 'page' : undefined}
+          href={tab.href}>{$_(tab.localizationKey)}</a>
+      </li>
+    {/each}
   </ul>
   <ul>
     {#each $locales as _locale}

@@ -16,8 +16,9 @@
   },
   "nav": {
     "about": "情報",
+    "blog": "ブログ",
     "home": "ホーム",
-    "blog": "ブログ"
+    "locations": "店舗を探す"
   },
   "notFound": {
     "title": "商店ガイド｜４０４",

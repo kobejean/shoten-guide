@@ -1,29 +1,30 @@
 <script context="module">
-  import { setLocale } from '../../services/i18n/setup.js'
-  import { LOCALE_IMPORTS } from '../../services/i18n/constants.js'
-  import { register, waitLocale, locale } from 'svelte-i18n'
-
-  // register locale lifes
-  Object.entries(LOCALE_IMPORTS).forEach(([locale, fn]) => register(locale, fn))
+  import { preloadLocale } from '../../services/i18n/setup.js'
+  import { waitLocale, locale } from 'svelte-i18n'
 
   export async function preload(page, session) {
-    await setLocale(this, page, session)
+    await preloadLocale(this, page, session)
     await waitLocale()
   }
 </script>
 
 <script>
-  import Nav from '../../components/Nav.svelte'
+  import NavigationBar from '../../components/NavigationBar.svelte'
+  import { get } from 'svelte/store'
   import { stores } from '@sapper/app'
-  const { page } = stores()
 
   export let segment
 
   // keep svelte-i18n locale store updated when locale url param changes
-  page.subscribe(({ params }) => locale.set(params.locale))
+  const { page } = stores()
+  page.subscribe(({ params }) => {
+    if (get(locale) !== params.locale) {
+      locale.set(params.locale)
+    }
+  })
 </script>
 
-<Nav {segment} />
+<NavigationBar {segment} />
 <main>
   <slot />
 </main>
