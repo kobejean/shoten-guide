@@ -1,3 +1,0 @@
-[submodule "submodules/svelte-routing"]
-	path = submodules/svelte-routing
-	url = https://github.com/kobejean/svelte-routing
