@@ -1,6 +1,6 @@
 .DS_Store
 /node_modules/
-/src/node_modules/@sapper/
+/src/node_modules/
 /src/node_modules_hack/@sapper/
 yarn-error.log
 /__sapper__/
