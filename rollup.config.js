@@ -10,6 +10,7 @@ import json from '@rollup/plugin-json'
 import { terser } from 'rollup-plugin-terser'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
+import fs from 'fs'
 
 const mode = process.env.NODE_ENV
 const dev = mode === 'development'
@@ -23,6 +24,16 @@ const onwarn = (warning, onwarn) =>
 
 const preprocess = sveltePreprocess()
 
+const mapkitSecret =
+  process.env.MAPKIT_SERCET ||
+  fs.readFileSync('./certificates/mapkit.p8', 'utf8')
+
+const commonReplacements = {
+  'process.env.NODE_ENV': JSON.stringify(mode),
+  'process.env.SAPPER_TIMESTAMP': process.env.SAPPER_TIMESTAMP || Date.now(),
+  'process.env.MAPKIT_SERCET': JSON.stringify(mapkitSecret),
+}
+
 export default {
   client: {
     input: config.client.input(),
@@ -31,7 +42,7 @@ export default {
       json(),
       replace({
         'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        ...commonReplacements,
       }),
       svelte({
         dev,
@@ -90,7 +101,7 @@ export default {
       json(),
       replace({
         'process.browser': false,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        ...commonReplacements,
       }),
       svelte({
         generate: 'ssr',
@@ -123,7 +134,7 @@ export default {
       resolve(),
       replace({
         'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        ...commonReplacements,
       }),
       commonjs(),
       !dev && terser(),

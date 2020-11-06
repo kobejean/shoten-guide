@@ -1,11 +1,13 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "shouten-guide",
+  "description": "shouten-guide",
   "version": "0.0.1",
   "scripts": {
-    "dev": "sapper dev",
-    "build": "sapper build --legacy",
-    "export": "sapper export --legacy",
+    "dev": "rename-hack && sapper dev",
+    "rename-hack": "cp -R src/node_modules_hack src/node_modules",
+    "build": "npm run rename-hack && sapper build --legacy",
+    "publish": "vercel -e SAPPER_TIMESTAMP=$(date +%s%3N)",
+    "export": "npm run rename-hack && sapper export --legacy",
     "start": "node __sapper__/build"
   },
   "dependencies": {
