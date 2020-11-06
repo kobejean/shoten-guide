@@ -1,4 +1,4 @@
-import { files, shell } from '@sapper/service-worker'
+import { files, shell, routes } from '@sapper/service-worker'
 const timestamp = process.env.SAPPER_TIMESTAMP
 
 const ASSETS = `cache${timestamp}`
@@ -53,6 +53,15 @@ async function fetchAndCache(request, url) {
     const response = await cache.match(request)
     if (response) return response
 
+    // for pages, you might want to serve a shell `service-worker-index.html` file,
+    // which Sapper has generated for you. It's not right for every
+    // app, but if it's right for yours then uncomment this section
+    const route = routes.find(route => route.pattern.test(url.pathname))
+    const fisrtSegment = route && route.pattern.exec(url.pathname)[1]
+    if (url.origin === self.origin && route && fisrtSegment !== 'api') {
+      return caches.match('/service-worker-index.html')
+    }
+
     throw err
   }
 }
@@ -79,18 +88,6 @@ self.addEventListener('fetch', event => {
         // if your application has other URLs with data that will never change,
         // set this variable to true for them and they will only be fetched once.
         const cachedAsset = isStaticAsset && (await caches.match(event.request))
-
-        // for pages, you might want to serve a shell `service-worker-index.html` file,
-        // which Sapper has generated for you. It's not right for every
-        // app, but if it's right for yours then uncomment this section
-
-        // if (
-        //   !cachedAsset &&
-        //   url.origin === self.origin &&
-        //   routes.find(route => route.pattern.test(url.pathname))
-        // ) {
-        //   return caches.match('/service-worker-index.html')
-        // }
 
         return cachedAsset || fetchAndCache(event.request, url)
       })()
