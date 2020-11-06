@@ -1,0 +1,28 @@
+{
+  "about": {
+    "title": "商店ガイド｜情報",
+    "pageName": "情報ページ",
+    "welcome": "<b>情報ページ</b>へようこそ！"
+  },
+  "home": {
+    "title": "商店ガイド｜ホーム",
+    "pageName": "ホームページ",
+    "welcome": "<b>ホームページ</b>へようこそ！"
+  },
+  "locale": {
+    "en": "English",
+    "ja": "日本語",
+    "ko": "한국어"
+  },
+  "nav": {
+    "about": "情報",
+    "blog": "ブログ",
+    "home": "ホーム",
+    "locations": "店舗を探す"
+  },
+  "notFound": {
+    "title": "商店ガイド｜４０４",
+    "errorMessage": "ページが見つかりませんでした。",
+    "linkBackHome": "ホームへ"
+  }
+}
