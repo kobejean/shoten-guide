@@ -25,13 +25,13 @@ const onwarn = (warning, onwarn) =>
 const preprocess = sveltePreprocess()
 
 const mapkitSecret =
-  process.env.MAPKIT_SERCET ||
+  process.env.MAPKIT_SECRET ||
   fs.readFileSync('./certificates/mapkit.p8', 'utf8')
 
 const commonReplacements = {
   'process.env.NODE_ENV': JSON.stringify(mode),
   'process.env.SAPPER_TIMESTAMP': process.env.SAPPER_TIMESTAMP || Date.now(),
-  'process.env.MAPKIT_SERCET': JSON.stringify(mapkitSecret),
+  'process.env.MAPKIT_SECRET': JSON.stringify(mapkitSecret),
 }
 
 export default {

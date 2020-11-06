@@ -17,7 +17,7 @@ export function get(req, res, next) {
     iat: timestamp,
     exp: timestamp + 15778800,
   }
-  const token = jwt.sign(payload, process.env.MAPKIT_SERCET, { header: HEADER })
+  const token = jwt.sign(payload, process.env.MAPKIT_SECRET, { header: HEADER })
 
   res.writeHead(200, {
     'Content-Type': 'application/json',
