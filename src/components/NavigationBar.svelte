@@ -24,7 +24,7 @@
     },
   ]
 
-  export let segment, safeMode
+  export let segment
 </script>
 
 <nav>
@@ -34,7 +34,7 @@
         <a
           rel={tab.prefetch ? 'prefetch' : undefined}
           aria-current={segment === tab.segment ? 'page' : undefined}
-          href={`${$locale}/${tab.segment || ''}`}>{$locale && $_(tab.localizationKey)}</a>
+          href={`${$locale}/${tab.segment || ''}`}>{$_(tab.localizationKey)}</a>
       </li>
     {/each}
   </ul>
@@ -42,10 +42,9 @@
     {#each $locales as _locale (_locale)}
       <li>
         <a
-          rel={safeMode ? 'external' : undefined}
           aria-current={_locale === $locale ? 'page' : undefined}
           href={pathWithReplacedLocale($page.path, _locale)}
-          sapper:noscroll>{$locale && $_(`locale.${_locale}`)}</a>
+          sapper:noscroll>{$_(`locale.${_locale}`)}</a>
       </li>
     {/each}
   </ul>

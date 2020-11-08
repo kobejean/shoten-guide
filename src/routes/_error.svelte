@@ -9,6 +9,7 @@
 
   const dev = process.env.NODE_ENV === 'development'
 
+  // if we're at root or locale was never initialized we need to get it from session
   $: locale = $localeStore || $session.sessionLocale
 </script>
 

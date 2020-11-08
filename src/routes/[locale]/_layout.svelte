@@ -25,17 +25,22 @@
 </script>
 
 <NavigationBar {segment} />
-<main>
-  <slot />
-</main>
+<slot />
 
 <style>
-  main {
+  :global(main) {
     position: relative;
     max-width: 56em;
     background-color: white;
     padding: 2em;
     margin: 0 auto;
     box-sizing: border-box;
+  }
+
+  :global(main h1) {
+    color: #ff3e00;
+    text-transform: uppercase;
+    font-size: 4em;
+    font-weight: 100;
   }
 </style>
