@@ -14,10 +14,10 @@
 </script>
 
 <svelte:head>
-  <title>Blog</title>
+  <title>{$_('blog.title')}</title>
 </svelte:head>
 
-<h1>Recent posts</h1>
+<h1>{$_('blog.recentPosts')}</h1>
 <ul>
   {#each posts as post}
     <!-- we're using the non-standard `rel=prefetch` attribute to
