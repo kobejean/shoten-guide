@@ -11,7 +11,7 @@
   <h1>{$_('home.pageName')}</h1>
   <p />
   <figure>
-    <!-- <img alt="Terresa Biker" src={terresaBiker} /> -->
+    <img alt="Terresa Biker" src={terresaBiker} style="display: none" />
     <figcaption>
       {@html $_('home.welcome')}
     </figcaption>
