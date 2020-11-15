@@ -11,19 +11,10 @@
 </script>
 
 <svelte:head>
-  <title>{$_('about.title')}</title>
+  <title>{$_('locations.title')}</title>
 </svelte:head>
 
-<h1>{$_('about.pageName')}</h1>
+<h1>{$_('locations.pageName')}</h1>
 <a href="{locationsPath}/aizu/">Aizu</a>
 <a href="{locationsPath}/kobe/">Kobe</a>
 <p>Region: {region}</p>
-
-<style lang="scss">
-  h1 {
-    color: #ff3e00;
-    text-transform: uppercase;
-    font-size: 4em;
-    font-weight: 100;
-  }
-</style>

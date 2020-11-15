@@ -1,7 +1,7 @@
 <script context="module">
   import { _, locale } from 'svelte-i18n'
   export function preload() {
-    return this.fetch(`${locale}/blog.json`)
+    return this.fetch(`api/blog.json`)
       .then(r => r.json())
       .then(posts => {
         return { posts }

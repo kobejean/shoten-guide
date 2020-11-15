@@ -1,15 +1,15 @@
 <script context="module">
   export async function preload(page, session) {
     if (page.path === '/') return this.redirect(302, session.locale + '/')
-    return {}
   }
 </script>
 
 <script>
   export let segment
+  segment // silence warning
 </script>
 
-<slot {segment} />
+<slot />
 
 <style lang="scss">
   :global(html) {

@@ -1,9 +1,8 @@
 <script>
-  import { onMount, onDestroy } from 'svelte'
-  import { mountMapkit, unmountMapkit } from './mapkitUtils.js'
+  import { onMount } from 'svelte'
+  import { mountMapkit } from './mapkitUtils.js'
 
   onMount(mountMapkit)
-  onDestroy(unmountMapkit)
 </script>
 
 <div id="map" role="application" aria-label="Map of Shoutengai" />

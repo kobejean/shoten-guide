@@ -1,20 +1,22 @@
 <script>
   import { _ } from 'svelte-i18n'
-  import terresaBiker from 'images/terresaBiker.jpg'
+  // import terresaBiker from 'images/terresaBiker.jpg'
 </script>
 
 <svelte:head>
   <title>{$_('home.title')}</title>
 </svelte:head>
 
-<h1>{$_('home.pageName')}</h1>
-<p />
-<figure>
-  <img alt="Terresa Biker" src={terresaBiker} />
-  <figcaption>
-    {@html $_('home.welcome')}
-  </figcaption>
-</figure>
+<main>
+  <h1>{$_('home.pageName')}</h1>
+  <p />
+  <figure>
+    <!-- <img alt="Terresa Biker" src={terresaBiker} style="display: none" /> -->
+    <figcaption>
+      {@html $_('home.welcome')}
+    </figcaption>
+  </figure>
+</main>
 
 <style lang="scss">
   h1,

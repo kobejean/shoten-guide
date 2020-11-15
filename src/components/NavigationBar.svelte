@@ -7,22 +7,18 @@
   const navTabs = [
     {
       localizationKey: 'nav.home',
-      href: `${$locale}/`,
       segment: undefined,
     },
     {
       localizationKey: 'nav.locations',
-      href: `${$locale}/locations/`,
       segment: 'locations',
     },
     {
       localizationKey: 'nav.about',
-      href: `${$locale}/about/`,
       segment: 'about',
     },
     {
       localizationKey: 'nav.blog',
-      href: `${$locale}/blog/`,
       segment: 'blog',
       prefetch: true,
     },
@@ -33,17 +29,17 @@
 
 <nav>
   <ul>
-    {#each navTabs as tab}
+    {#each navTabs as tab (tab.localizationKey)}
       <li>
         <a
           rel={tab.prefetch ? 'prefetch' : undefined}
           aria-current={segment === tab.segment ? 'page' : undefined}
-          href={tab.href}>{$_(tab.localizationKey)}</a>
+          href={`${$locale}/${tab.segment || ''}`}>{$_(tab.localizationKey)}</a>
       </li>
     {/each}
   </ul>
   <ul>
-    {#each $locales as _locale}
+    {#each $locales as _locale (_locale)}
       <li>
         <a
           aria-current={_locale === $locale ? 'page' : undefined}
