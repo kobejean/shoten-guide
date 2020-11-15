@@ -25,7 +25,7 @@
 
   <p>{error.message}</p>
   <p>
-    <a href="#back" onclick="event.preventDefault();history.go(-1)">Go Back</a>
+    <a href="#back" on:click|preventDefault={() => history.go(-1)}>Go Back</a>
     or go to
     <a href={`${locale}/`}>Home</a>
   </p>

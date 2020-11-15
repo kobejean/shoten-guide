@@ -29,8 +29,7 @@ export const preloadLocale = async (preloadMethods, page, session) => {
   preloadAllLanguageData(locale)
 
   if (!SUPPORTED_LOCALE.has(locale)) {
-    return
-    // preloadMethods.error(404, 'Not found')
+    preloadMethods.error(404, 'Not found')
   }
 
   if (!currentLocale) {
