@@ -33,4 +33,8 @@
   $: pathPrefix = `${$locale}/locations`
 </script>
 
+<svelte:head>
+  <title>{$_('locations.title')}</title>
+</svelte:head>
+
 <h1>{$_('locations.pageName')}</h1>

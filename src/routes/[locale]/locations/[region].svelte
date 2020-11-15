@@ -11,7 +11,7 @@
 </script>
 
 <svelte:head>
-  <title>{$_('locations.title')}</title>
+  <title>{$_('locations.title')}{` | ${region}`}</title>
 </svelte:head>
 
 <h1>{$_('locations.pageName')}</h1>
