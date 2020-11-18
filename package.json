@@ -3,7 +3,7 @@
   "description": "shouten-guide",
   "version": "0.0.1",
   "scripts": {
-    "rename-hack": "cp -R src/node_modules_hack/* src/node_modules",
+    "rename-hack": "cp -R src/node_modules_hack src/node_modules",
     "dev": "npm run rename-hack && sapper dev",
     "build": "npm run rename-hack && SAPPER_TIMESTAMP=$(date +%s%3N) sapper build --legacy",
     "export": "npm run rename-hack && sapper export --legacy",
