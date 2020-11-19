@@ -1,55 +1,11 @@
 import { loadScript } from '../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
+import { current } from '../sidebar/store'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
 let map
-
-const REGION_DATA = {
-  aizu: {
-    center: { latitude: 37.4967762, longitude: 139.9267593 },
-    span: { latitudeDelta: 0.01, longitudeDelta: 0.01 },
-    annotations: [
-      {
-        color: '#f4a56d',
-        title: '神明通り商店街',
-        glyphText: '🛍',
-        center: { latitude: 37.4967762, longitude: 139.9267593 },
-      },
-    ],
-  },
-  kobe: {
-    center: { latitude: 34.688392, longitude: 135.18649 },
-    span: { latitudeDelta: 0.01, longitudeDelta: 0.01 },
-    annotations: [
-      {
-        color: '#f4a56d',
-        title: '元町商店街',
-        glyphText: '🛍',
-        center: { latitude: 34.688392, longitude: 135.18649 },
-      },
-    ],
-  },
-}
-const COUNTRY_DATA = {
-  japan: {
-    center: { latitude: 37.998915, longitude: 137.191162 },
-    span: { latitudeDelta: 15, longitudeDelta: 15 },
-    annotations: [
-      {
-        color: '#f4a56d',
-        title: '会津',
-        center: REGION_DATA.aizu.center,
-      },
-      {
-        color: '#f4a56d',
-        title: '神戸',
-        center: REGION_DATA.kobe.center,
-      },
-    ],
-  },
-}
 
 /**
  * Handles initializing mapkit.
@@ -68,7 +24,7 @@ const initMap = async () => {
 /**
  * Handles loading the map with the desired region and annotations.
  */
-const loadMap = async region => {
+const loadMap = async () => {
   const mapType = mapkit.Map.MapTypes.Standard
   const pointOfInterestFilter = mapkit.PointOfInterestFilter.including([
     mapkit.PointOfInterestCategory.Airport,
@@ -120,7 +76,8 @@ const loadMap = async region => {
   }
   map = new mapkit.Map('map', mapOptions)
 
-  moveToRegion(region, false)
+  const { annotations, center, span } = get(current)
+  moveToScene({ annotations, center, span }, false)
 }
 
 /**
@@ -132,28 +89,26 @@ const handleLanguageChange = async language => {
   setTimeout(() => (mapkit.language = language), 0)
 }
 
-const moveToScene = (data, animated = false) => {
+const moveToScene = (scene, animated = false) => {
+  if (!scene.center || !scene.span || typeof scene.annotations !== 'object')
+    return
+
   const center = new mapkit.Coordinate(
-    data.center.latitude,
-    data.center.longitude
+    scene.center.latitude,
+    scene.center.longitude
   )
   const span = new mapkit.CoordinateSpan(
-    data.span.latitudeDelta,
-    data.span.longitudeDelta
+    scene.span.latitudeDelta,
+    scene.span.longitudeDelta
   )
   const region = new mapkit.CoordinateRegion(center, span)
 
-  const annotations = data.annotations.map(annotation => {
-    const center = new mapkit.Coordinate(
-      annotation.center.latitude,
-      annotation.center.longitude
+  const annotations = scene.annotations.map(annotation => {
+    const coordinate = new mapkit.Coordinate(
+      annotation.coordinate.latitude,
+      annotation.coordinate.longitude
     )
-    const options = {
-      color: annotation.color,
-      title: annotation.title,
-      glyphText: annotation.glyphText || '',
-    }
-    return new mapkit.MarkerAnnotation(center, options)
+    return new mapkit.MarkerAnnotation(coordinate, annotation.options)
   })
 
   map.removeAnnotations(map.annotations)
@@ -161,20 +116,12 @@ const moveToScene = (data, animated = false) => {
   map.setRegionAnimated(region, animated)
 }
 
-const moveToRegion = (region, animated = false) => {
-  if (!region) {
-    moveToScene(COUNTRY_DATA.japan, animated)
-  } else {
-    moveToScene(REGION_DATA[region], animated)
-  }
-}
-
 /**
  * Used to keep mapkit's language state up-to-date with the site's language state.
  */
-export const handleRegionChange = region => {
+export const handleRegionChange = (annotations, center, span) => {
   if (typeof mapkit === 'undefined') return
-  moveToRegion(region, true)
+  moveToScene({ annotations, center, span }, true)
 }
 
 /**

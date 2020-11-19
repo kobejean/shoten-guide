@@ -21,7 +21,10 @@
   },
   "locations": {
     "title": "商店ガイド｜店舗を探す",
-    "pageName": "店舗を探す"
+    "pageName": "店舗を探す",
+    "sidebar": {
+      "emptyMessage": "店舗が見つかりませんでした。"
+    }
   },
   "nav": {
     "about": "情報",

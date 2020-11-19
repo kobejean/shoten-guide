@@ -7,19 +7,22 @@
   } from '../../../components/sidebar/store'
   import { _, locale } from 'svelte-i18n'
   export async function preload(page, session) {
-    const { locale } = page.params
-    const path = []
+    const { locale, path } = page.params
+    const [region] = path
 
     if (typeof get(pathStore) === 'undefined') {
       pathStore.set(path)
     }
 
-    const res = await this.fetch(`api/locations.json?locale=${locale}`)
+    const pathString = path.reduce((acc, seg) => acc + '/' + seg, '')
+    const res = await this.fetch(
+      `api/locations${pathString}.json?locale=${locale}`
+    )
 
     if (res.status === 200) {
       const sidebarParams = await res.json()
       updateNodeAtPathWithParams(path, sidebarParams)
-      return { path, sidebarParams }
+      return { region, path, sidebarParams }
     } else {
       this.error(res.status, data.message)
     }
@@ -28,18 +31,14 @@
 
 <script>
   import { onMount } from 'svelte'
-
-  export let path, sidebarParams
-
+  export let region, path, sidebarParams
   onMount(() => updateNodeAtPathWithParams(path, sidebarParams))
-
-  $: pathPrefix = `${$locale}/locations`
+  $: locationsPath = `${$locale}/locations`
 </script>
 
 <svelte:head>
-  <title>{$_('locations.title')}</title>
+  <title>{$_('locations.title')}{` | ${$current.title}`}</title>
 </svelte:head>
 
 <h1>{$_('locations.pageName')}</h1>
-
-<p>Please select a city.</p>
+<p>Showing locations for: {region}</p>

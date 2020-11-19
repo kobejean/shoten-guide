@@ -1,8 +1,9 @@
 <script>
-  import { locale } from 'svelte-i18n'
-  import { current } from '../../components/sidebar/store'
+  import { locale, _ } from 'svelte-i18n'
+  import { current, tree } from '../../components/sidebar/store'
 
-  $: items = ($current && Object.values($current.items)) || []
+  $: items = ($current && Object.values($current.items || {})) || []
+  // $: console.log($tree)
 </script>
 
 <ol class="sidebar-items">
@@ -11,7 +12,7 @@
       <li>{item.title}</li>
     </a>
   {:else}
-    <li>No locations to display.</li>
+    <li class="error-message">{$_('locations.sidebar.emptyMessage')}</li>
   {/each}
 </ol>
 
@@ -26,6 +27,10 @@
       line-height: 30px;
       list-style: none;
       border-bottom: solid 1px $border-shadow;
+
+      &.error-message {
+        text-align: center;
+      }
     }
   }
 </style>

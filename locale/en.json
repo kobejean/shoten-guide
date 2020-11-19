@@ -21,7 +21,10 @@
   },
   "locations": {
     "title": "Shouten Guide | Locations",
-    "pageName": "Locations"
+    "pageName": "Locations",
+    "sidebar": {
+      "emptyMessage": "No locations were found."
+    }
   },
   "nav": {
     "about": "About",

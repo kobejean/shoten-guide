@@ -42,7 +42,7 @@ const setNodeAtPath = ($path, newNode) => {
     tree.update($tree => $tree)
   }
 }
-export const updateNodeAtPath = ($path, updater) => {
+const updateNodeAtPath = ($path, updater) => {
   setNodeAtPath($path, updater(getNodeAtPath($path)))
 }
 
@@ -53,3 +53,14 @@ export const parent = derived(stack, getParentFromStack)
 const getCurrentFromStack = $stack =>
   $stack.length > 0 ? $stack[$stack.length - 1] : undefined
 export const current = derived(stack, getCurrentFromStack)
+
+export const updateNodeAtPathWithParams = (path, params) => {
+  updateNodeAtPath(path, $current => {
+    // don't overwrite items that have been loaded already
+    const items = { ...$current.items }
+    Object.values(params.items).forEach(item => {
+      items[item.id] = { ...items[item.id], ...item }
+    })
+    return Object.assign($current, params, { items })
+  })
+}

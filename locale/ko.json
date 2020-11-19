@@ -21,7 +21,10 @@
   },
   "locations": {
     "title": "상가 가이드 | 매장 찾기",
-    "pageName": "매장 찾기"
+    "pageName": "매장 찾기",
+    "sidebar": {
+      "emptyMessage": "점포를 찾을 수 없습니다."
+    }
   },
   "nav": {
     "about": "정보",

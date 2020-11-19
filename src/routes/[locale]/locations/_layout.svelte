@@ -1,13 +1,7 @@
 <script context="module">
   import { get } from 'svelte/store'
   import { path as pathStore } from '../../../components/sidebar/store'
-  export async function preload(page, session) {
-    if (typeof get(pathStore) === 'undefined') {
-      const { region } = page.params
-      pathStore.set([region].filter(seg => seg))
-    }
-    return {}
-  }
+  export async function preload(page, session) {}
 </script>
 
 <script>
@@ -18,18 +12,21 @@
 
   const { page } = stores()
   page.subscribe($page => {
-    const { region } = $page.params
-    pathStore.set([region].filter(seg => seg))
+    pathStore.set($page.params.path || [])
   })
 
   export let segment
   segment // silence warning
+
+  if (typeof get(pathStore) === 'undefined') {
+    pathStore.set($page.params.path || [])
+  }
 </script>
 
 <main>
   <Sidebar />
   <section id="content">
-    <Map region={$page.params.region} />
+    <Map />
     <slot />
   </section>
 </main>

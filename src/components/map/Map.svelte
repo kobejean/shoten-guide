@@ -1,11 +1,14 @@
 <script>
   import { onMount } from 'svelte'
   import { mountMapkit, handleRegionChange } from './mapkitUtils.js'
-  export let region
+  import { current } from '../sidebar/store'
+  $: annotations = $current.annotations
+  $: center = $current.center
+  $: span = $current.span
 
-  onMount(() => mountMapkit(region))
+  onMount(mountMapkit)
 
-  $: handleRegionChange(region)
+  $: handleRegionChange(annotations, center, span)
 </script>
 
 <div id="map" role="application" aria-label="Map of Shoutengai" />

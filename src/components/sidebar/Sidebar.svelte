@@ -1,10 +1,6 @@
 <script>
-  import { locale } from 'svelte-i18n'
-  import { parent, current } from '../../components/sidebar/store'
   import Breadcrumbs from './Breadcrumbs.svelte'
   import SidebarItems from './SidebarItems.svelte'
-
-  $: items = ($current && Object.values($current.items)) || []
 </script>
 
 <aside>
