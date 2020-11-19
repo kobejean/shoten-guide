@@ -4,6 +4,53 @@ import { get } from 'svelte/store'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
+let map
+
+const REGION_DATA = {
+  aizu: {
+    center: { latitude: 37.4967762, longitude: 139.9267593 },
+    span: { latitudeDelta: 0.01, longitudeDelta: 0.01 },
+    annotations: [
+      {
+        color: '#f4a56d',
+        title: '神明通り商店街',
+        glyphText: '🛍',
+        center: { latitude: 37.4967762, longitude: 139.9267593 },
+      },
+    ],
+  },
+  kobe: {
+    center: { latitude: 34.688392, longitude: 135.18649 },
+    span: { latitudeDelta: 0.01, longitudeDelta: 0.01 },
+    annotations: [
+      {
+        color: '#f4a56d',
+        title: '元町商店街',
+        glyphText: '🛍',
+        center: { latitude: 34.688392, longitude: 135.18649 },
+      },
+    ],
+  },
+}
+const COUNTRY_DATA = {
+  japan: {
+    center: { latitude: 37.998915, longitude: 137.191162 },
+    span: { latitudeDelta: 15, longitudeDelta: 15 },
+    annotations: [
+      {
+        color: '#f4a56d',
+        title: '会津',
+        center: REGION_DATA.aizu.center,
+      },
+      {
+        color: '#f4a56d',
+        title: '神戸',
+        center: REGION_DATA.kobe.center,
+      },
+    ],
+  },
+}
+
 /**
  * Handles initializing mapkit.
  */
@@ -21,13 +68,7 @@ const initMap = async () => {
 /**
  * Handles loading the map with the desired region and annotations.
  */
-const loadMap = async () => {
-  const MarkerAnnotation = mapkit.MarkerAnnotation
-  const shimeiDouriShoutengai = new mapkit.Coordinate(37.4967762, 139.9267593)
-  const shimeiDouriShoutengaiRegion = new mapkit.CoordinateRegion(
-    new mapkit.Coordinate(37.4967762, 139.9267593),
-    new mapkit.CoordinateSpan(0.01, 0.01)
-  )
+const loadMap = async region => {
   const mapType = mapkit.Map.MapTypes.Standard
   const pointOfInterestFilter = mapkit.PointOfInterestFilter.including([
     mapkit.PointOfInterestCategory.Airport,
@@ -77,18 +118,9 @@ const loadMap = async () => {
     pointOfInterestFilter,
     showsCompass: mapkit.FeatureVisibility.Adaptive,
   }
-  const map = new mapkit.Map('map', mapOptions)
+  map = new mapkit.Map('map', mapOptions)
 
-  const shimeiDouriShoutengaiAnnotation = new MarkerAnnotation(
-    shimeiDouriShoutengai,
-    {
-      color: '#f4a56d',
-      title: '神明通り商店街',
-      glyphText: '🛍',
-    }
-  )
-  map.showItems([shimeiDouriShoutengaiAnnotation])
-  map.region = shimeiDouriShoutengaiRegion
+  moveToRegion(region, false)
 }
 
 /**
@@ -100,19 +132,64 @@ const handleLanguageChange = async language => {
   setTimeout(() => (mapkit.language = language), 0)
 }
 
+const moveToScene = (data, animated = false) => {
+  const center = new mapkit.Coordinate(
+    data.center.latitude,
+    data.center.longitude
+  )
+  const span = new mapkit.CoordinateSpan(
+    data.span.latitudeDelta,
+    data.span.longitudeDelta
+  )
+  const region = new mapkit.CoordinateRegion(center, span)
+
+  const annotations = data.annotations.map(annotation => {
+    const center = new mapkit.Coordinate(
+      annotation.center.latitude,
+      annotation.center.longitude
+    )
+    const options = {
+      color: annotation.color,
+      title: annotation.title,
+      glyphText: annotation.glyphText || '',
+    }
+    return new mapkit.MarkerAnnotation(center, options)
+  })
+
+  map.removeAnnotations(map.annotations)
+  map.addAnnotations(annotations)
+  map.setRegionAnimated(region, animated)
+}
+
+const moveToRegion = (region, animated = false) => {
+  if (!region) {
+    moveToScene(COUNTRY_DATA.japan, animated)
+  } else {
+    moveToScene(REGION_DATA[region], animated)
+  }
+}
+
+/**
+ * Used to keep mapkit's language state up-to-date with the site's language state.
+ */
+export const handleRegionChange = region => {
+  if (typeof mapkit === 'undefined') return
+  moveToRegion(region, true)
+}
+
 /**
  * Handles loading mapkit and any other setup that needs to happen when the Map component is mounted.
  */
-export const mountMapkit = () => {
+export const mountMapkit = region => {
   if (typeof mapkit === 'undefined') {
     // load script, init map and load it on first mount
     loadScript(MAPKIT_SOURCE, () => {
       initMap()
-      loadMap()
+      loadMap(region)
     })
   } else {
     // just load map on subsequent mounts
-    loadMap()
+    loadMap(region)
   }
   // unsubscribe on unmount
   return locale.subscribe(handleLanguageChange)

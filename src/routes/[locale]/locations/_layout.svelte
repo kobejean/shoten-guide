@@ -14,6 +14,7 @@
   import Map from '../../../components/map/Map.svelte'
   import Sidebar from '../../../components/sidebar/Sidebar.svelte'
   import { stores } from '@sapper/app'
+  import { _ } from 'svelte-i18n'
 
   const { page } = stores()
   page.subscribe($page => {
@@ -25,11 +26,21 @@
   segment // silence warning
 </script>
 
-<Sidebar />
 <main>
-  <slot />
-  <Map />
+  <Sidebar />
+  <section id="content">
+    <Map region={$page.params.region} />
+    <slot />
+  </section>
 </main>
 
 <style lang="scss">
+  main {
+    display: flex;
+    max-width: 1400px;
+    #content {
+      margin-left: 40px;
+      width: 100%;
+    }
+  }
 </style>

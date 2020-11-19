@@ -24,7 +24,12 @@ export const stack = derived([path, tree], getStack)
 
 const getNodeAtPath = $path => {
   let node = get(tree)
-  $path.forEach(id => (node = node.items[id]))
+  $path.forEach(id => {
+    if (!node.items[id]) {
+      node.items[id] = { id, pathFromLocale: `${node.path}/${id}`, items: {} }
+    }
+    node = node.items[id]
+  })
   return node
 }
 const setNodeAtPath = ($path, newNode) => {

@@ -1,8 +1,11 @@
 <script>
   import { onMount } from 'svelte'
-  import { mountMapkit } from './mapkitUtils.js'
+  import { mountMapkit, handleRegionChange } from './mapkitUtils.js'
+  export let region
 
-  onMount(mountMapkit)
+  onMount(() => mountMapkit(region))
+
+  $: handleRegionChange(region)
 </script>
 
 <div id="map" role="application" aria-label="Map of Shoutengai" />
@@ -11,8 +14,9 @@
   @import '../../styles/colors';
 
   #map {
-    width: auto;
-    height: 600px;
+    width: 320px;
+    height: 320px;
+    float: right;
     background-color: $neutral-lightgray;
     border: solid 1px $border-shadow;
     border-radius: 10px;

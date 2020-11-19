@@ -1,27 +1,26 @@
 <script>
   import { locale } from 'svelte-i18n'
   import { parent, current } from '../../components/sidebar/store'
+  import Breadcrumbs from './Breadcrumbs.svelte'
+  import SidebarItems from './SidebarItems.svelte'
 
   $: items = ($current && Object.values($current.items)) || []
 </script>
 
 <aside>
-  {#if $parent}
-    <a href={`${$locale}${$parent.pathFromLocale}`}>{$parent.title}</a>
-  {/if}
-  <ul>
-    {#each items as item (item.id)}
-      <li><a href={`${$locale}${item.pathFromLocale}`}>{item.title}</a></li>
-    {/each}
-  </ul>
+  <Breadcrumbs />
+  <SidebarItems />
 </aside>
 
 <style lang="scss">
+  @import '../../styles/colors';
+
   aside {
-    height: 100%;
-    width: 160px;
-    float: left;
-    background-color: #ccc;
-    padding-top: 20px;
+    min-height: 320px;
+    min-width: 280px;
+    max-width: 320px;
+    background-color: $neutral-lightgray;
+    border: solid 1px $border-shadow;
+    border-radius: 10px;
   }
 </style>

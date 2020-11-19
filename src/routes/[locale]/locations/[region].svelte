@@ -1,20 +1,36 @@
 <script context="module">
+  import { current, updateNodeAtPath } from '../../../components/sidebar/store'
   import { _, locale } from 'svelte-i18n'
+
+  const TITLES = {
+    aizu: 'Aizu',
+    kobe: 'Kobe',
+  }
   export async function preload({ params }) {
-    return { region: params.region }
+    const { region } = params
+    const path = [region]
+    const sidebarParams = {
+      title: TITLES[region],
+      items: {},
+    }
+
+    updateNodeAtPath(path, $current => Object.assign($current, sidebarParams))
+    return { region, path, sidebarParams }
   }
 </script>
 
 <script>
-  export let region
+  import { onMount } from 'svelte'
+  export let region, path, sidebarParams
+  onMount(() =>
+    updateNodeAtPath(path, $current => Object.assign($current, sidebarParams))
+  )
   $: locationsPath = `${$locale}/locations`
 </script>
 
 <svelte:head>
-  <title>{$_('locations.title')}{` | ${region}`}</title>
+  <title>{$_('locations.title')}{` | ${$current.title}`}</title>
 </svelte:head>
 
 <h1>{$_('locations.pageName')}</h1>
-<a href="{locationsPath}/aizu/">Aizu</a>
-<a href="{locationsPath}/kobe/">Kobe</a>
-<p>Region: {region}</p>
+<p>Showing locations for: {region}</p>
