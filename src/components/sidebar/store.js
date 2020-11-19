@@ -13,7 +13,11 @@ const getStack = ([$path, $tree]) => {
   let stack = [$tree]
   $path.forEach(id => {
     if (!node.items[id]) {
-      node.items[id] = { id, pathFromLocale: `${node.path}/${id}`, items: {} }
+      node.items[id] = {
+        id,
+        pathFromLocale: `${node.pathFromLocale}/${id}`,
+        items: {},
+      }
     }
     node = node.items[id]
     stack.push(node)
@@ -26,7 +30,11 @@ const getNodeAtPath = $path => {
   let node = get(tree)
   $path.forEach(id => {
     if (!node.items[id]) {
-      node.items[id] = { id, pathFromLocale: `${node.path}/${id}`, items: {} }
+      node.items[id] = {
+        id,
+        pathFromLocale: `${node.pathFromLocale}/${id}`,
+        items: {},
+      }
     }
     node = node.items[id]
   })
@@ -63,4 +71,31 @@ export const updateNodeAtPathWithParams = (path, params) => {
     })
     return Object.assign($current, params, { items })
   })
+}
+
+const nodeIsLoaded = (node, locale) => {
+  return node && node.region && node.locale === locale
+}
+
+export const preloadLocationNode = async (locale, $path, proloadMethods) => {
+  $path = ($path && $path.filter(seg => !!seg)) || []
+  if (typeof get(path) === 'undefined') {
+    path.set($path)
+  }
+
+  let locationNode = getNodeAtPath($path)
+  if (nodeIsLoaded(locationNode, locale)) return locationNode
+
+  const pathString = $path.reduce((acc, seg) => acc + '/' + seg, '')
+  const res = await proloadMethods.fetch(
+    `api/locations${pathString}.json?locale=${locale}`
+  )
+
+  if (res.status === 200) {
+    locationNode = await res.json()
+    updateNodeAtPathWithParams($path, locationNode)
+    return locationNode
+  } else {
+    proloadMethods.error(res.status, data.message)
+  }
 }

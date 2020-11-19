@@ -1,16 +1,8 @@
 export default class LocationNode {
-  constructor(
-    id,
-    localizations,
-    center,
-    span,
-    annotation = null,
-    parent = null
-  ) {
+  constructor(id, localizations, region, annotation = null, parent = null) {
     this.id = id
     this.localizations = localizations
-    this.center = center
-    this.span = span
+    this.region = region
     this.annotation = annotation
     this.items = {}
 
@@ -26,13 +18,28 @@ export default class LocationNode {
     this.items[node.id] = node
   }
 
+  _getLocalization(locale, fallback, localizations) {
+    let localization = localizations[locale]
+    if (localization) {
+      return { ...localization, locale }
+    } else if (localizations[fallback]) {
+      localization = localizations[fallback]
+      return { ...localization, locale: fallback }
+    }
+    return {}
+  }
+
   stringify(locale, fallback) {
     const items = {}
     const annotations = []
     // get only important details of children
     Object.entries(this.items).forEach(([id, item]) => {
-      const localization =
-        item.localizations[locale] || item.localizations[fallback]
+      const localization = this._getLocalization(
+        locale,
+        fallback,
+        item.localizations
+      )
+      item.localizations[locale] || item.localizations[fallback]
       const processedItem = {
         ...localization,
         id,
@@ -48,15 +55,18 @@ export default class LocationNode {
       items[id] = processedItem
       annotations.push(processedAnnotation)
     })
-    const localization =
-      this.localizations[locale] || this.localizations[fallback]
+    const localization = this._getLocalization(
+      locale,
+      fallback,
+      this.localizations
+    )
     return JSON.stringify({
       ...localization,
       id: this.id,
-      center: this.center,
-      span: this.span,
-      items,
+      region: this.region,
       annotations,
+      items,
+      pathFromLocale: this.pathFromLocale,
     })
   }
 }

@@ -3,12 +3,11 @@
   import { mountMapkit, handleRegionChange } from './mapkitUtils.js'
   import { current } from '../sidebar/store'
   $: annotations = $current.annotations
-  $: center = $current.center
-  $: span = $current.span
+  $: region = $current.region
 
   onMount(mountMapkit)
 
-  $: handleRegionChange(annotations, center, span)
+  $: handleRegionChange(annotations, region)
 </script>
 
 <div id="map" role="application" aria-label="Map of Shoutengai" />

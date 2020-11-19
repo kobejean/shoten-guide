@@ -1,39 +1,21 @@
 <script context="module">
-  import { get } from 'svelte/store'
-  import { path as pathStore } from '../../../components/sidebar/store'
   import {
-    current,
+    preloadLocationNode,
     updateNodeAtPathWithParams,
   } from '../../../components/sidebar/store'
-  import { _, locale } from 'svelte-i18n'
+  import { _ } from 'svelte-i18n'
   export async function preload(page, session) {
     const { locale } = page.params
     const path = []
-
-    if (typeof get(pathStore) === 'undefined') {
-      pathStore.set(path)
-    }
-
-    const res = await this.fetch(`api/locations.json?locale=${locale}`)
-
-    if (res.status === 200) {
-      const sidebarParams = await res.json()
-      updateNodeAtPathWithParams(path, sidebarParams)
-      return { path, sidebarParams }
-    } else {
-      this.error(res.status, data.message)
-    }
+    const locationNode = await preloadLocationNode(locale, path, this)
+    return { path, locationNode }
   }
 </script>
 
 <script>
   import { onMount } from 'svelte'
-
-  export let path, sidebarParams
-
-  onMount(() => updateNodeAtPathWithParams(path, sidebarParams))
-
-  $: pathPrefix = `${$locale}/locations`
+  export let path, locationNode
+  onMount(() => updateNodeAtPathWithParams(path, locationNode))
 </script>
 
 <svelte:head>

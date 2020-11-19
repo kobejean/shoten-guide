@@ -12,6 +12,7 @@
     {
       localizationKey: 'nav.locations',
       segment: 'locations',
+      prefetch: true,
     },
     {
       localizationKey: 'nav.about',
@@ -34,7 +35,8 @@
         <a
           rel={tab.prefetch ? 'prefetch' : undefined}
           aria-current={segment === tab.segment ? 'page' : undefined}
-          href={`${$locale}/${tab.segment || ''}`}>{$_(tab.localizationKey)}</a>
+          href={`${$locale}/${tab.segment || ''}`}
+        >{$_(tab.localizationKey)}</a>
       </li>
     {/each}
   </ul>
@@ -44,7 +46,8 @@
         <a
           aria-current={_locale === $locale ? 'page' : undefined}
           href={pathWithReplacedLocale($page.path, _locale)}
-          sapper:noscroll>{$_(`locale.${_locale}`)}</a>
+          sapper:noscroll
+        >{$_(`locale.${_locale}`)}</a>
       </li>
     {/each}
   </ul>

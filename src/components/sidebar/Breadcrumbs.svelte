@@ -9,7 +9,9 @@
       <li>
         <a
           href={`${$locale}${$parent.pathFromLocale}`}
-          sapper:noscroll>{$parent.title}</a>
+          rel={'prefetch'}
+          sapper:noscroll
+        >{$parent.title}</a>
       </li>
     {/if}
     <li>{$current.title}</li>

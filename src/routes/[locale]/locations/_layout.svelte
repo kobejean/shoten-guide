@@ -12,15 +12,17 @@
 
   const { page } = stores()
   page.subscribe($page => {
-    pathStore.set($page.params.path || [])
+    const path =
+      ($page.params.path && $page.params.path.filter(seg => !!seg)) || []
+    pathStore.set(path)
   })
 
   export let segment
   segment // silence warning
 
-  if (typeof get(pathStore) === 'undefined') {
-    pathStore.set($page.params.path || [])
-  }
+  // if (typeof get(pathStore) === 'undefined') {
+  //   pathStore.set($page.params.path.filter(seg => !!seg) || [])
+  // }
 </script>
 
 <main>

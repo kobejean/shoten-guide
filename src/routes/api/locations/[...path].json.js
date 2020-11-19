@@ -15,9 +15,9 @@ function getLocationInfo(locale, path) {
 }
 
 export function get(req, res) {
-  const { slug } = req.params
+  let { path } = req.params
   const { locale } = req.query
-  const path = slug.filter(id => id)
+  path = (path && path.filter(seg => !!seg)) || []
 
   const result = getLocationInfo(locale, path)
 

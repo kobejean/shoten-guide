@@ -2,6 +2,7 @@ import { loadScript } from '../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
 import { current } from '../sidebar/store'
+import { isEqual } from 'lodash-es'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
@@ -76,8 +77,8 @@ const loadMap = async () => {
   }
   map = new mapkit.Map('map', mapOptions)
 
-  const { annotations, center, span } = get(current)
-  moveToScene({ annotations, center, span }, false)
+  const { annotations, region } = get(current)
+  moveToScene({ annotations, region }, false)
 }
 
 /**
@@ -89,39 +90,53 @@ const handleLanguageChange = async language => {
   setTimeout(() => (mapkit.language = language), 0)
 }
 
-const moveToScene = (scene, animated = false) => {
-  if (!scene.center || !scene.span || typeof scene.annotations !== 'object')
-    return
-
+let lastRegion
+const setRegionAnimated = (region, animated = false) => {
+  lastRegion = region
   const center = new mapkit.Coordinate(
-    scene.center.latitude,
-    scene.center.longitude
+    region.center.latitude,
+    region.center.longitude
   )
   const span = new mapkit.CoordinateSpan(
-    scene.span.latitudeDelta,
-    scene.span.longitudeDelta
+    region.span.latitudeDelta,
+    region.span.longitudeDelta
   )
-  const region = new mapkit.CoordinateRegion(center, span)
+  region = new mapkit.CoordinateRegion(center, span)
+  map.setRegionAnimated(region, animated)
+}
 
-  const annotations = scene.annotations.map(annotation => {
+let lastAnnotations
+const setAnnotations = annotations => {
+  lastAnnotations = annotations
+  annotations = annotations.map(annotation => {
     const coordinate = new mapkit.Coordinate(
       annotation.coordinate.latitude,
       annotation.coordinate.longitude
     )
     return new mapkit.MarkerAnnotation(coordinate, annotation.options)
   })
-
   map.removeAnnotations(map.annotations)
   map.addAnnotations(annotations)
-  map.setRegionAnimated(region, animated)
+}
+
+const moveToScene = (scene, animated = false) => {
+  if (scene.region && !isEqual(lastRegion, scene.region)) {
+    setRegionAnimated(scene.region, animated)
+  }
+  if (
+    typeof scene.annotations === 'object' &&
+    !isEqual(lastAnnotations, scene.annotations)
+  ) {
+    setAnnotations(scene.annotations)
+  }
 }
 
 /**
  * Used to keep mapkit's language state up-to-date with the site's language state.
  */
-export const handleRegionChange = (annotations, center, span) => {
+export const handleRegionChange = (annotations, region) => {
   if (typeof mapkit === 'undefined') return
-  moveToScene({ annotations, center, span }, true)
+  moveToScene({ annotations, region }, true)
 }
 
 /**
