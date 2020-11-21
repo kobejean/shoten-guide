@@ -15,11 +15,13 @@
 </script>
 
 <aside>
-  <SidebarHeader stack={$stack} />
-  <Map />
-  <footer>
-    <SidebarItems {items} />
-  </footer>
+  <article>
+    <SidebarHeader stack={$stack} />
+    <Map />
+    <footer>
+      <SidebarItems {items} />
+    </footer>
+  </article>
 </aside>
 
 <style lang="scss">
@@ -27,13 +29,17 @@
 
   aside {
     min-width: 320px;
-    background-color: $neutral-lightgray;
-    border: solid 1px $border-shadow;
-    border-radius: 10px;
-    overflow: hidden;
-    /* to have content stay within border radius */
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-    -moz-mask-image: -moz-radial-gradient(white, black);
-    mask-image: radial-gradient(white, black);
+    margin-right: 40px;
+    article {
+      margin-bottom: 2em;
+      background-color: $neutral-lightgray;
+      border: solid 1px $border-shadow;
+      border-radius: 10px;
+      overflow: hidden;
+      /* to have content stay within border radius */
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      -moz-mask-image: -moz-radial-gradient(white, black);
+      mask-image: radial-gradient(white, black);
+    }
   }
 </style>

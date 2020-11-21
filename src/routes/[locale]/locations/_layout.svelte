@@ -39,11 +39,8 @@
 <style lang="scss">
   main {
     display: flex;
+    flex-wrap: wrap;
     padding: 0 2em;
     max-width: 1400px;
-    #content {
-      margin-left: 40px;
-      width: 100%;
-    }
   }
 </style>
