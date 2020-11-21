@@ -15,7 +15,9 @@
 <ol class="sidebar-items" bind:this={list}>
   {#each sorted as item (item.id)}
     <li animate:flip transition:fade|local>
-      <a href={item.path} rel={'prefetch'} sapper:noscroll> {item.title} </a>
+      <a class="btn" href={item.path} rel={'prefetch'} sapper:noscroll>
+        {item.title}
+      </a>
     </li>
   {:else}
     <li class="error-message">{$_('locations.sidebar.emptyMessage')}</li>

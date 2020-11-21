@@ -9,7 +9,7 @@
 <header>
   <span class="left">
     {#if parent}
-      <a href={parent.path} rel={'prefetch'} sapper:noscroll>
+      <a class="btn" href={parent.path} rel={'prefetch'} sapper:noscroll>
         <svg width="13px" height="19px" viewBox="0 0 13 21">
           <title>back-button-icon</title>
           <defs />

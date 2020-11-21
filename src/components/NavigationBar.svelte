@@ -33,6 +33,7 @@
     {#each navTabs as tab (tab.localizationKey)}
       <li>
         <a
+          class="btn"
           rel={tab.prefetch ? 'prefetch' : undefined}
           aria-current={segment === tab.segment ? 'page' : undefined}
           href={`${$locale}/${tab.segment || ''}`}
@@ -46,6 +47,7 @@
     {#each $locales as _locale (_locale)}
       <li>
         <a
+          class="btn"
           aria-current={_locale === $locale ? 'page' : undefined}
           href={pathWithReplacedLocale($page.path, _locale)}
           sapper:noscroll
