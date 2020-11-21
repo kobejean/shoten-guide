@@ -1,7 +1,7 @@
 import { loadScript } from '../../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
-import { isEqual } from 'lodash'
+import { isEqual, find } from 'lodash'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
@@ -117,6 +117,7 @@ const setAnnotations = annotations => {
   })
   map.removeAnnotations(map.annotations)
   map.addAnnotations(annotations)
+  console.log('map.annotations', annotations)
 }
 
 const moveToScene = (scene, animated = false) => {
@@ -129,6 +130,12 @@ const moveToScene = (scene, animated = false) => {
   ) {
     setAnnotations(scene.annotations)
   }
+}
+
+export const selectAnnotationWithId = id => {
+  if (typeof mapkit === 'undefined' || !map) return
+  map.selectedAnnotation =
+    id && find(map.annotations, ann => ann.data.id === id)
 }
 
 /**

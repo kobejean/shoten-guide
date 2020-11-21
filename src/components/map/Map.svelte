@@ -4,14 +4,19 @@
 
 <script>
   import { onMount, getContext } from 'svelte'
-  import { mountMapkit, handleRegionChange } from './_models/MapModel.js'
+  import {
+    mountMapkit,
+    handleRegionChange,
+    selectAnnotationWithId,
+  } from './_models/MapModel.js'
 
   const stores = getContext(MAP_KEY)
-  const { annotations, region } = stores
+  const { annotations, region, highlighted } = stores
 
   onMount(() => mountMapkit(stores))
 
   $: handleRegionChange($annotations, $region)
+  $: selectAnnotationWithId($highlighted)
 </script>
 
 <div id="map" role="application" aria-label="Map of store locations" />

@@ -35,17 +35,18 @@ class LocationsModel {
     // shared stores
     const path = writable(model.path)
     const locations = writable(model.locations)
+    const highlighted = writable()
     const stack = derived([locations, path], this._getStack)
     const current = derived(stack, last)
-    const shared = { path, locations, stack, current }
+    const shared = { path, locations, stack, current, highlighted }
     // breadcrumbs stores
     const breadcrumbs = { stack, current }
     // sidebar stores
-    const sidebar = { stack, current }
+    const sidebar = { stack, current, highlighted }
     // map stores
     const region = derived(current, $current => $current.region)
     const annotations = derived(current, $current => $current.annotations)
-    const map = { region, annotations }
+    const map = { region, annotations, highlighted }
     return { shared, breadcrumbs, sidebar, map }
   }
 
