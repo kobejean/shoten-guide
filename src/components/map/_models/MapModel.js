@@ -1,8 +1,7 @@
-import { loadScript } from '../../utils/scriptLoad'
+import { loadScript } from '../../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
-import { current } from '../sidebar/store'
-import { isEqual } from 'lodash-es'
+import { isEqual } from 'lodash'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
@@ -25,7 +24,7 @@ const initMap = async () => {
 /**
  * Handles loading the map with the desired region and annotations.
  */
-const loadMap = async () => {
+const loadMap = async mapStores => {
   const mapType = mapkit.Map.MapTypes.Standard
   const pointOfInterestFilter = mapkit.PointOfInterestFilter.including([
     mapkit.PointOfInterestCategory.Airport,
@@ -77,7 +76,8 @@ const loadMap = async () => {
   }
   map = new mapkit.Map('map', mapOptions)
 
-  const { annotations, region } = get(current)
+  const annotations = get(mapStores.annotations)
+  const region = get(mapStores.region)
   moveToScene({ annotations, region }, false)
 }
 
@@ -142,16 +142,16 @@ export const handleRegionChange = (annotations, region) => {
 /**
  * Handles loading mapkit and any other setup that needs to happen when the Map component is mounted.
  */
-export const mountMapkit = region => {
+export const mountMapkit = mapStores => {
   if (typeof mapkit === 'undefined') {
     // load script, init map and load it on first mount
     loadScript(MAPKIT_SOURCE, () => {
       initMap()
-      loadMap(region)
+      loadMap(mapStores)
     })
   } else {
     // just load map on subsequent mounts
-    loadMap(region)
+    loadMap(mapStores)
   }
   // unsubscribe on unmount
   return locale.subscribe(handleLanguageChange)

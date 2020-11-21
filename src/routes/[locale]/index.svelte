@@ -1,3 +1,9 @@
+<script context="module">
+  export async function preload(page, session) {
+    return this.redirect(302, page.params.locale + '/locations')
+  }
+</script>
+
 <script>
   import { _ } from 'svelte-i18n'
   import terresaBiker from 'images/terresaBiker.jpg'

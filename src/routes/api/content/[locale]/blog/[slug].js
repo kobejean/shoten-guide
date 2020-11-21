@@ -2,7 +2,7 @@ import * as POSTS from './_posts'
 import {
   SUPPORTED_LOCALE,
   FALLBACK_LOCAL,
-} from '../../../services/i18n/constants'
+} from '../../../../../services/i18n/constants'
 
 const lookup = new Map()
 SUPPORTED_LOCALE.forEach(locale => {
@@ -21,8 +21,7 @@ function lookupPost(locale, slug) {
 export function get(req, res, next) {
   // the `slug` parameter is available because
   // this file is called [slug].json.js
-  const { slug } = req.params
-  const { locale } = req.query
+  const { locale, slug } = req.params
   const result = lookupPost(locale, slug)
 
   if (result) {

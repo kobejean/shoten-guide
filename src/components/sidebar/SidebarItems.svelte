@@ -1,20 +1,22 @@
 <script>
-  import { locale, _ } from 'svelte-i18n'
-  import { current, tree } from '../../components/sidebar/store'
+  import { _ } from 'svelte-i18n'
+  import { sortBy } from 'lodash'
+  import { flip } from 'svelte/animate'
+  import { fade } from 'svelte/transition'
+  export let items
+  let list
 
-  $: items = ($current && Object.values($current.items)) || []
-  $: console.log(JSON.stringify($tree, null, 2))
+  $: sorted = sortBy(items, 'title')
+  $: {
+    sorted
+  }
 </script>
 
-<ol class="sidebar-items">
-  {#each items as item (item.id)}
-    <a
-      href={`${$locale}${item.pathFromLocale}`}
-      rel={'prefetch'}
-      sapper:noscroll
-    >
-      <li>{item.title}</li>
-    </a>
+<ol class="sidebar-items" bind:this={list}>
+  {#each sorted as item (item.id)}
+    <li animate:flip transition:fade>
+      <a href={item.path} rel={'prefetch'} sapper:noscroll> {item.title} </a>
+    </li>
   {:else}
     <li class="error-message">{$_('locations.sidebar.emptyMessage')}</li>
   {/each}
@@ -25,16 +27,32 @@
 
   ol {
     margin: 0;
-    padding: 0;
+    padding: 10px;
+    border-top: solid 1px $border-shadow;
+    display: flex;
+    flex-wrap: wrap;
 
     li {
-      padding: 10px;
-      line-height: 30px;
+      background-color: #fafafa;
+      text-decoration: none;
+      padding: 0 10px;
+      margin-right: 8px;
+      height: 28px;
+      line-height: 28px;
       list-style: none;
-      border-bottom: solid 1px $border-shadow;
+      border-radius: 5px;
+      border: solid 1px $border-shadow;
+
+      a {
+        display: block;
+      }
 
       &.error-message {
         text-align: center;
+        background-color: unset;
+        border: none;
+        height: 30px;
+        line-height: 30px;
       }
     }
   }

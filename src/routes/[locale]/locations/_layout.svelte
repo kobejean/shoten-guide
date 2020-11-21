@@ -1,34 +1,37 @@
 <script context="module">
-  import { get } from 'svelte/store'
-  import { path as pathStore } from '../../../components/sidebar/store'
-  export async function preload(page, session) {}
+  import LocationsModel, { LOCATIONS_KEY } from './_models/LocationsModel.js'
+
+  export async function preload(page, session) {
+    return LocationsModel.preload(this, page, session)
+  }
 </script>
 
 <script>
-  import Map from '../../../components/map/Map.svelte'
-  import Sidebar from '../../../components/sidebar/Sidebar.svelte'
-  import { stores } from '@sapper/app'
+  import Map, { MAP_KEY } from '../../../components/map/Map.svelte'
+  import Sidebar, {
+    SIDEBAR_KEY,
+  } from '../../../components/sidebar/Sidebar.svelte'
+  import Breadcrumbs, {
+    BREADCRUMBS_KEY,
+  } from '../../../components/breadcrumbs/Breadcrumbs.svelte'
   import { _ } from 'svelte-i18n'
+  import { setContext } from 'svelte'
 
-  const { page } = stores()
-  page.subscribe($page => {
-    const path =
-      ($page.params.path && $page.params.path.filter(seg => !!seg)) || []
-    pathStore.set(path)
-  })
-
-  export let segment
+  export let segment, model
   segment // silence warning
 
-  // if (typeof get(pathStore) === 'undefined') {
-  //   pathStore.set($page.params.path.filter(seg => !!seg) || [])
-  // }
+  const stores = LocationsModel.initStores(model)
+  setContext(LOCATIONS_KEY, stores.shared)
+  setContext(BREADCRUMBS_KEY, stores.breadcrumbs)
+  setContext(SIDEBAR_KEY, stores.sidebar)
+  setContext(MAP_KEY, stores.map)
+  $: LocationsModel.updateStores(stores, model)
 </script>
 
+<Breadcrumbs />
 <main>
   <Sidebar />
   <section id="content">
-    <Map />
     <slot />
   </section>
 </main>
@@ -36,6 +39,7 @@
 <style lang="scss">
   main {
     display: flex;
+    padding: 0 2em;
     max-width: 1400px;
     #content {
       margin-left: 40px;

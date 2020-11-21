@@ -1,28 +1,14 @@
-<script context="module">
-  import {
-    preloadLocationNode,
-    updateNodeAtPathWithParams,
-    current,
-  } from '../../../components/sidebar/store'
-  import { _ } from 'svelte-i18n'
-  export async function preload(page, session) {
-    let { locale, path } = page.params
-    path = (path && path.filter(seg => !!seg)) || []
-    console.log(path, locale)
-    const locationNode = await preloadLocationNode(locale, path, this)
-    return { path, locationNode }
-  }
-</script>
-
 <script>
-  import { onMount } from 'svelte'
-  export let path, locationNode
-  onMount(() => updateNodeAtPathWithParams(path, locationNode))
+  import { LOCATIONS_KEY } from './_models/LocationsModel.js'
+  import { _ } from 'svelte-i18n'
+  import { getContext } from 'svelte'
+
+  const { current } = getContext(LOCATIONS_KEY)
 </script>
 
 <svelte:head>
-  <title>{$_('locations.title')}{` | ${$current.title}`}</title>
+  <title>{$_('locations.titlePrefix') + $current.title}</title>
 </svelte:head>
 
-<h1>{$_('locations.pageName')}</h1>
+<h1>{$current.title}</h1>
 <p>Showing locations for: {$current.title}</p>

@@ -1,8 +1,8 @@
 {
   "background_color": "#ffffff",
   "theme_color": "#333333",
-  "name": "Shouten Guide",
-  "short_name": "Shouten Guide",
+  "name": "Shoten Guide",
+  "short_name": "Shoten Guide",
   "display": "minimal-ui",
   "start_url": "/",
   "icons": [

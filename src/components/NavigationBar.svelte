@@ -5,10 +5,10 @@
   const { page } = stores()
 
   const navTabs = [
-    {
-      localizationKey: 'nav.home',
-      segment: undefined,
-    },
+    // {
+    //   localizationKey: 'nav.home',
+    //   segment: undefined,
+    // },
     {
       localizationKey: 'nav.locations',
       segment: 'locations',
@@ -36,7 +36,9 @@
           rel={tab.prefetch ? 'prefetch' : undefined}
           aria-current={segment === tab.segment ? 'page' : undefined}
           href={`${$locale}/${tab.segment || ''}`}
-        >{$_(tab.localizationKey)}</a>
+        >
+          {$_(tab.localizationKey)}
+        </a>
       </li>
     {/each}
   </ul>
@@ -47,7 +49,10 @@
           aria-current={_locale === $locale ? 'page' : undefined}
           href={pathWithReplacedLocale($page.path, _locale)}
           sapper:noscroll
-        >{$_(`locale.${_locale}`)}</a>
+          lang={_locale}
+        >
+          {$_(`locale.${_locale}`)}
+        </a>
       </li>
     {/each}
   </ul>

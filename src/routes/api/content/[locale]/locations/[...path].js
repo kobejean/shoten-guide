@@ -1,21 +1,17 @@
 import root from './_data'
-import { FALLBACK_LOCAL } from '../../../services/i18n/constants'
-
-function getLocationInfo(locale) {
-  return root.stringify(locale, FALLBACK_LOCAL)
-}
 
 export function get(req, res) {
-  const { locale } = req.query
+  let { locale, path } = req.params
+  path = (path && path.filter(seg => !!seg)) || []
 
-  const result = getLocationInfo(locale)
+  const locations = root.getPathSummary(locale, path)
 
-  if (result) {
+  if (locations) {
     res.writeHead(200, {
       'Content-Type': 'application/json',
     })
 
-    res.end(result)
+    res.end(JSON.stringify({ locations }))
   } else {
     res.writeHead(404, {
       'Content-Type': 'application/json',

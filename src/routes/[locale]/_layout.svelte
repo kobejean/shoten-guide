@@ -10,21 +10,20 @@
 
 <script>
   import NavigationBar from '../../components/NavigationBar.svelte'
-  import { get } from 'svelte/store'
   import { stores } from '@sapper/app'
 
   export let segment
 
   // keep svelte-i18n locale store updated when locale url param changes
   const { page } = stores()
-  page.subscribe(({ params }) => {
-    if (get(locale) !== params.locale) {
-      locale.set(params.locale)
-    }
-  })
+  $: {
+    if ($locale !== $page.params.locale) locale.set($page.params.locale)
+  }
 </script>
 
-<NavigationBar {segment} />
+<header>
+  <NavigationBar {segment} />
+</header>
 <slot />
 
 <style>
