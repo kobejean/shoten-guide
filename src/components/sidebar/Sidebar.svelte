@@ -1,27 +1,50 @@
-<script>
-  import { locale } from 'svelte-i18n'
-  import { parent, current } from '../../components/sidebar/store'
+<script context="module">
+  export const SIDEBAR_KEY = {}
+</script>
 
-  $: items = ($current && Object.values($current.items)) || []
+<script>
+  import Map from '../map/Map.svelte'
+  import SidebarHeader from './SidebarHeader.svelte'
+  import SidebarItems from './SidebarItems.svelte'
+  import { values } from 'lodash'
+  import { getContext } from 'svelte'
+
+  const { current, stack } = getContext(SIDEBAR_KEY)
+
+  $: items = values($current.items)
 </script>
 
 <aside>
-  {#if $parent}
-    <a href={`${$locale}${$parent.pathFromLocale}`}>{$parent.title}</a>
-  {/if}
-  <ul>
-    {#each items as item (item.id)}
-      <li><a href={`${$locale}${item.pathFromLocale}`}>{item.title}</a></li>
-    {/each}
-  </ul>
+  <article>
+    <SidebarHeader stack={$stack} />
+    <Map />
+    <footer>
+      <SidebarItems {items} />
+    </footer>
+  </article>
 </aside>
 
 <style lang="scss">
+  @import '../../styles/colors';
+
   aside {
-    height: 100%;
-    width: 160px;
-    float: left;
-    background-color: #ccc;
-    padding-top: 20px;
+    min-width: 320px;
+    article {
+      margin-bottom: 2em;
+      background-color: $neutral-light-gray;
+      border: solid 1px $border-shadow;
+      border-radius: 10px;
+      overflow: hidden;
+      /* to have content stay within border radius */
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      -moz-mask-image: -moz-radial-gradient(white, black);
+      mask-image: radial-gradient(white, black);
+    }
+  }
+
+  @media (min-width: 720px) {
+    aside {
+      margin-right: 40px;
+    }
   }
 </style>

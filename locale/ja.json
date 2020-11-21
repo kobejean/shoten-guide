@@ -21,7 +21,11 @@
   },
   "locations": {
     "title": "商店ガイド｜店舗を探す",
-    "pageName": "店舗を探す"
+    "titlePrefix": "商店ガイド｜",
+    "pageName": "店舗を探す",
+    "sidebar": {
+      "emptyMessage": "これ以上の選択はありません。"
+    }
   },
   "nav": {
     "about": "情報",

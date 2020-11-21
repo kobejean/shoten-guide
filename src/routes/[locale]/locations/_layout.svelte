@@ -1,35 +1,65 @@
 <script context="module">
-  import { get } from 'svelte/store'
-  import { path as pathStore } from '../../../components/sidebar/store'
+  import LocationsModel, { LOCATIONS_KEY } from './_models/LocationsModel.js'
+
   export async function preload(page, session) {
-    if (typeof get(pathStore) === 'undefined') {
-      const { region } = page.params
-      pathStore.set([region].filter(seg => seg))
-    }
-    return {}
+    return LocationsModel.preload(this, page, session)
   }
 </script>
 
 <script>
-  import Map from '../../../components/map/Map.svelte'
-  import Sidebar from '../../../components/sidebar/Sidebar.svelte'
-  import { stores } from '@sapper/app'
+  import Map, { MAP_KEY } from '../../../components/map/Map.svelte'
+  import Sidebar, {
+    SIDEBAR_KEY,
+  } from '../../../components/sidebar/Sidebar.svelte'
+  import Breadcrumbs, {
+    BREADCRUMBS_KEY,
+  } from '../../../components/breadcrumbs/Breadcrumbs.svelte'
+  import { _ } from 'svelte-i18n'
+  import { setContext } from 'svelte'
 
-  const { page } = stores()
-  page.subscribe($page => {
-    const { region } = $page.params
-    pathStore.set([region].filter(seg => seg))
-  })
-
-  export let segment
+  export let segment, model
   segment // silence warning
+
+  const stores = LocationsModel.initStores(model)
+  setContext(LOCATIONS_KEY, stores.shared)
+  setContext(BREADCRUMBS_KEY, stores.breadcrumbs)
+  setContext(SIDEBAR_KEY, stores.sidebar)
+  setContext(MAP_KEY, stores.map)
+  $: LocationsModel.updateStores(stores, model)
 </script>
 
-<Sidebar />
+<header>
+  <Breadcrumbs />
+</header>
 <main>
-  <slot />
-  <Map />
+  <Sidebar />
+  <section id="content">
+    <slot />
+  </section>
 </main>
 
 <style lang="scss">
+  main {
+    display: flex;
+    flex-wrap: nowrap;
+  }
+
+  main,
+  header {
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding: 0 2em;
+    max-width: 1400px;
+  }
+
+  @media (max-width: 720px) {
+    main {
+      flex-direction: column;
+    }
+
+    main,
+    header {
+      padding: 0 1em;
+    }
+  }
 </style>

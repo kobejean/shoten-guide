@@ -1,8 +1,11 @@
-import { loadScript } from '../../utils/scriptLoad'
+import { loadScript } from '../../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
+import { isEqual } from 'lodash'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
+
+let map
 
 /**
  * Handles initializing mapkit.
@@ -21,13 +24,7 @@ const initMap = async () => {
 /**
  * Handles loading the map with the desired region and annotations.
  */
-const loadMap = async () => {
-  const MarkerAnnotation = mapkit.MarkerAnnotation
-  const shimeiDouriShoutengai = new mapkit.Coordinate(37.4967762, 139.9267593)
-  const shimeiDouriShoutengaiRegion = new mapkit.CoordinateRegion(
-    new mapkit.Coordinate(37.4967762, 139.9267593),
-    new mapkit.CoordinateSpan(0.01, 0.01)
-  )
+const loadMap = async mapStores => {
   const mapType = mapkit.Map.MapTypes.Standard
   const pointOfInterestFilter = mapkit.PointOfInterestFilter.including([
     mapkit.PointOfInterestCategory.Airport,
@@ -77,18 +74,11 @@ const loadMap = async () => {
     pointOfInterestFilter,
     showsCompass: mapkit.FeatureVisibility.Adaptive,
   }
-  const map = new mapkit.Map('map', mapOptions)
+  map = new mapkit.Map('map', mapOptions)
 
-  const shimeiDouriShoutengaiAnnotation = new MarkerAnnotation(
-    shimeiDouriShoutengai,
-    {
-      color: '#f4a56d',
-      title: '神明通り商店街',
-      glyphText: '🛍',
-    }
-  )
-  map.showItems([shimeiDouriShoutengaiAnnotation])
-  map.region = shimeiDouriShoutengaiRegion
+  const annotations = get(mapStores.annotations)
+  const region = get(mapStores.region)
+  moveToScene({ annotations, region }, false)
 }
 
 /**
@@ -100,20 +90,75 @@ const handleLanguageChange = async language => {
   setTimeout(() => (mapkit.language = language), 0)
 }
 
+let lastRegion
+const setRegionAnimated = (region, animated = false) => {
+  lastRegion = region
+  const center = new mapkit.Coordinate(
+    region.center.latitude,
+    region.center.longitude
+  )
+  const span = new mapkit.CoordinateSpan(
+    region.span.latitudeDelta,
+    region.span.longitudeDelta
+  )
+  region = new mapkit.CoordinateRegion(center, span)
+  map.setRegionAnimated(region, animated)
+}
+
+let lastAnnotations
+const setAnnotations = annotations => {
+  lastAnnotations = annotations
+  annotations = annotations.map(annotation => {
+    const coordinate = new mapkit.Coordinate(
+      annotation.coordinate.latitude,
+      annotation.coordinate.longitude
+    )
+    return new mapkit.MarkerAnnotation(coordinate, annotation.options)
+  })
+  map.removeAnnotations(map.annotations)
+  map.addAnnotations(annotations)
+}
+
+const moveToScene = (scene, animated = false) => {
+  if (scene.region && !isEqual(lastRegion, scene.region)) {
+    setRegionAnimated(scene.region, animated)
+  }
+  if (
+    typeof scene.annotations === 'object' &&
+    !isEqual(lastAnnotations, scene.annotations)
+  ) {
+    setAnnotations(scene.annotations)
+  }
+}
+
+/**
+ * Used to keep mapkit's language state up-to-date with the site's language state.
+ */
+export const handleRegionChange = (annotations, region) => {
+  if (typeof mapkit === 'undefined' || !map) return
+  moveToScene({ annotations, region }, true)
+}
+
 /**
  * Handles loading mapkit and any other setup that needs to happen when the Map component is mounted.
  */
-export const mountMapkit = () => {
+export const mountMapkit = mapStores => {
   if (typeof mapkit === 'undefined') {
     // load script, init map and load it on first mount
     loadScript(MAPKIT_SOURCE, () => {
       initMap()
-      loadMap()
+      loadMap(mapStores)
     })
   } else {
     // just load map on subsequent mounts
-    loadMap()
+    loadMap(mapStores)
   }
   // unsubscribe on unmount
-  return locale.subscribe(handleLanguageChange)
+  const unsubscribe = locale.subscribe(handleLanguageChange)
+  return async () => {
+    map = null
+    lastAnnotations = null
+    lastRegion = null
+    unsubscribe()
+  }
 }

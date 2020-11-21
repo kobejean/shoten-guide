@@ -33,6 +33,8 @@ const commonReplacements = {
   'process.env.SAPPER_TIMESTAMP': process.env.SAPPER_TIMESTAMP || Date.now(),
   'process.env.MAPKIT_SECRET': JSON.stringify(mapkitSecret),
 }
+// to get it to work with vercel we need to add exports param
+const serverOutput = { ...config.server.output(), exports: 'default' }
 
 export default {
   client: {
@@ -96,7 +98,7 @@ export default {
 
   server: {
     input: config.server.input(),
-    output: config.server.output(),
+    output: serverOutput,
     plugins: [
       json(),
       replace({

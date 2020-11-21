@@ -1,25 +1,33 @@
-<script>
-  import { onMount } from 'svelte'
-  import { mountMapkit } from './mapkitUtils.js'
-
-  onMount(mountMapkit)
+<script context="module">
+  export const MAP_KEY = {}
 </script>
 
-<div id="map" role="application" aria-label="Map of Shoutengai" />
+<script>
+  import { onMount, getContext } from 'svelte'
+  import { mountMapkit, handleRegionChange } from './_models/MapModel.js'
+
+  const stores = getContext(MAP_KEY)
+  const { annotations, region } = stores
+
+  onMount(() => mountMapkit(stores))
+
+  $: handleRegionChange($annotations, $region)
+</script>
+
+<div id="map" role="application" aria-label="Map of store locations" />
 
 <style type="scss">
   @import '../../styles/colors';
 
   #map {
-    width: auto;
-    height: 600px;
-    background-color: $neutral-lightgray;
-    border: solid 1px $border-shadow;
-    border-radius: 10px;
-    overflow: hidden;
-    /* to have content stay within border radius */
-    -webkit-mask-image: -webkit-radial-gradient(white, black);
-    -moz-mask-image: -moz-radial-gradient(white, black);
-    mask-image: radial-gradient(white, black);
+    min-width: 320px;
+    height: 320px;
+    background-color: $neutral-light-gray;
+  }
+
+  @media (max-width: 420px) {
+    #map {
+      height: 200px;
+    }
   }
 </style>
