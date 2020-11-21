@@ -135,7 +135,7 @@ const moveToScene = (scene, animated = false) => {
  * Used to keep mapkit's language state up-to-date with the site's language state.
  */
 export const handleRegionChange = (annotations, region) => {
-  if (typeof mapkit === 'undefined') return
+  if (typeof mapkit === 'undefined' || !map) return
   moveToScene({ annotations, region }, true)
 }
 
@@ -154,5 +154,11 @@ export const mountMapkit = mapStores => {
     loadMap(mapStores)
   }
   // unsubscribe on unmount
-  return locale.subscribe(handleLanguageChange)
+  const unsubscribe = locale.subscribe(handleLanguageChange)
+  return async () => {
+    map = null
+    lastAnnotations = null
+    lastRegion = null
+    unsubscribe()
+  }
 }

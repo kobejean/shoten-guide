@@ -20,8 +20,14 @@
   @import '../../styles/colors';
 
   #map {
-    width: 320px;
+    min-width: 320px;
     height: 320px;
-    background-color: $neutral-lightgray;
+    background-color: $neutral-light-gray;
+  }
+
+  @media (max-width: 420px) {
+    #map {
+      height: 200px;
+    }
   }
 </style>

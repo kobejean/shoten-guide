@@ -28,7 +28,9 @@
   $: LocationsModel.updateStores(stores, model)
 </script>
 
-<Breadcrumbs />
+<header>
+  <Breadcrumbs />
+</header>
 <main>
   <Sidebar />
   <section id="content">
@@ -39,8 +41,25 @@
 <style lang="scss">
   main {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+  }
+
+  main,
+  header {
+    box-sizing: border-box;
+    margin: 0 auto;
     padding: 0 2em;
     max-width: 1400px;
+  }
+
+  @media (max-width: 720px) {
+    main {
+      flex-direction: column;
+    }
+
+    main,
+    header {
+      padding: 0 1em;
+    }
   }
 </style>

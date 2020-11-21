@@ -8,44 +8,44 @@
 </script>
 
 <nav>
-  <ol>
+  <p>
     {#each $stack as page (page.id)}
-      <li>
-        {#if page.id === $current.id}
-          {page.title}
-        {:else}
-          <a href={page.path} rel={'prefetch'} sapper:noscroll>{page.title}</a>
-        {/if}
-      </li>
+      {#if page.id === $current.id}
+        {page.title}
+      {:else}
+        <a href={page.path} rel={'prefetch'} sapper:noscroll>{page.title}</a>
+      {/if}
     {/each}
-  </ol>
+  </p>
 </nav>
 
 <style lang="scss">
   @import '../../styles/colors';
   nav {
     display: flex;
-    padding: 0 2em;
-    max-width: 1400px;
     margin: 0 auto;
     box-sizing: border-box;
 
-    ol {
-      list-style: none;
-      padding-left: 0;
-      display: inline-flex;
-      flex-wrap: wrap;
+    p {
+      white-space: nowrap;
+      overflow-x: scroll;
+      -webkit-overflow-scrolling: touch;
 
-      li {
-        a::after {
-          display: inline-block;
-          color: #000;
-          content: '>';
-          font-size: 80%;
-          font-weight: bold;
-          padding: 0 5px;
-        }
+      /* Hide scrollbar for Chrome, Safari and Opera */
+      &::-webkit-scrollbar {
+        display: none;
       }
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+
+    a::after {
+      display: inline-block;
+      color: #000;
+      content: '>';
+      font-size: 80%;
+      font-weight: bold;
+      padding: 0 5px;
     }
   }
 </style>

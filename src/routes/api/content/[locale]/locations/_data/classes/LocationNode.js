@@ -34,11 +34,12 @@ export default class LocationNode {
   }
 
   getProcessedAnnotation(locale) {
+    const { title } = this.getLocalization(locale)
     return {
       coordinate: this.annotation.coordinate,
       options: {
         ...this.annotation.options,
-        ...this.getLocalization(locale),
+        title,
       },
     }
   }

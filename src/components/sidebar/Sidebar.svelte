@@ -29,10 +29,9 @@
 
   aside {
     min-width: 320px;
-    margin-right: 40px;
     article {
       margin-bottom: 2em;
-      background-color: $neutral-lightgray;
+      background-color: $neutral-light-gray;
       border: solid 1px $border-shadow;
       border-radius: 10px;
       overflow: hidden;
@@ -40,6 +39,12 @@
       -webkit-mask-image: -webkit-radial-gradient(white, black);
       -moz-mask-image: -moz-radial-gradient(white, black);
       mask-image: radial-gradient(white, black);
+    }
+  }
+
+  @media (min-width: 720px) {
+    aside {
+      margin-right: 40px;
     }
   }
 </style>

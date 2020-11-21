@@ -14,7 +14,7 @@
 
 <ol class="sidebar-items" bind:this={list}>
   {#each sorted as item (item.id)}
-    <li animate:flip transition:fade>
+    <li animate:flip transition:fade|local>
       <a href={item.path} rel={'prefetch'} sapper:noscroll> {item.title} </a>
     </li>
   {:else}
@@ -33,7 +33,7 @@
     flex-wrap: wrap;
 
     li {
-      background-color: #fafafa;
+      background-color: $neutral-super-light-gray;
       text-decoration: none;
       padding: 0 10px;
       margin-right: 8px;

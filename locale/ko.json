@@ -21,6 +21,7 @@
   },
   "locations": {
     "title": "상가 가이드 | 매장 찾기",
+    "titlePrefix": "상가 가이드 | ",
     "pageName": "매장 찾기",
     "sidebar": {
       "emptyMessage": "더 이상 선택이 아닙니다."

@@ -4,10 +4,3 @@
 </script>
 
 <slot />
-
-<style lang="scss">
-  :global(html) {
-    font-family: 'SF Pro Text', 'SF Pro Icons', 'Helvetica Neue', 'Helvetica',
-      'Arial', sans-serif;
-  }
-</style>
