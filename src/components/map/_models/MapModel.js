@@ -78,6 +78,7 @@ const loadMap = async mapStores => {
 
   const annotations = get(mapStores.annotations)
   const region = get(mapStores.region)
+  console.log('annotations, region', annotations, region)
   moveToScene({ annotations, region }, false)
 }
 
@@ -136,6 +137,7 @@ export const selectAnnotationWithId = id => {
   if (typeof mapkit === 'undefined' || !map) return
   map.selectedAnnotation =
     id && find(map.annotations, ann => ann.data.id === id)
+  console.log('annotations id', id)
 }
 
 /**
