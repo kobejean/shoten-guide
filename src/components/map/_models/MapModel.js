@@ -21,6 +21,7 @@ const initMap = async () => {
     },
     language: get(locale),
   })
+  debugger
 }
 
 /**
@@ -84,6 +85,7 @@ const loadMap = async mapStores => {
   const region = get(mapStores.region)
   const overlays = get(mapStores.overlays)
   moveToScene({ annotations, region, overlays }, false)
+  debugger
 }
 
 /**
@@ -179,6 +181,7 @@ const moveToScene = (scene, animated = false) => {
   if (!isEqual(overlayIds, lastOverlayIds)) {
     setOverlays(scene.overlays)
   }
+  debugger
 }
 
 const getItemWithId = (collection, id) => {
