@@ -44,6 +44,7 @@
 
   @media (min-width: 720px) {
     aside {
+      width: 320px;
       margin-right: 40px;
     }
   }

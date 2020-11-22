@@ -11,11 +11,11 @@
   } from './_models/MapModel.js'
 
   const stores = getContext(MAP_KEY)
-  const { annotations, region, highlighted } = stores
+  const { annotations, region, overlays, highlighted } = stores
 
   onMount(() => mountMapkit(stores))
 
-  $: handleRegionChange($annotations, $region)
+  $: handleRegionChange($annotations, $region, $overlays)
   $: selectAnnotationWithId($highlighted)
 </script>
 

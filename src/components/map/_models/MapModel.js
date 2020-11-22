@@ -1,7 +1,9 @@
 import { loadScript } from '../../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
-import { isEqual, find, get as getValue } from 'lodash'
+import { isEqual, find, get as getValue, forEach } from 'lodash'
+import { goto } from '@sapper/app'
+import TextAnnotation from '../TextAnnotation.svelte'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
@@ -76,9 +78,12 @@ const loadMap = async mapStores => {
   }
   map = new mapkit.Map('map', mapOptions)
 
+  map.addEventListener('select', handleSelection)
+
   const annotations = get(mapStores.annotations)
   const region = get(mapStores.region)
-  moveToScene({ annotations, region }, false)
+  const overlays = get(mapStores.overlays)
+  moveToScene({ annotations, region, overlays }, false)
 }
 
 /**
@@ -113,10 +118,50 @@ const setAnnotations = annotations => {
       annotation.coordinate.latitude,
       annotation.coordinate.longitude
     )
-    return new mapkit.MarkerAnnotation(coordinate, annotation.options)
+    let options = annotation.options
+    if (options.data.type === 'text') {
+      options = {
+        ...options,
+        anchorOffset: new DOMPoint(0, 10),
+        glyphColor: 'transparent',
+        color: 'transparent',
+        enabled: false,
+      }
+    }
+    return new mapkit.MarkerAnnotation(coordinate, options)
   })
   map.removeAnnotations(map.annotations)
   map.addAnnotations(annotations)
+}
+
+let lastOverlayIds
+const setOverlays = overlays => {
+  lastOverlayIds = overlays.map(overlay => overlay.options.data.id)
+  if (!overlays || overlays.length === 0) map.removeOverlays(map.overlays)
+  let oldOverlays = map.overlays
+  forEach(overlays, ({ geoJSON, options }) => {
+    mapkit.importGeoJSON(geoJSON, {
+      styleForOverlay: function (overlay) {
+        Object.assign(overlay.style, options.style)
+        overlay.style.fillOpacity = 0.2
+        return overlay.style
+      },
+      itemForPolygon: function (overlay, geoJSON) {
+        overlay.data = options.data
+        return overlay
+      },
+      geoJSONDidComplete: function (itemCollection) {
+        if (oldOverlays) {
+          map.removeOverlays(oldOverlays)
+          oldOverlays = null
+        }
+        if (itemCollection) map.addItems(itemCollection)
+      },
+      geoJSONDidError: function (err) {
+        console.error(err)
+      },
+    })
+  })
 }
 
 const moveToScene = (scene, animated = false) => {
@@ -129,21 +174,47 @@ const moveToScene = (scene, animated = false) => {
   ) {
     setAnnotations(scene.annotations)
   }
+  const overlayIds =
+    scene.overlays && scene.overlays.map(overlay => overlay.options.data.id)
+  if (!isEqual(overlayIds, lastOverlayIds)) {
+    setOverlays(scene.overlays)
+  }
 }
 
+const getItemWithId = (collection, id) => {
+  return id && find(collection, item => getValue(item, ['data', 'id']) === id)
+}
+
+let lastHighlightId
 export const selectAnnotationWithId = id => {
-  if (typeof mapkit === 'undefined' || !map) return
-  if (id === getValue(map, ['selectedAnnotation', 'data', 'id'])) return
-  map.selectedAnnotation =
-    id && find(map.annotations, ann => getValue(ann, ['data', 'id']) === id)
+  if (typeof mapkit === 'undefined' || !map || id === lastHighlightId) return
+  const lastOverlay = getItemWithId(map.overlays, lastHighlightId)
+  const overlay = getItemWithId(map.overlays, id)
+  if (lastOverlay) lastOverlay.style.fillOpacity = 0.2
+  if (overlay) overlay.style.fillOpacity = 0.4
+
+  lastHighlightId = id
+  const ann = getItemWithId(map.annotations, id)
+  if (
+    id !== getValue(map, ['selectedAnnotation', 'data', 'id']) &&
+    (!ann || ann.enabled)
+  ) {
+    map.selectedAnnotation = ann
+  }
 }
 
 /**
  * Used to keep mapkit's language state up-to-date with the site's language state.
  */
-export const handleRegionChange = (annotations, region) => {
+export const handleRegionChange = (annotations, region, overlays) => {
   if (typeof mapkit === 'undefined' || !map) return
-  moveToScene({ annotations, region }, true)
+  moveToScene({ annotations, region, overlays }, true)
+}
+
+export const handleSelection = event => {
+  if (event.overlay && event.overlay.data.path) {
+    goto(event.overlay.data.path, { noscroll: true })
+  }
 }
 
 /**
@@ -160,9 +231,11 @@ export const mountMapkit = mapStores => {
     // just load map on subsequent mounts
     loadMap(mapStores)
   }
+
   // unsubscribe on unmount
   const unsubscribe = locale.subscribe(handleLanguageChange)
   return async () => {
+    if (map) map.removeEventListener('select', handleSelection)
     map = null
     lastAnnotations = null
     lastRegion = null

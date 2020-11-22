@@ -46,7 +46,8 @@ class LocationsModel {
     // map stores
     const region = derived(current, $current => $current.region)
     const annotations = derived(current, $current => $current.annotations)
-    const map = { region, annotations, highlighted }
+    const overlays = derived(current, $current => $current.overlays)
+    const map = { region, annotations, overlays, highlighted }
     return { shared, breadcrumbs, sidebar, map }
   }
 
