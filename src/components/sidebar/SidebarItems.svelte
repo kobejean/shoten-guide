@@ -3,19 +3,25 @@
   import { sortBy } from 'lodash'
   import { flip } from 'svelte/animate'
   import { fade } from 'svelte/transition'
-  export let items
-  let list
+  export let items, highlighted
 
   $: sorted = sortBy(items, 'title')
-  $: {
-    sorted
-  }
 </script>
 
-<ol class="sidebar-items" bind:this={list}>
+<ol class="sidebar-items">
   {#each sorted as item (item.id)}
     <li animate:flip transition:fade|local>
-      <a class="btn" href={item.path} rel={'prefetch'} sapper:noscroll>
+      <a
+        class="btn"
+        href={item.path}
+        rel={'prefetch'}
+        sapper:noscroll
+        on:mouseover={() => (highlighted = item.id)}
+        on:touchstart={() => (highlighted = item.id)}
+        on:mouseout={() => (highlighted = null)}
+        on:touchcancel={() => (highlighted = null)}
+        on:touchend={() => (highlighted = null)}
+      >
         {item.title}
       </a>
     </li>
@@ -46,6 +52,8 @@
       border: solid 1px $border-shadow;
 
       a {
+        margin: 0 -10px;
+        padding: 0 10px;
         display: block;
       }
 

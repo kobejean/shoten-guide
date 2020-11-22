@@ -39,6 +39,7 @@ export default class LocationNode {
       coordinate: this.annotation.coordinate,
       options: {
         ...this.annotation.options,
+        data: { id: this.id },
         title,
       },
     }

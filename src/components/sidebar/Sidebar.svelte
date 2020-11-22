@@ -9,7 +9,7 @@
   import { values } from 'lodash'
   import { getContext } from 'svelte'
 
-  const { current, stack } = getContext(SIDEBAR_KEY)
+  const { current, stack, highlighted } = getContext(SIDEBAR_KEY)
 
   $: items = values($current.items)
 </script>
@@ -19,7 +19,7 @@
     <SidebarHeader stack={$stack} />
     <Map />
     <footer>
-      <SidebarItems {items} />
+      <SidebarItems {items} bind:highlighted={$highlighted} />
     </footer>
   </article>
 </aside>

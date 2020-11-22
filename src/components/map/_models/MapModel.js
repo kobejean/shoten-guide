@@ -1,7 +1,7 @@
 import { loadScript } from '../../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
-import { isEqual } from 'lodash'
+import { isEqual, find, get as getValue } from 'lodash'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
@@ -129,6 +129,13 @@ const moveToScene = (scene, animated = false) => {
   ) {
     setAnnotations(scene.annotations)
   }
+}
+
+export const selectAnnotationWithId = id => {
+  if (typeof mapkit === 'undefined' || !map) return
+  if (id === getValue(map, ['selectedAnnotation', 'data', 'id'])) return
+  map.selectedAnnotation =
+    id && find(map.annotations, ann => getValue(ann, ['data', 'id']) === id)
 }
 
 /**
