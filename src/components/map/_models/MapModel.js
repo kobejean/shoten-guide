@@ -1,7 +1,7 @@
 import { loadScript } from '../../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
-import { isEqual, find } from 'lodash'
+import { isEqual, find, get as getValue } from 'lodash'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
@@ -78,7 +78,6 @@ const loadMap = async mapStores => {
 
   const annotations = get(mapStores.annotations)
   const region = get(mapStores.region)
-  console.log('annotations, region', annotations, region)
   moveToScene({ annotations, region }, false)
 }
 
@@ -118,7 +117,6 @@ const setAnnotations = annotations => {
   })
   map.removeAnnotations(map.annotations)
   map.addAnnotations(annotations)
-  console.log('map.annotations', annotations)
 }
 
 const moveToScene = (scene, animated = false) => {
@@ -135,9 +133,9 @@ const moveToScene = (scene, animated = false) => {
 
 export const selectAnnotationWithId = id => {
   if (typeof mapkit === 'undefined' || !map) return
+  if (id === getValue(map, ['selectedAnnotation', 'data', 'id'])) return
   map.selectedAnnotation =
-    id && find(map.annotations, ann => ann.data.id === id)
-  console.log('annotations id', id)
+    id && find(map.annotations, ann => getValue(ann, ['data', 'id']) === id)
 }
 
 /**
