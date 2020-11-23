@@ -10,6 +10,8 @@ init({
   initialLocale: getInitialLocale(),
 })
 
-sapper.start({
-  target: document.querySelector('#sapper'),
-})
+setTimeout(() =>
+  sapper.start({
+    target: document.querySelector('#sapper'),
+  })
+)
