@@ -35,13 +35,14 @@ const commonReplacements = {
 }
 // to get it to work with vercel we need to add exports param
 const serverOutput = { ...config.server.output(), exports: 'default' }
+const jsonOptions = { compact: !dev }
 
 export default {
   client: {
     input: config.client.input(),
     output: config.client.output(),
     plugins: [
-      json(),
+      json(jsonOptions),
       replace({
         'process.browser': true,
         ...commonReplacements,
@@ -100,7 +101,7 @@ export default {
     input: config.server.input(),
     output: serverOutput,
     plugins: [
-      json(),
+      json(jsonOptions),
       replace({
         'process.browser': false,
         ...commonReplacements,

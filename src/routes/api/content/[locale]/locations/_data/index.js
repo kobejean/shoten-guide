@@ -49,7 +49,7 @@ const regions = {
       data: { type: 'text' },
     }),
     new Overlay(chubu, {
-      style: { fillColor: 'gold', strokeColor: 'gold' },
+      style: { fillColor: 'goldenrod', strokeColor: 'goldenrod' },
     }),
     root
   ),
@@ -125,7 +125,7 @@ const regions = {
       data: { type: 'text' },
     }),
     new Overlay(kanto, {
-      style: { fillColor: 'darkorange', strokeColor: 'darkorange' },
+      style: { fillColor: 'orangered', strokeColor: 'orangered' },
     }),
     root
   ),
@@ -181,7 +181,9 @@ const regions = {
     new Annotation(new Coordinate(39.152451, 140.780502), {
       data: { type: 'text' },
     }),
-    new Overlay(tohoku, { style: { fillColor: 'red', strokeColor: 'red' } }),
+    new Overlay(tohoku, {
+      style: { fillColor: 'crimson', strokeColor: 'crimson' },
+    }),
     root
   ),
 }

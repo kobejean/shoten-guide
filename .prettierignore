@@ -2,5 +2,4 @@
 /dev/
 /src/node_modules/@sapper/
 /src/node_modules_hack/@sapper/
-/src/routes/api/content/[locale]/locations/_data/geo-json/
 /__sapper__/

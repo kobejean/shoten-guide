@@ -61,6 +61,7 @@ export default class LocationNode {
       geoJSON: this.overlay.geoJSON,
       options: {
         ...this.overlay.options,
+        enabled: !isEmpty(this.items),
         data: {
           ...this.overlay.options.data,
           ...this.getLocalization(locale),
