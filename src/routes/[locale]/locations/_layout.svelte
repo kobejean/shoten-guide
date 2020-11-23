@@ -20,6 +20,8 @@
   export let segment, model
   segment // silence warning
 
+  console.log('model', model)
+
   const stores = LocationsModel.initStores(model)
   setContext(LOCATIONS_KEY, stores.shared)
   setContext(BREADCRUMBS_KEY, stores.breadcrumbs)

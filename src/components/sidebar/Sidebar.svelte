@@ -12,6 +12,7 @@
   const { current, stack, highlighted } = getContext(SIDEBAR_KEY)
 
   $: items = values($current.items)
+  console.log('items', $current.items)
 </script>
 
 <aside>
