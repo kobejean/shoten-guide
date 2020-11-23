@@ -224,6 +224,7 @@ export const handleSelection = event => {
  * Handles loading mapkit and any other setup that needs to happen when the Map component is mounted.
  */
 export const mountMapkit = mapStores => {
+  console.log('mountMapkit')
   if (typeof mapkit === 'undefined') {
     // load script, init map and load it on first mount
     loadScript(MAPKIT_SOURCE, () => {

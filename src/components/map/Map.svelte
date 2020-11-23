@@ -13,6 +13,8 @@
   const stores = getContext(MAP_KEY)
   const { annotations, region, overlays, highlighted } = stores
 
+  console.log('map init')
+
   onMount(() => mountMapkit(stores))
 
   $: handleRegionChange($annotations, $region, $overlays)
