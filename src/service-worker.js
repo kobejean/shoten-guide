@@ -49,7 +49,7 @@ async function fetchAndCache(request, url) {
   try {
     const response = await fetch(request)
     if (shouldCache) {
-      // cache.put(request, response.clone())
+      cache.put(request, response.clone())
     }
     return response
   } catch (err) {
