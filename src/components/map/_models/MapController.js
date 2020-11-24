@@ -16,7 +16,7 @@ export default class MapController {
 
   static preload({ features, id }) {
     // only want to do this on client side
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined' || typeof mapkit === 'undefined') return
     MapDecoder.loadFeatures(features, id)
   }
   /**

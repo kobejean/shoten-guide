@@ -14,6 +14,7 @@
 
   function handleMouseOut(event) {
     const isToEnabledButton =
+      event.relatedTarget &&
       event.relatedTarget.className.split(' ').includes('btn') &&
       !event.relatedTarget.parentNode.className.split(' ').includes('disabled')
     if (!isToEnabledButton) highlighted = null
