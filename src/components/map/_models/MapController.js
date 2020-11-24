@@ -120,15 +120,30 @@ export default class MapController {
     const unsubscribe = locale.subscribe(this.handleLanguageChange)
     return async () => {
       if (this.map) {
-        this.map.removeEventListener('select', this.handleSelection)
+        this.map.removeEventListener('select', this.handleSelection.bind(this))
         const mapView = this.element.querySelector('.mk-map-view')
 
-        mapView.removeEventListener('mousemove', this.handleMouseMove)
-        mapView.removeEventListener('touchstart', this.handleTouchStart)
+        mapView.removeEventListener(
+          'mousemove',
+          this.handleMouseMove.bind(this)
+        )
+        mapView.removeEventListener(
+          'touchstart',
+          this.handleTouchStart.bind(this)
+        )
 
-        mapView.removeEventListener('mouseout', this.handleHighlightOff)
-        mapView.removeEventListener('touchend', this.handleHighlightOff)
-        mapView.removeEventListener('touchcancel', this.handleHighlightOff)
+        mapView.removeEventListener(
+          'mouseout',
+          this.handleHighlightOff.bind(this)
+        )
+        mapView.removeEventListener(
+          'touchend',
+          this.handleHighlightOff.bind(this)
+        )
+        mapView.removeEventListener(
+          'touchcancel',
+          this.handleHighlightOff.bind(this)
+        )
       }
       this.map = null
       this.element = null
@@ -221,7 +236,7 @@ export default class MapController {
     this.lastHighlightedOverlays = highlightedOverlays
   }
 
-  handleSelection = event => {
+  handleSelection(event) {
     if (
       event.overlay &&
       event.overlay.data.id &&
