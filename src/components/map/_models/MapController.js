@@ -1,26 +1,24 @@
 import { loadScript } from '../../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
-import {
-  isEqual,
-  find,
-  get as getValue,
-  forEach,
-  orderBy,
-  filter,
-} from 'lodash'
+import { find, get as getValue, filter, transform, forEach } from 'lodash'
 import { goto } from '@sapper/app'
+import MapDecoder from './MapDecoder.js'
+import MapItemStyler from './MapItemStyler.js'
+import TextAnnotation from './custom/TextAnnotation.js'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
-const ENABLED_FILL_OPACITY = 0.2
-const DISABLED_FILL_OPACITY = 0
-const HIGHLIGHTED_FILL_OPACITY = 0.4
-const ENABLED_STROKE_OPACITY = 0.5
-const DISABLED_STROKE_OPACITY = 0.5
-const HIGHLIGHTED_STROKE_OPACITY = 1
+export default class MapController {
+  constructor() {
+    this.stores = {}
+  }
 
-export default class MapModel {
+  static preload({ features, id }) {
+    // only want to do this on client side
+    if (typeof window === 'undefined') return
+    MapDecoder.loadFeatures(features, id)
+  }
   /**
    * Handles initializing mapkit.
    */
@@ -33,6 +31,8 @@ export default class MapModel {
       },
       language: get(locale),
     })
+    // custom mapkit classes
+    mapkit.TextAnnotation = TextAnnotation(mapkit)
   }
   /**
    * Handles loading the map with the desired region and annotations.
@@ -108,12 +108,12 @@ export default class MapModel {
       loadScript(MAPKIT_SOURCE, () => {
         this.initMapKit()
         this.loadMap()
-        this.moveToScene(scene, false)
+        this.setMapParameters(scene, false)
       })
     } else {
       // just load map on subsequent mounts
       this.loadMap()
-      this.moveToScene(scene, false)
+      this.setMapParameters(scene, false)
     }
 
     // unsubscribe on unmount
@@ -152,106 +152,38 @@ export default class MapModel {
     this.map.setRegionAnimated(region, animated)
   }
 
-  createTextAnnotation(coordinate, options) {
-    options = {
-      ...options,
-      anchorOffset: new DOMPoint(0, 10),
-      glyphColor: 'transparent',
-      color: 'transparent',
-      enabled: false,
-    }
-    return new mapkit.MarkerAnnotation(coordinate, options)
-  }
-
-  decodeAnnotation(coordinate, options) {
-    coordinate = new mapkit.Coordinate(
-      coordinate.latitude,
-      coordinate.longitude
-    )
-    if (options.data.type === 'text') {
-      return this.createTextAnnotation(coordinate, options)
-    }
-    return new mapkit.MarkerAnnotation(coordinate, options)
-  }
-
   setAnnotations(annotations) {
-    this.lastAnnotations = annotations
-    annotations = annotations.map(annotation => {
-      return this.decodeAnnotation(annotation.coordinate, annotation.options)
+    annotations = annotations.map(({ coordinate, options }) => {
+      const annotation = MapDecoder.decodeAnnotation(coordinate, options)
+      MapItemStyler.style(annotation)
+      return annotation
     })
     this.map.removeAnnotations(this.map.annotations)
     this.map.addAnnotations(annotations)
   }
 
-  async setOverlays(overlays) {
-    this.lastOverlayIds = overlays.map(overlay => overlay.options.data.id)
-    const sorted = orderBy(
-      overlays,
-      ['options.enabled', 'options.data.id'],
-      ['asc', 'desc']
-    )
-    const promises = sorted.map(({ geoJSON, options }) => {
-      const style = (item, geoJSON) => {
-        const properties = geoJSON.properties
-        item.enabled = !!properties.enabled
-        Object.assign(item.style, properties.style)
-        item.data.id = geoJSON.id
-        item.data.path = options.data.path
-
-        item.style.fillOpacity = properties.enabled
-          ? ENABLED_FILL_OPACITY
-          : DISABLED_FILL_OPACITY
-        item.style.strokeOpacity = properties.enabled
-          ? ENABLED_STROKE_OPACITY
-          : DISABLED_STROKE_OPACITY
-      }
-      return this._importGeoJSON(geoJSON, {
-        // itemForPolygon: function (overlay, geoJSON) {
-        //   overlay.data = options.data
-        //   return overlay
-        // },
-        itemForFeature: function (item, geoJSON) {
-          if (item.getFlattenedItemList)
-            item.getFlattenedItemList().forEach(item => style(item, geoJSON))
-          else style(item, geoJSON)
-
-          const properties = geoJSON.properties || {}
-          if (properties['display_point']) {
-            const title = properties.name['en']
-            const [longitude, latitude] = properties[
-              'display_point'
-            ].coordinates
-            const coordinates = { longitude, latitude }
-            const options = { data: { type: 'text' }, title }
-            const annotation = this.decodeAnnotation(coordinates, options)
-            return [item, annotation]
-          }
-          return item
-        },
-      })
-    })
-    const items = await Promise.all(promises)
-    console.log('items', items)
-    if (this.lastItems) this.map.removeItems(this.lastItems)
+  async setFeatures(features, id) {
+    const items = await MapDecoder.loadFeatures(features, id)
+    if (this.lastFeatureItems) this.map.removeItems(this.lastFeatureItems)
     if (items) this.map.addItems(items)
-    this.lastItems = items
+    this.lastFeatureItems = items
   }
 
-  moveToScene(scene, animated = false) {
-    if (scene.region && !isEqual(this.lastRegion, scene.region)) {
-      this.setRegionAnimated(scene.region, animated)
-    }
-    if (
-      typeof scene.annotations === 'object' &&
-      !isEqual(this.lastAnnotations, scene.annotations)
-    ) {
-      this.setAnnotations(scene.annotations)
-    }
-    const overlayIds =
-      scene.overlays && scene.overlays.map(overlay => overlay.options.data.id)
-    if (!isEqual(overlayIds, this.lastOverlayIds)) {
-      this.setOverlays(scene.overlays)
-    }
+  setMapParameters(parameters, animated = false) {
+    const isNewLocation = this.lastId !== parameters.id
+    if (parameters.region && isNewLocation)
+      this.setRegionAnimated(parameters.region, animated)
+    this.setAnnotations(parameters.annotations)
+    if (isNewLocation) this.setFeatures(parameters.features, parameters.id)
+
+    this.paths = transform(
+      parameters.items,
+      (result, page, id) => {
+        result[id] = page.path
+      },
+      {}
+    )
+    this.lastId = parameters.id
   }
 
   handleHighlight(id) {
@@ -259,25 +191,24 @@ export default class MapModel {
       typeof mapkit === 'undefined' ||
       !this.map ||
       id === this.lastHighlightId
-    )
+    ) {
       return
-    this._getItemsWithId(this.map.overlays, this.lastHighlightId).forEach(
-      overlay => {
-        if (overlay.enabled) {
-          overlay.style.fillOpacity = ENABLED_FILL_OPACITY
-          overlay.style.strokeOpacity = ENABLED_STROKE_OPACITY
-        } else {
-          overlay.style.fillOpacity = DISABLED_FILL_OPACITY
-          overlay.style.strokeOpacity = DISABLED_STROKE_OPACITY
-        }
-      }
-    )
-    this._getItemsWithId(this.map.overlays, id).forEach(overlay => {
+    }
+    forEach(this.lastHighlightedOverlays, overlay => {
+      overlay.data.highlighted = false
+      const state = MapItemStyler.getStyleState(overlay)
+      MapItemStyler.styleOverlay(overlay, state)
+    })
+    const highlightedOverlays = this._getItemsWithId(this.map.overlays, id)
+    forEach(highlightedOverlays, overlay => {
       if (overlay.enabled) {
-        overlay.style.fillOpacity = HIGHLIGHTED_FILL_OPACITY
-        overlay.style.strokeOpacity = HIGHLIGHTED_STROKE_OPACITY
+        overlay.data.highlighted = true
+        MapItemStyler.styleOverlay(overlay, 'highlighted')
       }
     })
+    // move overlays to top
+    this.map.removeOverlays(highlightedOverlays)
+    this.map.addOverlays(highlightedOverlays)
 
     const annotation = this._getItemWithId(this.map.annotations, id)
     if (
@@ -287,11 +218,16 @@ export default class MapModel {
       this.map.selectedAnnotation = annotation
     }
     this.lastHighlightId = id
+    this.lastHighlightedOverlays = highlightedOverlays
   }
 
   handleSelection = event => {
-    if (event.overlay && event.overlay.data.path) {
-      goto(event.overlay.data.path, { noscroll: true })
+    if (
+      event.overlay &&
+      event.overlay.data.id &&
+      this.paths[event.overlay.data.id]
+    ) {
+      goto(this.paths[event.overlay.data.id], { noscroll: true })
     }
   }
 
@@ -300,7 +236,7 @@ export default class MapModel {
    */
   handleRegionChange(scene) {
     if (typeof mapkit === 'undefined' || !this.map) return
-    this.moveToScene(scene, true)
+    this.setMapParameters(scene, true)
   }
 
   /**
@@ -316,10 +252,10 @@ export default class MapModel {
     const targetOverlay = this.map.topOverlayAtPoint(
       new DOMPoint(event.pageX, event.pageY)
     )
-    if (targetOverlay && targetOverlay.data.id) {
-      this.handleHighlight(targetOverlay.data.id)
+    if (targetOverlay && targetOverlay.enabled && targetOverlay.data.id) {
+      this.stores.highlighted.set(targetOverlay.data.id)
     } else {
-      this.handleHighlight(undefined)
+      this.stores.highlighted.set(undefined)
     }
   }
 
@@ -327,13 +263,13 @@ export default class MapModel {
     if (event.touches.length !== 1) return
     const { pageX, pageY } = event.touches[0]
     const targetOverlay = this.map.topOverlayAtPoint(new DOMPoint(pageX, pageY))
-    if (targetOverlay && targetOverlay.data.id) {
-      this.handleHighlight(targetOverlay.data.id)
+    if (targetOverlay && targetOverlay.enabled && targetOverlay.data.id) {
+      this.stores.highlighted.set(targetOverlay.data.id)
     }
   }
 
   handleHighlightOff() {
-    this.handleHighlight(undefined)
+    this.stores.highlighted.set(undefined)
   }
 
   _getItemWithId(collection, id) {
@@ -345,16 +281,6 @@ export default class MapModel {
       (id &&
         filter(collection, item => getValue(item, ['data', 'id']) === id)) ||
       []
-    )
-  }
-
-  async _importGeoJSON(data, delegate) {
-    return new Promise((resolve, reject) =>
-      mapkit.importGeoJSON(data, {
-        ...delegate,
-        geoJSONDidComplete: resolve,
-        geoJSONDidError: reject,
-      })
     )
   }
 }

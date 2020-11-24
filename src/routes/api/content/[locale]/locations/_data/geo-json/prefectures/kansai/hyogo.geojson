@@ -223,8 +223,8 @@
       },
       "properties": {
         "style": {
-          "strokeColor": "purple",
-          "fillColor": "purple"
+          "strokeColor": "green",
+          "fillColor": "green"
         },
         "enabled": true
       },

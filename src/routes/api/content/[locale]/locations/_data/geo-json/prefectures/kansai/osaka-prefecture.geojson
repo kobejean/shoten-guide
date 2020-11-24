@@ -139,8 +139,8 @@
       },
       "properties": {
         "style": {
-          "strokeColor": "blue",
-          "fillColor": "blue"
+          "strokeColor": "green",
+          "fillColor": "green"
         },
         "enabled": true
       },

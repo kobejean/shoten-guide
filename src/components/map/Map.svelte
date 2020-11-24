@@ -4,20 +4,19 @@
 
 <script>
   import { onMount, getContext } from 'svelte'
-  import MapModel from './_models/MapModel.js'
+  import MapController from './_models/MapController.js'
 
-  const model = new MapModel()
+  const controller = new MapController()
 
-  const stores = getContext(MAP_KEY)
-  const { annotations, region, overlays, highlighted } = stores
-  $: scene = { annotations: $annotations, region: $region, overlays: $overlays }
+  controller.stores = getContext(MAP_KEY)
+  const { current, highlighted } = controller.stores
 
   let map
 
-  onMount(() => model.mount(scene, map))
+  onMount(() => controller.mount($current, map))
 
-  $: model.handleRegionChange(scene)
-  $: model.handleHighlight($highlighted)
+  $: controller.handleRegionChange($current)
+  $: controller.handleHighlight($highlighted)
 </script>
 
 <div bind:this={map} role="application" aria-label="Map of store locations" />

@@ -6,14 +6,14 @@ export default class LocationNode {
     localizations,
     region,
     annotation = null,
-    overlay = null,
+    features = null,
     parent = null
   ) {
     this.id = id
     this.localizations = localizations
     this.region = region
     this.annotation = annotation
-    this.overlay = overlay
+    this.features = features
     this.items = {}
 
     if (parent) {
@@ -56,21 +56,6 @@ export default class LocationNode {
     }
   }
 
-  getProcessedOverlay(locale) {
-    return {
-      geoJSON: this.overlay.geoJSON,
-      options: {
-        ...this.overlay.options,
-        enabled: !isEmpty(this.items),
-        data: {
-          ...this.overlay.options.data,
-          ...this.getLocalization(locale),
-          id: this.id,
-        },
-      },
-    }
-  }
-
   getMinimalSummary(locale) {
     return {
       ...this.getLocalization(locale),
@@ -83,20 +68,18 @@ export default class LocationNode {
   getNodeSummary(locale) {
     const items = {}
     const annotations = []
-    const overlays = []
     // get only important details of children
     forEach(this.items, (item, id) => {
       items[id] = item.getMinimalSummary(locale)
       if (item.annotation) annotations.push(item.getProcessedAnnotation(locale))
-      if (item.overlay) overlays.push(item.getProcessedOverlay(locale))
     })
     return {
       ...this.getLocalization(locale),
       id: this.id,
       region: this.region,
       annotations,
-      overlays,
       items,
+      features: this.features,
       enabled: !isEmpty(items),
     }
   }

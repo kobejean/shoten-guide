@@ -4,20 +4,10 @@ import CoordinateRegion from './classes/CoordinateRegion'
 import CoordinateSpan from './classes/CoordinateSpan'
 import Localization from './classes/Localization'
 import LocationNode from './classes/LocationNode'
-import Overlay from './classes/Overlay'
-// geojson
-import chubu from './geo-json/regions/chubu.geojson'
-import chugoku from './geo-json/regions/chugoku.geojson'
-import hokkaido from './geo-json/regions/hokkaido.geojson'
-import kansai from './geo-json/regions/kansai.geojson'
-import kanto from './geo-json/regions/kanto.geojson'
-import kyushu from './geo-json/regions/kyushu.geojson'
-import shikoku from './geo-json/regions/shikoku.geojson'
-import tohoku from './geo-json/regions/tohoku.geojson'
 
-// import hokkaidoPrefecture from './geo-json/prefectures/hokkaido-prefecture.geojson'
-import hyogo from './geo-json/prefectures/hyogo.geojson'
-import osakaPrefecture from './geo-json/prefectures/osaka-prefecture.geojson'
+// geojson
+import regionsFeatures from './geo-json/regions'
+import kansaiFeatures from './geo-json/prefectures/kansai'
 
 const root = new LocationNode(
   'japan',
@@ -29,7 +19,9 @@ const root = new LocationNode(
   new CoordinateRegion(
     new Coordinate(37.998915, 137.191162),
     new CoordinateSpan(16, 16)
-  )
+  ),
+  null,
+  regionsFeatures
 )
 
 // regions
@@ -48,9 +40,7 @@ const regions = {
     new Annotation(new Coordinate(35.825202, 137.473215), {
       data: { type: 'text' },
     }),
-    new Overlay(chubu, {
-      style: { fillColor: 'goldenrod', strokeColor: 'goldenrod' },
-    }),
+    null,
     root
   ),
   chugoku: new LocationNode(
@@ -67,9 +57,7 @@ const regions = {
     new Annotation(new Coordinate(34.857729, 132.866525), {
       data: { type: 'text' },
     }),
-    new Overlay(chugoku, {
-      style: { fillColor: 'deepskyblue', strokeColor: 'deepskyblue' },
-    }),
+    null,
     root
   ),
   hokkaido: new LocationNode(
@@ -86,9 +74,7 @@ const regions = {
     new Annotation(new Coordinate(43.451133, 143.069544), {
       data: { type: 'text' },
     }),
-    new Overlay(hokkaido, {
-      style: { fillColor: 'brown', strokeColor: 'brown' },
-    }),
+    null,
     root
   ),
   kansai: new LocationNode(
@@ -100,14 +86,12 @@ const regions = {
     },
     new CoordinateRegion(
       new Coordinate(34.601106, 135.616878),
-      new CoordinateSpan(2.3, 2.3)
+      new CoordinateSpan(3.7, 3.7)
     ),
     new Annotation(new Coordinate(34.701106, 135.616878), {
       data: { type: 'text' },
     }),
-    new Overlay(kansai, {
-      style: { fillColor: 'green', strokeColor: 'green' },
-    }),
+    kansaiFeatures,
     root
   ),
   kanto: new LocationNode(
@@ -124,9 +108,7 @@ const regions = {
     new Annotation(new Coordinate(36.123515, 139.634759), {
       data: { type: 'text' },
     }),
-    new Overlay(kanto, {
-      style: { fillColor: 'orangered', strokeColor: 'orangered' },
-    }),
+    null,
     root
   ),
   kyushu: new LocationNode(
@@ -143,9 +125,7 @@ const regions = {
     new Annotation(new Coordinate(32.58890848826727, 130.82414415737875), {
       data: { type: 'text' },
     }),
-    new Overlay(kyushu, {
-      style: { fillColor: 'purple', strokeColor: 'purple' },
-    }),
+    null,
     root
   ),
   shikoku: new LocationNode(
@@ -162,9 +142,7 @@ const regions = {
     new Annotation(new Coordinate(33.749498, 133.637592), {
       data: { type: 'text' },
     }),
-    new Overlay(shikoku, {
-      style: { fillColor: 'blue', strokeColor: 'blue' },
-    }),
+    null,
     root
   ),
   tohoku: new LocationNode(
@@ -181,9 +159,7 @@ const regions = {
     new Annotation(new Coordinate(39.152451, 140.780502), {
       data: { type: 'text' },
     }),
-    new Overlay(tohoku, {
-      style: { fillColor: 'crimson', strokeColor: 'crimson' },
-    }),
+    null,
     root
   ),
 }
@@ -191,62 +167,62 @@ const regions = {
 // prefectures
 
 const prefectures = {
-  fukushima: new LocationNode(
-    'fukushima',
-    {
-      en: new Localization('Fukushima'),
-      ja: new Localization('福島県'),
-      ko: new Localization('후쿠시마현'),
-    },
-    new CoordinateRegion(
-      new Coordinate(37.37868022126601, 140.10356778964822),
-      new CoordinateSpan(1.5, 1.5)
+  tohoku: {
+    fukushima: new LocationNode(
+      'fukushima',
+      {
+        en: new Localization('Fukushima'),
+        ja: new Localization('福島県'),
+        ko: new Localization('후쿠시마현'),
+      },
+      new CoordinateRegion(
+        new Coordinate(37.37868022126601, 140.10356778964822),
+        new CoordinateSpan(1.5, 1.5)
+      ),
+      new Annotation(new Coordinate(37.37868022126601, 140.10356778964822), {
+        color: '#f4a56d',
+        glyphText: '',
+      }),
+      null,
+      regions.tohoku
     ),
-    new Annotation(new Coordinate(37.37868022126601, 140.10356778964822), {
-      color: '#f4a56d',
-      glyphText: '',
-    }),
-    null,
-    regions.tohoku
-  ),
-  hyogo: new LocationNode(
-    'hyogo',
-    {
-      en: new Localization('Hyōgo'),
-      ja: new Localization('兵庫県'),
-      ko: new Localization('효고현'),
-    },
-    new CoordinateRegion(
-      new Coordinate(34.913663, 134.858898),
-      new CoordinateSpan(1.63, 1.63)
+  },
+  kansai: {
+    hyogo: new LocationNode(
+      'hyogo',
+      {
+        en: new Localization('Hyōgo'),
+        ja: new Localization('兵庫県'),
+        ko: new Localization('효고현'),
+      },
+      new CoordinateRegion(
+        new Coordinate(34.913663, 134.858898),
+        new CoordinateSpan(1.63, 1.63)
+      ),
+      new Annotation(new Coordinate(34.913663, 134.858898), {
+        data: { type: 'text' },
+      }),
+      null,
+      regions.kansai
     ),
-    new Annotation(new Coordinate(34.913663, 134.858898), {
-      data: { type: 'text' },
-    }),
-    new Overlay(hyogo, {
-      style: { fillColor: 'purple', strokeColor: 'purple' },
-    }),
-    regions.kansai
-  ),
-  'osaka-prefecture': new LocationNode(
-    'osaka-prefecture',
-    {
-      en: new Localization('Ōsaka Prefecture'),
-      ja: new Localization('大阪府'),
-      ko: new Localization('오사카 부'),
-    },
-    new CoordinateRegion(
-      new Coordinate(34.660681, 135.497049),
-      new CoordinateSpan(0.98, 0.98)
+    'osaka-prefecture': new LocationNode(
+      'osaka-prefecture',
+      {
+        en: new Localization('Ōsaka Prefecture'),
+        ja: new Localization('大阪府'),
+        ko: new Localization('오사카 부'),
+      },
+      new CoordinateRegion(
+        new Coordinate(34.660681, 135.497049),
+        new CoordinateSpan(0.98, 0.98)
+      ),
+      new Annotation(new Coordinate(34.660681, 135.557049), {
+        data: { type: 'text' },
+      }),
+      null,
+      regions.kansai
     ),
-    new Annotation(new Coordinate(34.660681, 135.557049), {
-      data: { type: 'text' },
-    }),
-    new Overlay(osakaPrefecture, {
-      style: { fillColor: 'orange', strokeColor: 'orange' },
-    }),
-    regions.kansai
-  ),
+  },
 }
 
 const cities = {
@@ -266,7 +242,7 @@ const cities = {
       glyphText: '',
     }),
     null,
-    prefectures.fukushima
+    prefectures.tohoku.fukushima
   ),
   kobe: new LocationNode(
     'kobe',
@@ -284,7 +260,7 @@ const cities = {
       glyphText: '',
     }),
     null,
-    prefectures.hyogo
+    prefectures.kansai.hyogo
   ),
   osaka: new LocationNode(
     'osaka',
@@ -302,7 +278,7 @@ const cities = {
       glyphText: '',
     }),
     null,
-    prefectures['osaka-prefecture']
+    prefectures.kansai['osaka-prefecture']
   ),
 }
 
