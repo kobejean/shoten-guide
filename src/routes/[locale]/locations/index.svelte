@@ -5,14 +5,25 @@
   import { get } from 'lodash'
 
   const { current, highlighted } = getContext(LOCATIONS_KEY)
-  $: highlightTitle =
-    get($current, ['items', $highlighted, 'title']) || $_('locations.pageName')
+  $: active = get($current, ['items', $highlighted], $current)
 </script>
 
 <svelte:head>
   <title>{$_('locations.title')}</title>
 </svelte:head>
 
-<h1>{highlightTitle}</h1>
+<h1>{active.title}</h1>
 
-<p>Please select a region in the sidebar.</p>
+{#if active.description}
+  <p>
+    {@html active.description}
+  </p>
+{:else}
+  <p>No Description Available</p>
+{/if}
+
+<hr />
+
+<p style="opacity:{$highlighted ? 0.4 : 1.0}">
+  Please select a region in the sidebar.
+</p>

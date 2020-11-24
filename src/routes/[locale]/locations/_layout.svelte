@@ -44,6 +44,10 @@
     flex-wrap: nowrap;
   }
 
+  #content {
+    width: 100%;
+  }
+
   main,
   header {
     box-sizing: border-box;

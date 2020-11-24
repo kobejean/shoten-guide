@@ -2,6 +2,7 @@ import { derived, writable } from 'svelte/store'
 import { last, forEach } from 'lodash'
 import MapController from '../../../../components/map/_models/MapController.js'
 import { getFromCacheOrFetch } from '../../../../utils/cache.js'
+import { debounced } from '../../../../utils/store.js'
 
 class LocationsModel {
   async _fetch(ctx, path) {
@@ -48,13 +49,13 @@ class LocationsModel {
   }
 
   initStores(modelData) {
-    console.log()
     // shared stores
     const model = writable(modelData)
     const stack = derived(model, $model => $model.stack)
     const current = derived(model, $model => $model.current)
     const highlighted = writable()
-    const shared = { model, stack, current, highlighted }
+    const debouncedHighlighted = debounced(highlighted) // debounce for content display
+    const shared = { model, stack, current, highlighted: debouncedHighlighted }
     // breadcrumbs stores
     const breadcrumbs = { stack, current }
     // sidebar stores

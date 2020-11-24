@@ -9,13 +9,17 @@ import LocationNode from './classes/LocationNode'
 import regionsFeatures from './geo-json/regions'
 import kansaiFeatures from './geo-json/prefectures/kansai'
 
+// localizations
+import japanLocalizations from './localizations/japan.js'
+
+import kansaiLocalizations from './localizations/regions/kansai.js'
+import hyogoLocalizations from './localizations/prefectures/kansai/hyogo'
+import osakaPrefectureLocalizations from './localizations/prefectures/kansai/osakaPrefecture'
+import tohokuLocalizations from './localizations/regions/tohoku'
+
 const root = new LocationNode(
   'japan',
-  {
-    en: new Localization('Japan'),
-    ja: new Localization('全国'),
-    ko: new Localization('일본'),
-  },
+  japanLocalizations,
   new CoordinateRegion(
     new Coordinate(37.998915, 137.191162),
     new CoordinateSpan(16, 16)
@@ -79,11 +83,7 @@ const regions = {
   ),
   kansai: new LocationNode(
     'kansai',
-    {
-      en: new Localization('Kansai'),
-      ja: new Localization('関西'),
-      ko: new Localization('간사이'),
-    },
+    kansaiLocalizations,
     new CoordinateRegion(
       new Coordinate(34.601106, 135.616878),
       new CoordinateSpan(3.7, 3.7)
@@ -147,11 +147,7 @@ const regions = {
   ),
   tohoku: new LocationNode(
     'tohoku',
-    {
-      en: new Localization('Tōhoku'),
-      ja: new Localization('東北'),
-      ko: new Localization('도호쿠'),
-    },
+    tohokuLocalizations,
     new CoordinateRegion(
       new Coordinate(39.152451, 140.610502),
       new CoordinateSpan(5, 5)
@@ -190,11 +186,7 @@ const prefectures = {
   kansai: {
     hyogo: new LocationNode(
       'hyogo',
-      {
-        en: new Localization('Hyōgo'),
-        ja: new Localization('兵庫県'),
-        ko: new Localization('효고현'),
-      },
+      hyogoLocalizations,
       new CoordinateRegion(
         new Coordinate(34.913663, 134.858898),
         new CoordinateSpan(1.63, 1.63)
@@ -207,11 +199,7 @@ const prefectures = {
     ),
     'osaka-prefecture': new LocationNode(
       'osaka-prefecture',
-      {
-        en: new Localization('Ōsaka Prefecture'),
-        ja: new Localization('大阪府'),
-        ko: new Localization('오사카 부'),
-      },
+      osakaPrefectureLocalizations,
       new CoordinateRegion(
         new Coordinate(34.660681, 135.497049),
         new CoordinateSpan(0.98, 0.98)

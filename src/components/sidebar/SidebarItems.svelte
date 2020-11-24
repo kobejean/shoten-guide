@@ -7,6 +7,17 @@
     highlighted = undefined
 
   $: sorted = orderBy(items, ['enabled', 'title'], ['desc', 'asc'])
+
+  function setHighlight(item, on) {
+    if (item.enabled) highlighted = on ? item.id : null
+  }
+
+  function handleMouseOut(event) {
+    const isToEnabledButton =
+      event.relatedTarget.className.split(' ').includes('btn') &&
+      !event.relatedTarget.parentNode.className.split(' ').includes('disabled')
+    if (!isToEnabledButton) highlighted = null
+  }
 </script>
 
 <ol class="sidebar-items">
@@ -17,11 +28,11 @@
         href={(item.enabled && item.path) || undefined}
         rel={'prefetch'}
         sapper:noscroll
-        on:mouseover={() => item.enabled && (highlighted = item.id)}
-        on:touchstart={() => item.enabled && (highlighted = item.id)}
-        on:mouseout={() => item.enabled && (highlighted = null)}
-        on:touchcancel={() => item.enabled && (highlighted = null)}
-        on:touchend={() => item.enabled && (highlighted = null)}
+        on:mouseover={() => setHighlight(item, true)}
+        on:touchstart={() => setHighlight(item, true)}
+        on:mouseout={handleMouseOut}
+        on:touchcancel={() => setHighlight(item, false)}
+        on:touchend={() => setHighlight(item, false)}
       >
         {item.title}
       </a>
@@ -53,7 +64,8 @@
       border: solid 1px $border-shadow;
 
       a {
-        padding: 0 10px;
+        margin: -5px;
+        padding: 5px 15px;
         display: block;
       }
 

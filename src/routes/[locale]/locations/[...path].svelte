@@ -5,13 +5,26 @@
   import { get } from 'lodash'
 
   const { current, highlighted } = getContext(LOCATIONS_KEY)
-  $: highlightTitle =
-    get($current, ['items', $highlighted, 'title']) || $current.title
+  $: active = get($current, ['items', $highlighted], $current)
 </script>
 
 <svelte:head>
   <title>{$_('locations.titlePrefix') + $current.title}</title>
 </svelte:head>
 
-<h1>{highlightTitle}</h1>
-<p>Showing locations for: {$current.title}</p>
+<h1>{active.title}</h1>
+
+{#if active.description}
+  <p>
+    {@html active.description}
+  </p>
+{:else}
+  <p>No Description Abailable</p>
+{/if}
+
+<hr />
+
+<p style="opacity:{$highlighted ? 0.4 : 1.0}">
+  Showing locations for:
+  {$current.title}
+</p>

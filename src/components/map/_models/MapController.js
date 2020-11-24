@@ -96,7 +96,7 @@ export default class MapController {
     mapView.addEventListener('mousemove', this.handleMouseMove.bind(this))
     mapView.addEventListener('touchstart', this.handleTouchStart.bind(this))
 
-    mapView.addEventListener('mouseout', this.handleHighlightOff.bind(this))
+    mapView.addEventListener('mouseout', this.handleMouseOut.bind(this))
     mapView.addEventListener('touchend', this.handleHighlightOff.bind(this))
     mapView.addEventListener('touchcancel', this.handleHighlightOff.bind(this))
   }
@@ -132,9 +132,9 @@ export default class MapController {
           this.handleTouchStart.bind(this)
         )
 
-        mapView.removeEventListener(
+        this.element.removeEventListener(
           'mouseout',
-          this.handleHighlightOff.bind(this)
+          this.handleMouseOut.bind(this)
         )
         mapView.removeEventListener(
           'touchend',
@@ -189,7 +189,10 @@ export default class MapController {
     if (parameters.region && isNewLocation)
       this.setRegionAnimated(parameters.region, animated)
     this.setAnnotations(parameters.annotations)
-    if (isNewLocation) this.setFeatures(parameters.features, parameters.id)
+    if (isNewLocation) {
+      this.handleHighlightOff()
+      this.setFeatures(parameters.features, parameters.id)
+    }
 
     this.paths = transform(
       parameters.items,
@@ -199,7 +202,6 @@ export default class MapController {
       {}
     )
     this.lastId = parameters.id
-    this.handleHighlightOff()
   }
 
   handleHighlight(id) {
@@ -268,7 +270,7 @@ export default class MapController {
     const targetOverlay = this.map.topOverlayAtPoint(
       new DOMPoint(event.pageX, event.pageY)
     )
-    if (targetOverlay && targetOverlay.enabled && targetOverlay.data.id) {
+    if (targetOverlay && targetOverlay.enabled) {
       this.stores.highlighted.set(targetOverlay.data.id)
     } else {
       this.stores.highlighted.set(undefined)
@@ -279,9 +281,14 @@ export default class MapController {
     if (event.touches.length !== 1) return
     const { pageX, pageY } = event.touches[0]
     const targetOverlay = this.map.topOverlayAtPoint(new DOMPoint(pageX, pageY))
-    if (targetOverlay && targetOverlay.enabled && targetOverlay.data.id) {
+    if (targetOverlay && targetOverlay.enabled) {
       this.stores.highlighted.set(targetOverlay.data.id)
     }
+  }
+
+  handleMouseOut(event) {
+    if (!event.currentTarget.contains(event.relatedTarget))
+      this.stores.highlighted.set(undefined) // must have truly moused out of map view
   }
 
   handleHighlightOff() {
