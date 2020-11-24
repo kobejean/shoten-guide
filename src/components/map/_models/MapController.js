@@ -199,6 +199,7 @@ export default class MapController {
       {}
     )
     this.lastId = parameters.id
+    this.handleHighlightOff()
   }
 
   handleHighlight(id) {
