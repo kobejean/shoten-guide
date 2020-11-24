@@ -14,13 +14,13 @@ class LocationsModel {
     return null
   }
 
-  _getStack = ([data, path]) => {
+  _getStack([data, path]) {
     const stack = [data.locations]
     forEach(path, seg => stack.push(last(stack).items[seg]))
     return stack
   }
 
-  fetchModel = async (ctx, path) => {
+  async fetchModel(ctx, path) {
     const data = await this._fetch(ctx, path)
     if (!data) return null
     path = path
@@ -32,7 +32,7 @@ class LocationsModel {
     return model
   }
 
-  preload = async (ctx, page, session) => {
+  async preload(ctx, page, session) {
     const model = await getFromCacheOrFetch(
       LocationsModel.caches,
       `model/${page.path}`,
@@ -41,7 +41,7 @@ class LocationsModel {
     return { model }
   }
 
-  getModelData = (path, data) => {
+  getModelData(path, data) {
     const stack = this._getStack([data, path])
     const current = last(stack)
     return { stack, current }
