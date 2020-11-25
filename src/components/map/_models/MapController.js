@@ -149,6 +149,7 @@ export default class MapController {
       this.element = null
       this.lastAnnotations = null
       this.lastRegion = null
+      MapDecoder.caches.clear()
       unsubscribe()
     }
   }
