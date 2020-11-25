@@ -90,6 +90,7 @@ export default {
       !dev &&
         terser({
           module: true,
+          format: { comments: false },
         }),
     ],
 
