@@ -6,7 +6,7 @@
   import Map from '../map/Map.svelte'
   import SidebarHeader from './SidebarHeader.svelte'
   import SidebarItems from './SidebarItems.svelte'
-  import { values } from 'lodash'
+  import { values } from 'lodash-es'
   import { getContext } from 'svelte'
 
   const { current, stack, highlighted } = getContext(SIDEBAR_KEY)

@@ -1,5 +1,5 @@
 import { FALLBACK_LOCAL } from '../../../../../../../services/i18n/constants'
-import { forEach, isEmpty } from 'lodash'
+import { forEach, isEmpty } from 'lodash-es'
 export default class LocationNode {
   constructor(
     id,

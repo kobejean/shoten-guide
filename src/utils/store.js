@@ -1,4 +1,4 @@
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 import { derived } from 'svelte/store'
 
 export const debounced = (store, wait, options) => {

@@ -121,6 +121,9 @@ export default {
         dedupe: ['svelte'],
       }),
       commonjs(),
+      replace({
+        'lodash-es': 'lodash', // server does not like lodash-es
+      }),
     ],
     external: Object.keys(pkg.dependencies).concat(
       require('module').builtinModules

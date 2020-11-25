@@ -1,6 +1,6 @@
 <script>
   import { _ } from 'svelte-i18n'
-  import { orderBy } from 'lodash'
+  import { orderBy } from 'lodash-es'
   import { flip } from 'svelte/animate'
   import { fade } from 'svelte/transition'
   export let items,

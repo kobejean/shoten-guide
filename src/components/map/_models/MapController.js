@@ -1,7 +1,7 @@
 import { loadScript } from '../../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
-import { find, get as getValue, filter, transform, forEach } from 'lodash'
+import { find, get as getValue, filter, transform, forEach } from 'lodash-es'
 import { goto } from '@sapper/app'
 import MapDecoder from './MapDecoder.js'
 import MapItemStyler from './MapItemStyler.js'
@@ -19,6 +19,57 @@ export default class MapController {
     if (typeof window === 'undefined' || typeof mapkit === 'undefined') return
     MapDecoder.loadFeatures(features, id)
   }
+
+  mount(scene, element) {
+    this.element = element
+    if (typeof mapkit === 'undefined') {
+      // load script, init map and load it on first mount
+      loadScript(MAPKIT_SOURCE, () => {
+        this.initMapKit()
+        this.loadMap()
+        this.setMapParameters(scene, false)
+      })
+    } else {
+      // just load map on subsequent mounts
+      this.loadMap()
+      this.setMapParameters(scene, false)
+    }
+
+    // unsubscribe on unmount
+    const localeUnsubscriber = locale.subscribe(this.handleLanguageChange)
+    return async () => {
+      if (this.map) {
+        this.map.removeEventListener('select', this.handleSelection.bind(this))
+        const mapView = this.element.querySelector('.mk-map-view')
+
+        mapView.removeEventListener(
+          'mousemove',
+          this.handleMouseMove.bind(this)
+        )
+        mapView.removeEventListener(
+          'touchstart',
+          this.handleTouchStart.bind(this)
+        )
+
+        this.element.removeEventListener(
+          'mouseout',
+          this.handleMouseOut.bind(this)
+        )
+        mapView.removeEventListener(
+          'touchend',
+          this.handleHighlightOff.bind(this)
+        )
+        mapView.removeEventListener(
+          'touchcancel',
+          this.handleHighlightOff.bind(this)
+        )
+      }
+
+      MapDecoder.caches.clear()
+      localeUnsubscriber()
+    }
+  }
+
   /**
    * Handles initializing mapkit.
    */
@@ -101,61 +152,7 @@ export default class MapController {
     mapView.addEventListener('touchcancel', this.handleHighlightOff.bind(this))
   }
 
-  mount(scene, element) {
-    this.element = element
-    if (typeof mapkit === 'undefined') {
-      // load script, init map and load it on first mount
-      loadScript(MAPKIT_SOURCE, () => {
-        this.initMapKit()
-        this.loadMap()
-        this.setMapParameters(scene, false)
-      })
-    } else {
-      // just load map on subsequent mounts
-      this.loadMap()
-      this.setMapParameters(scene, false)
-    }
-
-    // unsubscribe on unmount
-    const unsubscribe = locale.subscribe(this.handleLanguageChange)
-    return async () => {
-      if (this.map) {
-        this.map.removeEventListener('select', this.handleSelection.bind(this))
-        const mapView = this.element.querySelector('.mk-map-view')
-
-        mapView.removeEventListener(
-          'mousemove',
-          this.handleMouseMove.bind(this)
-        )
-        mapView.removeEventListener(
-          'touchstart',
-          this.handleTouchStart.bind(this)
-        )
-
-        this.element.removeEventListener(
-          'mouseout',
-          this.handleMouseOut.bind(this)
-        )
-        mapView.removeEventListener(
-          'touchend',
-          this.handleHighlightOff.bind(this)
-        )
-        mapView.removeEventListener(
-          'touchcancel',
-          this.handleHighlightOff.bind(this)
-        )
-      }
-      this.map = null
-      this.element = null
-      this.lastAnnotations = null
-      this.lastRegion = null
-      MapDecoder.caches.clear()
-      unsubscribe()
-    }
-  }
-
   setRegionAnimated(region, animated = false) {
-    this.lastRegion = region
     const center = new mapkit.Coordinate(
       region.center.latitude,
       region.center.longitude

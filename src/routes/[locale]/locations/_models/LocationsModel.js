@@ -1,5 +1,5 @@
 import { derived, writable } from 'svelte/store'
-import { last, forEach } from 'lodash'
+import { last, forEach } from 'lodash-es'
 import MapController from '../../../../components/map/_models/MapController.js'
 import { getFromCacheOrFetch } from '../../../../utils/cache.js'
 import { debounced } from '../../../../utils/store.js'
