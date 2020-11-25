@@ -186,13 +186,13 @@ export default class MapController {
 
   setMapParameters(parameters, animated = false) {
     const isNewLocation = this.lastId !== parameters.id
-    if (parameters.region && isNewLocation)
-      this.setRegionAnimated(parameters.region, animated)
     this.setAnnotations(parameters.annotations)
     if (isNewLocation) {
       this.handleHighlightOff()
       this.setFeatures(parameters.features, parameters.id)
     }
+    if (parameters.region && isNewLocation)
+      this.setRegionAnimated(parameters.region, animated)
 
     this.paths = transform(
       parameters.items,
