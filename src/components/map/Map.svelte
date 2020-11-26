@@ -4,34 +4,34 @@
 
 <script>
   import { onMount, getContext } from 'svelte'
-  import {
-    mountMapkit,
-    handleRegionChange,
-    selectAnnotationWithId,
-  } from './_models/MapModel.js'
+  import MapController from './_models/MapController.js'
 
-  const stores = getContext(MAP_KEY)
-  const { annotations, region, highlighted } = stores
+  const controller = new MapController()
 
-  onMount(() => mountMapkit(stores))
+  controller.stores = getContext(MAP_KEY)
+  const { current, highlighted } = controller.stores
 
-  $: handleRegionChange($annotations, $region)
-  $: selectAnnotationWithId($highlighted)
+  let map
+
+  onMount(() => controller.mount($current, map))
+
+  $: controller.handleRegionChange($current)
+  $: controller.handleHighlight($highlighted)
 </script>
 
-<div id="map" role="application" aria-label="Map of store locations" />
+<div bind:this={map} role="application" aria-label="Map of store locations" />
 
 <style type="scss">
   @import '../../styles/colors';
 
-  #map {
+  div {
     min-width: 320px;
     height: 320px;
-    background-color: $neutral-light-gray;
+    background-color: $neutral-super-light-gray;
   }
 
   @media (max-width: 420px) {
-    #map {
+    div {
       height: 200px;
     }
   }

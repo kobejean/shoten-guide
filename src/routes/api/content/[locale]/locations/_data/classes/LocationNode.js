@@ -1,11 +1,19 @@
 import { FALLBACK_LOCAL } from '../../../../../../../services/i18n/constants'
-import { forEach } from 'lodash'
+import { forEach, isEmpty } from 'lodash-es'
 export default class LocationNode {
-  constructor(id, localizations, region, annotation = null, parent = null) {
+  constructor(
+    id,
+    localizations,
+    region,
+    annotation = null,
+    features = null,
+    parent = null
+  ) {
     this.id = id
     this.localizations = localizations
     this.region = region
     this.annotation = annotation
+    this.features = features
     this.items = {}
 
     if (parent) {
@@ -39,7 +47,10 @@ export default class LocationNode {
       coordinate: this.annotation.coordinate,
       options: {
         ...this.annotation.options,
-        data: { id: this.id },
+        data: {
+          ...this.annotation.options.data,
+          id: this.id,
+        },
         title,
       },
     }
@@ -50,6 +61,7 @@ export default class LocationNode {
       ...this.getLocalization(locale),
       id: this.id,
       items: {},
+      enabled: !isEmpty(this.items),
     }
   }
 
@@ -59,7 +71,7 @@ export default class LocationNode {
     // get only important details of children
     forEach(this.items, (item, id) => {
       items[id] = item.getMinimalSummary(locale)
-      annotations.push(item.getProcessedAnnotation(locale))
+      if (item.annotation) annotations.push(item.getProcessedAnnotation(locale))
     })
     return {
       ...this.getLocalization(locale),
@@ -67,6 +79,8 @@ export default class LocationNode {
       region: this.region,
       annotations,
       items,
+      features: this.features,
+      enabled: !isEmpty(items),
     }
   }
 

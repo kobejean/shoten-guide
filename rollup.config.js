@@ -6,7 +6,7 @@ import url from '@rollup/plugin-url'
 import svelte from 'rollup-plugin-svelte'
 import sveltePreprocess from 'svelte-preprocess'
 import babel from '@rollup/plugin-babel'
-import json from '@rollup/plugin-json'
+import json from './plugins/json.js'
 import { terser } from 'rollup-plugin-terser'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
@@ -35,13 +35,14 @@ const commonReplacements = {
 }
 // to get it to work with vercel we need to add exports param
 const serverOutput = { ...config.server.output(), exports: 'default' }
+const jsonOptions = { compact: !dev }
 
 export default {
   client: {
     input: config.client.input(),
     output: config.client.output(),
     plugins: [
-      json(),
+      json(jsonOptions),
       replace({
         'process.browser': true,
         ...commonReplacements,
@@ -89,6 +90,7 @@ export default {
       !dev &&
         terser({
           module: true,
+          format: { comments: false },
         }),
     ],
 
@@ -100,7 +102,7 @@ export default {
     input: config.server.input(),
     output: serverOutput,
     plugins: [
-      json(),
+      json(jsonOptions),
       replace({
         'process.browser': false,
         ...commonReplacements,
@@ -120,6 +122,9 @@ export default {
         dedupe: ['svelte'],
       }),
       commonjs(),
+      replace({
+        'lodash-es': 'lodash', // server does not like lodash-es
+      }),
     ],
     external: Object.keys(pkg.dependencies).concat(
       require('module').builtinModules

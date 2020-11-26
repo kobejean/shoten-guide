@@ -25,9 +25,9 @@
 	     the current page has one -->
     %sapper.head%
   </head>
-  <body id="sapper">
+  <body>
     <!-- The application will be rendered inside this element,
-	     because `src/client.js` references id="sapper" -->
-    %sapper.html%
+       because `src/client.js` references id="sapper" -->
+    <div id="sapper">%sapper.html%</div>
   </body>
 </html>

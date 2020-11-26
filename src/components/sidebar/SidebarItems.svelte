@@ -1,26 +1,39 @@
 <script>
   import { _ } from 'svelte-i18n'
-  import { sortBy } from 'lodash'
+  import { orderBy } from 'lodash-es'
   import { flip } from 'svelte/animate'
   import { fade } from 'svelte/transition'
-  export let items, highlighted
+  export let items,
+    highlighted = undefined
 
-  $: sorted = sortBy(items, 'title')
+  $: sorted = orderBy(items, ['enabled', 'title'], ['desc', 'asc'])
+
+  function setHighlight(item, on) {
+    if (item.enabled) highlighted = on ? item.id : null
+  }
+
+  function handleMouseOut(event) {
+    const isToEnabledButton =
+      event.relatedTarget &&
+      event.relatedTarget.className.split(' ').includes('btn') &&
+      !event.relatedTarget.parentNode.className.split(' ').includes('disabled')
+    if (!isToEnabledButton) highlighted = null
+  }
 </script>
 
 <ol class="sidebar-items">
   {#each sorted as item (item.id)}
-    <li animate:flip transition:fade|local>
+    <li animate:flip transition:fade|local class:disabled={!item.enabled}>
       <a
         class="btn"
-        href={item.path}
+        href={(item.enabled && item.path) || undefined}
         rel={'prefetch'}
         sapper:noscroll
-        on:mouseover={() => (highlighted = item.id)}
-        on:touchstart={() => (highlighted = item.id)}
-        on:mouseout={() => (highlighted = null)}
-        on:touchcancel={() => (highlighted = null)}
-        on:touchend={() => (highlighted = null)}
+        on:mouseover={() => setHighlight(item, true)}
+        on:touchstart={() => setHighlight(item, true)}
+        on:mouseout={handleMouseOut}
+        on:touchcancel={() => setHighlight(item, false)}
+        on:touchend={() => setHighlight(item, false)}
       >
         {item.title}
       </a>
@@ -43,8 +56,8 @@
     li {
       background-color: $neutral-super-light-gray;
       text-decoration: none;
-      padding: 0 10px;
       margin-right: 8px;
+      margin-bottom: 8px;
       height: 28px;
       line-height: 28px;
       list-style: none;
@@ -52,17 +65,22 @@
       border: solid 1px $border-shadow;
 
       a {
-        margin: 0 -10px;
-        padding: 0 10px;
+        margin: -5px;
+        padding: 5px 15px;
         display: block;
       }
 
       &.error-message {
+        padding: 0 10px;
         text-align: center;
         background-color: unset;
         border: none;
         height: 30px;
         line-height: 30px;
+      }
+
+      &.disabled {
+        opacity: 0.4;
       }
     }
   }

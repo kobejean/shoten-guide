@@ -1,5 +1,5 @@
 <script>
-  import { nth } from 'lodash'
+  import { nth } from 'lodash-es'
   export let stack
 
   $: current = nth(stack, -1)

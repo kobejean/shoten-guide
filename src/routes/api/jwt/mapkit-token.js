@@ -21,6 +21,7 @@ export function get(req, res, next) {
 
   res.writeHead(200, {
     'Content-Type': 'application/json',
+    'Cache-Control': 'no-store',
   })
   res.end(JSON.stringify({ token }))
 }
