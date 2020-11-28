@@ -15,17 +15,21 @@
     "welcome": "<b>홈 페이지</b>에 오신 것을 환영합니다!"
   },
   "locale": {
-    "en": "English",
-    "ja": "日本語",
-    "ko": "한국어"
+    "en": "🇺🇸 English",
+    "ja": "🇯🇵 日本語",
+    "ko": "🇰🇷 한국어"
   },
   "locations": {
-    "title": "상가 가이드 | 매장 찾기",
+    "title": "상가 가이드 | {title}",
     "titlePrefix": "상가 가이드 | ",
     "pageName": "매장 찾기",
     "sidebar": {
       "emptyMessage": "더 이상 선택이 아닙니다."
-    }
+    },
+    "noDescription": "이 장소에 대한 설명이 없습니다",
+    "selectInstructions": "사이드 바에서 위치를 선택하십시오.",
+    "noResults": "표시되는 정보는 없습니다.",
+    "resultsTitle": "{location}의 상점"
   },
   "nav": {
     "about": "정보",

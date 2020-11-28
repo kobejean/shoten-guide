@@ -15,17 +15,21 @@
     "welcome": "<b>ホームページ</b>へようこそ！"
   },
   "locale": {
-    "en": "English",
-    "ja": "日本語",
-    "ko": "한국어"
+    "en": "🇺🇸 English",
+    "ja": "🇯🇵 日本語",
+    "ko": "🇰🇷 한국어"
   },
   "locations": {
-    "title": "商店ガイド｜店舗を探す",
+    "title": "商店ガイド｜{title}",
     "titlePrefix": "商店ガイド｜",
     "pageName": "店舗を探す",
     "sidebar": {
       "emptyMessage": "これ以上の選択はありません。"
-    }
+    },
+    "noDescription": "この場所の説明はございません",
+    "selectInstructions": "サイドバーで場所を選択してください。",
+    "noResults": "表示する情報はございません。",
+    "resultsTitle": "{location}の店舗"
   },
   "nav": {
     "about": "情報",
