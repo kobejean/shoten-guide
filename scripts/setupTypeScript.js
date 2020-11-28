@@ -11,6 +11,8 @@ const { argv } = require('process');
 
 const projectRoot = argv[2] || path.join(__dirname, '..');
 
+const isRollup = fs.existsSync(path.join(projectRoot, "rollup.config.js"));
+
 function warn(message) {
 	console.warn('Warning: ' + message);
 }
@@ -55,7 +57,7 @@ function addDepsToPackageJson() {
 	const pkgJSONPath = path.join(projectRoot, 'package.json');
 	const packageJSON = JSON.parse(fs.readFileSync(pkgJSONPath, 'utf8'));
 	packageJSON.devDependencies = Object.assign(packageJSON.devDependencies, {
-		'@rollup/plugin-typescript': '^6.0.0',
+		...(isRollup ? { '@rollup/plugin-typescript': '^6.0.0' } : { 'ts-loader': '^8.0.4' }),
 		'@tsconfig/svelte': '^1.0.10',
 		'@types/compression': '^1.7.0',
 		'@types/node': '^14.11.1',
@@ -81,7 +83,7 @@ function changeJsExtensionToTs(dir) {
 	for (let i = 0; i < elements.length; i++) {
 		if (elements[i].isDirectory()) {
 			changeJsExtensionToTs(path.join(dir, elements[i].name));
-		} else if (elements[i].name.match(/^((?!json).)*js$/)) {
+		} else if (elements[i].name.match(/^[^_]((?!json).)*js$/)) {
 			fs.renameSync(path.join(dir, elements[i].name), path.join(dir, elements[i].name).replace('.js', '.ts'));
 		}
 	}
@@ -150,14 +152,14 @@ import typescript from '@rollup/plugin-typescript';
 			/(?<!THIS_IS_UNDEFINED[^\n]*\n\s*)onwarn\(warning\);/,
 			`(warning.code === 'THIS_IS_UNDEFINED') ||\n\tonwarn(warning);`
 		],
-		[/input: config.client.input\(\)(?!\.replace)/, `input: config.client.input().replace(/\.js$/, '.ts')`],
+		[/input: config.client.input\(\)(?!\.replace)/, `input: config.client.input().replace(/\\.js$/, '.ts')`],
 		[
 			/input: config.server.input\(\)(?!\.replace)/,
-			`input: { server: config.server.input().server.replace(/\.js$/, ".ts") }`
+			`input: { server: config.server.input().server.replace(/\\.js$/, ".ts") }`
 		],
 		[
 			/input: config.serviceworker.input\(\)(?!\.replace)/,
-			`input: config.serviceworker.input().replace(/\.js$/, '.ts')`
+			`input: config.serviceworker.input().replace(/\\.js$/, '.ts')`
 		],
 		// Add preprocess to the svelte config, this is tricky because there's no easy signifier.
 		// Instead we look for 'hydratable: true,'
@@ -167,14 +169,65 @@ import typescript from '@rollup/plugin-typescript';
 	]);
 }
 
+function updateWebpackConfig() {
+	// Edit webpack config
+	replaceInFile(path.join(projectRoot, 'webpack.config.js'), [
+		// Edit imports
+		[
+			/require\('webpack-modules'\);\n(?!const sveltePreprocess)/,
+			`require('webpack-modules');\nconst sveltePreprocess = require('svelte-preprocess');\n`
+		],
+		// Edit extensions
+		[
+			/\['\.mjs', '\.js', '\.json', '\.svelte', '\.html'\]/,
+			`['.mjs', '.js', '.ts', '.json', '.svelte', '.html']`
+		],
+		// Edit entries
+		[
+			/entry: config\.client\.entry\(\)/,
+			`entry: { main: config.client.entry().main.replace(/\\.js$/, '.ts') }`
+		],
+		[
+			/entry: config\.server\.entry\(\)/,
+			`entry: { server: config.server.entry().server.replace(/\\.js$/, '.ts') }`
+		],
+		[
+			/entry: config\.serviceworker\.entry\(\)/,
+			`entry: { 'service-worker': config.serviceworker.entry()['service-worker'].replace(/\\.js$/, '.ts') }`
+		],
+		// Add preprocess to the svelte config, this is tricky because there's no easy signifier.
+		// Instead we look for 'hydratable: true,'
+		[
+			/hydratable: true(?!,\n\s*preprocess)/g,
+			'hydratable: true,\n\t\t\t\t\t\t\tpreprocess: sveltePreprocess()'
+		],
+		// Add TypeScript rules for client and server
+		[
+			/module: {\n\s*rules: \[\n\s*(?!{\n\s*test: \/\\\.ts\$\/)/g,
+			`module: {\n\t\t\trules: [\n\t\t\t\t{\n\t\t\t\t\ttest: /\\.ts$/,\n\t\t\t\t\tloader: 'ts-loader'\n\t\t\t\t},\n\t\t\t\t`
+		],
+		// Add TypeScript rules for serviceworker
+		[
+			/output: config\.serviceworker\.output\(\),\n\s*(?!module)/,
+			`output: config.serviceworker.output(),\n\t\tmodule: {\n\t\t\trules: [\n\t\t\t\t{\n\t\t\t\t\ttest: /\\.ts$/,\n\t\t\t\t\tloader: 'ts-loader'\n\t\t\t\t}\n\t\t\t]\n\t\t},\n\t\t`
+		],
+		// Edit outputs
+		[
+			/output: config\.serviceworker\.output\(\),\n\s*(?!resolve)/,
+			`output: config.serviceworker.output(),\n\t\tresolve: { extensions: ['.mjs', '.js', '.ts', '.json'] },\n\t\t`
+		]
+	]);
+}
+
 function updateServiceWorker() {
 	replaceInFile(path.join(projectRoot, 'src', 'service-worker.ts'), [
 		[`shell.concat(files);`, `(shell as string[]).concat(files as string[]);`],
-		[`'install', event =>`, `'install', <EventType extends ExtendableEvent>(event: EventType) =>`],
 		[`self.skipWaiting();`, `((self as any) as ServiceWorkerGlobalScope).skipWaiting();`],
-		[`'activate', event =>`, `'activate', <EventType extends ExtendableEvent>(event: EventType) =>`],
 		[`self.clients.claim();`, `((self as any) as ServiceWorkerGlobalScope).clients.claim();`],
-		[`'fetch', event =>`, `'fetch', <EventType extends FetchEvent>(event: EventType) =>`]
+		[`fetchAndCache(request)`, `fetchAndCache(request: Request)`],
+		[`self.addEventListener('activate', event =>`, `self.addEventListener('activate', (event: ExtendableEvent) =>`],
+		[`self.addEventListener('install', event =>`, `self.addEventListener('install', (event: ExtendableEvent) =>`],
+		[`addEventListener('fetch', event =>`, `addEventListener('fetch', (event: FetchEvent) =>`],
 	]);
 }
 
@@ -218,7 +271,7 @@ function deleteThisScript() {
 	}
 }
 
-console.log('Adding TypeScript with Rollup...');
+console.log(`Adding TypeScript with ${isRollup ? "Rollup" : "webpack" }...`);
 
 addDepsToPackageJson();
 
@@ -226,7 +279,11 @@ changeJsExtensionToTs(path.join(projectRoot, 'src'));
 
 updateSvelteFiles();
 
-updateRollupConfig();
+if (isRollup) {
+	updateRollupConfig();
+} else {
+	updateWebpackConfig();
+}
 
 updateServiceWorker();
 
@@ -242,5 +299,9 @@ if (!argv[2]) {
 console.log('Converted to TypeScript.');
 
 if (fs.existsSync(path.join(projectRoot, 'node_modules'))) {
-	console.log(`\nYou will need to re-run 'npm install' to get started.`);
+	console.log(`
+Next:
+1. run 'npm install' again to install TypeScript dependencies
+2. run 'npm run build' for the @sapper imports in your project to work
+`);
 }

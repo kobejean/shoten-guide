@@ -1,0 +1,5 @@
+/node_modules/
+/dev/
+/src/node_modules/@sapper/
+/src/node_modules_hack/@sapper/
+/__sapper__/
