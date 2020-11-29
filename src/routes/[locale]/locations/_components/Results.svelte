@@ -5,10 +5,10 @@
 
   export let items = []
 
-  const { current, highlighted } = getContext(LOCATIONS_KEY)
+  const { current } = getContext(LOCATIONS_KEY)
 </script>
 
-<section style="opacity:{$highlighted ? 0.4 : 1.0}">
+<section>
   <header>
     <h3>
       {$_('locations.resultsTitle', { values: { location: $current.title } })}

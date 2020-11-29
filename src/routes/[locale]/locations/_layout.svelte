@@ -43,7 +43,7 @@
 <main>
   <Sidebar />
   <article id="content">
-    <Description active={$active} />
+    <Description title={$current.title} description={$current.description} />
     <slot />
     <Results />
   </article>

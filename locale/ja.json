@@ -29,7 +29,9 @@
     "noDescription": "この場所の説明はございません",
     "selectInstructions": "サイドバーで場所を選択してください。",
     "noResults": "表示する情報はございません。",
-    "resultsTitle": "{location}の店舗"
+    "resultsTitle": "{location}の店舗",
+    "showMore": "もっと見せる...",
+    "hideMore": "...隠す"
   },
   "nav": {
     "about": "情報",

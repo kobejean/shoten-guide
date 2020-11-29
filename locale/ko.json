@@ -29,7 +29,9 @@
     "noDescription": "이 장소에 대한 설명이 없습니다",
     "selectInstructions": "사이드 바에서 위치를 선택하십시오.",
     "noResults": "표시되는 정보는 없습니다.",
-    "resultsTitle": "{location}의 상점"
+    "resultsTitle": "{location}의 상점",
+    "showMore": "자세히보기...",
+    "hideMore": "...숨는 장소"
   },
   "nav": {
     "about": "정보",
