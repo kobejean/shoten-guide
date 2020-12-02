@@ -16,6 +16,9 @@
   } from '../../../components/breadcrumbs/Breadcrumbs.svelte'
   import { _ } from 'svelte-i18n'
   import { setContext } from 'svelte'
+  import { get } from 'lodash-es'
+  import Description from './_components/Description.svelte'
+  import Results from './_components/Results.svelte'
 
   export let segment, model
   segment // silence warning
@@ -26,16 +29,24 @@
   setContext(SIDEBAR_KEY, stores.sidebar)
   setContext(MAP_KEY, stores.map)
   $: LocationsModel.updateStores(stores, model)
+
+  const { current, active } = stores.shared
 </script>
+
+<svelte:head>
+  <title>{$_('locations.title', { values: { title: $current.title } })}</title>
+</svelte:head>
 
 <header>
   <Breadcrumbs />
 </header>
 <main>
   <Sidebar />
-  <section id="content">
+  <article id="content">
+    <Description title={$current.title} description={$current.description} />
     <slot />
-  </section>
+    <Results />
+  </article>
 </main>
 
 <style lang="scss">

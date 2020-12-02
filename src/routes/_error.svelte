@@ -1,5 +1,5 @@
 <script>
-  import NavigationBar from '../components/NavigationBar.svelte'
+  import NavigationBar from '../components/navigation-bar/NavigationBar.svelte'
   import { stores } from '@sapper/app'
   import { isLocaleLoaded } from '../services/i18n/helpers.js'
   import { locale as localeStore } from 'svelte-i18n'
