@@ -1,7 +1,6 @@
 <script>
   import { _ } from 'svelte-i18n'
   import { afterUpdate } from 'svelte'
-  import { fade } from 'svelte/transition'
   export let title, description
 
   let header,
@@ -9,14 +8,11 @@
     collapsed = true
 
   function updateOverflow() {
-    setTimeout(() => (overflow = header.clientHeight < header.scrollHeight), 50)
+    overflow = header.clientHeight < header.scrollHeight
   }
 
   function toggleExpand() {
     collapsed = !collapsed
-    if (!collapsed) {
-      header.style.maxHeight = `${header.scrollHeight}px`
-    }
   }
 
   $: {
@@ -40,7 +36,7 @@
     <p>{$_('locations.noDescription')}</p>
   {/if}
   {#if overflow || !collapsed}
-    <span class="show-more-container" transition:fade|local={{ duration: 200 }}>
+    <span class="show-more-container">
       <button on:click={toggleExpand}>
         {#if collapsed}
           {$_('locations.showMore')}
@@ -56,8 +52,6 @@
     overflow: hidden;
     box-sizing: content-box;
     margin-bottom: 2em;
-    transition: all 0.2s ease-in-out;
-    transition-property: max-height, padding-bottom;
 
     &.collapsed {
       max-height: calc(
