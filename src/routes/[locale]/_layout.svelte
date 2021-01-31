@@ -1,6 +1,6 @@
 <script context="module">
   import { preloadLocale } from '../../services/i18n/preload.js'
-  import { waitLocale, locale } from 'svelte-i18n'
+  import { waitLocale } from 'svelte-i18n'
 
   export async function preload(page, session) {
     await preloadLocale(this, page, session)
@@ -11,6 +11,7 @@
 <script>
   import NavigationBar from '../../components/navigation-bar/NavigationBar.svelte'
   import { stores } from '@sapper/app'
+  import { locale } from 'svelte-i18n'
 
   export let segment
 

@@ -3,13 +3,15 @@
 </script>
 
 <script>
-  import Map from '../map/Map.svelte'
+  import Map, { MAP_KEY } from '../map/Map.svelte'
   import SidebarHeader from './SidebarHeader.svelte'
   import SidebarItems from './SidebarItems.svelte'
   import { values } from 'lodash-es'
-  import { getContext } from 'svelte'
+  import { getContext, setContext } from 'svelte'
 
-  const { current, stack, highlighted } = getContext(SIDEBAR_KEY)
+  const stores = getContext(SIDEBAR_KEY)
+  setContext(MAP_KEY, stores)
+  const { current, stack, highlighted } = stores
 
   $: items = values($current.items)
 </script>
