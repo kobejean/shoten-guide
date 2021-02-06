@@ -7,7 +7,6 @@
 </script>
 
 <script>
-  import Map, { MAP_KEY } from '../../../components/map/Map.svelte'
   import Sidebar, {
     SIDEBAR_KEY,
   } from '../../../components/sidebar/Sidebar.svelte'
@@ -16,7 +15,6 @@
   } from '../../../components/breadcrumbs/Breadcrumbs.svelte'
   import { _ } from 'svelte-i18n'
   import { setContext } from 'svelte'
-  import { get } from 'lodash-es'
   import Description from './_components/Description.svelte'
   import Results from './_components/Results.svelte'
 
@@ -27,10 +25,9 @@
   setContext(LOCATIONS_KEY, stores.shared)
   setContext(BREADCRUMBS_KEY, stores.breadcrumbs)
   setContext(SIDEBAR_KEY, stores.sidebar)
-  setContext(MAP_KEY, stores.map)
   $: LocationsModel.updateStores(stores, model)
 
-  const { current, active } = stores.shared
+  const { current } = stores.shared
 </script>
 
 <svelte:head>

@@ -6,9 +6,7 @@
   import { onMount, getContext } from 'svelte'
   import MapController from './_models/MapController.js'
 
-  const controller = new MapController()
-
-  controller.stores = getContext(MAP_KEY)
+  const controller = new MapController(getContext(MAP_KEY))
   const { current, highlighted } = controller.stores
 
   let map

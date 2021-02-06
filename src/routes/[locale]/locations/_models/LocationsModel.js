@@ -2,7 +2,6 @@ import { derived, writable } from 'svelte/store'
 import { last, forEach, get } from 'lodash-es'
 import MapController from '../../../../components/map/_models/MapController.js'
 import { getFromCacheOrFetch } from '../../../../utils/cache.js'
-import { debounced } from '../../../../utils/store.js'
 
 class LocationsModel {
   async _fetch(ctx, path) {
@@ -15,20 +14,24 @@ class LocationsModel {
     return null
   }
 
-  _getStack([data, path]) {
+  _getStack([data, segments]) {
     const stack = [data.locations]
-    forEach(path, seg => stack.push(last(stack).items[seg]))
+    forEach(segments, seg => stack.push(last(stack).items[seg]))
     return stack
+  }
+
+  _getSegments(path) {
+    return path
+      .split('/')
+      .filter(seg => seg)
+      .splice(2) // ignore /:locale/locations
   }
 
   async fetchModel(ctx, path) {
     const data = await this._fetch(ctx, path)
     if (!data) return null
-    path = path
-      .split('/')
-      .filter(seg => seg)
-      .splice(2) // ignore /:locale/locations
-    const model = this.getModelData(path, data)
+    const segments = this._getSegments(path)
+    const model = this.getModelData(segments, data)
     MapController.preload(model.current)
     return model
   }
@@ -42,8 +45,8 @@ class LocationsModel {
     return { model }
   }
 
-  getModelData(path, data) {
-    const stack = this._getStack([data, path])
+  getModelData(segments, data) {
+    const stack = this._getStack([data, segments])
     const current = last(stack)
     return { stack, current }
   }
@@ -54,26 +57,17 @@ class LocationsModel {
     const stack = derived(model, $model => $model.stack)
     const current = derived(model, $model => $model.current)
     const highlighted = writable()
-    const debouncedHighlighted = debounced(highlighted, 50) // debounce for content display
-    const active = derived(
-      [current, debouncedHighlighted],
-      ([$current, $highlighted]) =>
-        get($current, ['items', $highlighted], $current)
-    )
     const shared = {
       model,
       stack,
       current,
-      highlighted: debouncedHighlighted,
-      active,
+      highlighted,
     }
     // breadcrumbs stores
     const breadcrumbs = { stack, current }
     // sidebar stores
     const sidebar = { stack, current, highlighted }
-    // map stores
-    const map = { current, highlighted }
-    return { shared, breadcrumbs, sidebar, map }
+    return { shared, breadcrumbs, sidebar }
   }
 
   updateStores(stores, model) {

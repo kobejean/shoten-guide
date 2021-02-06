@@ -10,8 +10,8 @@ import TextAnnotation from './custom/TextAnnotation.js'
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
 
 export default class MapController {
-  constructor() {
-    this.stores = {}
+  constructor(stores) {
+    this.stores = stores
   }
 
   static preload({ features, id }) {

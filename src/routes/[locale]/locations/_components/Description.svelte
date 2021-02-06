@@ -15,12 +15,17 @@
     collapsed = !collapsed
   }
 
+  $: {
+    title, description // subscribe to these props
+    collapsed = true // collapse when we have new content
+  }
+
   afterUpdate(updateOverflow)
 </script>
 
 <svelte:window on:resize={updateOverflow} />
 
-<header class:overflow class:collapsed bind:this={header}>
+<header class:collapsed bind:this={header}>
   <h1>{title}</h1>
 
   {#if description}
@@ -31,10 +36,13 @@
     <p>{$_('locations.noDescription')}</p>
   {/if}
   {#if overflow || !collapsed}
-    <span class="show-more-btn" on:click={toggleExpand}>
-      {#if collapsed}
-        {$_('locations.showMore')}
-      {:else}{$_('locations.hideMore')}{/if}</span>
+    <span class="show-more-container">
+      <button on:click={toggleExpand}>
+        {#if collapsed}
+          {$_('locations.showMore')}
+        {:else}{$_('locations.hideMore')}{/if}
+      </button>
+    </span>
   {/if}
 </header>
 
@@ -48,7 +56,7 @@
     &.collapsed {
       max-height: calc(
         4 * (1.2em + 0.5em) + (3 * 1.5em)
-      ); /* exactly three lines */
+      ) !important; /* exactly three lines */
     }
 
     &:not(.collapsed) {
@@ -59,9 +67,8 @@
       margin-block-end: 0;
     }
 
-    .show-more-btn {
+    .show-more-container {
       text-align: right;
-      text-decoration: underline;
       position: absolute;
       bottom: 0;
       right: 0;
@@ -72,6 +79,14 @@
         rgba(255, 255, 255, 0),
         rgba(255, 255, 255, 1) 50%
       );
+      button {
+        background: none;
+        text-decoration: underline;
+        border: none;
+        padding: 0 !important;
+        cursor: pointer;
+        font-size: inherit;
+      }
     }
   }
 </style>

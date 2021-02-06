@@ -22,7 +22,12 @@ const onwarn = (warning, onwarn) =>
     /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning)
 
-const preprocess = sveltePreprocess()
+const preprocess = sveltePreprocess({
+  // replace: [['@styles', path.resolve(__dirname, 'src/styles')]],
+  scss: {
+    includePaths: ['theme'],
+  },
+})
 
 const mapkitSecret =
   process.env.MAPKIT_SECRET ||
