@@ -27,7 +27,7 @@
       <a
         class="btn"
         href={(item.enabled && item.path) || undefined}
-        rel={'prefetch'}
+        sapper:prefetch
         sapper:noscroll
         on:mouseover={() => setHighlight(item, true)}
         on:touchstart={() => setHighlight(item, true)}

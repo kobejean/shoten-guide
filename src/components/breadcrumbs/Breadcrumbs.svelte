@@ -13,7 +13,7 @@
       {#if page.id === $current.id}
         {page.title}
       {:else}
-        <a href={page.path} rel={'prefetch'} sapper:noscroll>{page.title}</a>
+        <a href={page.path} sapper:prefetch sapper:noscroll>{page.title}</a>
       {/if}
     {/each}
   </p>

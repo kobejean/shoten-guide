@@ -30,7 +30,7 @@
     <li>
       <a
         class="btn"
-        rel={tab.prefetch ? 'prefetch' : undefined}
+        sapper:prefetch={tab.prefetch}
         aria-current={segment === tab.segment ? 'page' : undefined}
         href={`${$locale}/${tab.segment || ''}`}
       >
