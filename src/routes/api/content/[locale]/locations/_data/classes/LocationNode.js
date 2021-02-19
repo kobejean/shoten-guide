@@ -1,5 +1,11 @@
 import { FALLBACK_LOCAL } from '../../../../../../../services/i18n/constants'
 import { forEach, isEmpty } from 'lodash-es'
+import Annotation from './Annotation'
+import Coordinate from './Coordinate'
+import CoordinateRegion from './CoordinateRegion'
+import CoordinateSpan from './CoordinateSpan'
+import Localization from './Localization'
+
 export default class LocationNode {
   constructor(
     id,
@@ -22,6 +28,60 @@ export default class LocationNode {
     } else {
       this.pathFromLocale = '/locations'
     }
+  }
+
+  static fromStatic(
+    metadata = {},
+    data = {
+      id: 'japan',
+      localizations: {
+        en: new Localization('Japan'),
+        ja: new Localization('全国'),
+        ko: new Localization('일본'),
+      },
+      region: new CoordinateRegion(
+        new Coordinate(37.998915, 137.191162),
+        new CoordinateSpan(16, 16)
+      ),
+    }
+  ) {
+    const node = new LocationNode(
+      data.id,
+      data.localizations,
+      data.region,
+      data.annotation,
+      metadata.features,
+      data.parent
+    )
+    forEach(metadata.features, feature => {
+      const { id } = feature
+      feature.properties.enabled = true //!!metadata.items[id]
+      // feature.properties.style = { strokeColor: 'blue', fillColor: 'blue' }
+      const { interiorPoint, bounds, name } = feature.properties
+      const lat = (bounds.yMin + bounds.yMax) / 2
+      const long = (bounds.xMin + bounds.xMax) / 2
+      const spanLat = bounds.yMax - bounds.yMin
+      const spanLong = bounds.xMax - bounds.xMin
+      LocationNode.fromStatic(metadata.items[id], {
+        id,
+        localizations: {
+          en: new Localization(name.en),
+          ja: new Localization(name.ja),
+        },
+        region: new CoordinateRegion(
+          new Coordinate(lat, long),
+          new CoordinateSpan(spanLat, spanLong)
+        ),
+        annotation: new Annotation(
+          new Coordinate(interiorPoint.y, interiorPoint.x),
+          {
+            data: { type: 'text' },
+          }
+        ),
+        parent: node,
+      })
+    })
+    return node
   }
 
   addChild(node) {
