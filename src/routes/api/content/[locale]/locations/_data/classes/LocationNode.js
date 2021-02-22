@@ -24,8 +24,6 @@ export default class LocationNode {
 
   static fromFeatureAndMetadata(feature, metadata, parent) {
     const { id } = feature
-    feature.properties.enabled = true //!!metadata.items[id]
-    // feature.properties.style = { strokeColor: 'blue', fillColor: 'blue' }
     const { bounds, name } = feature.properties
     const lat = (bounds.yMin + bounds.yMax) / 2
     const long = (bounds.xMin + bounds.xMax) / 2
@@ -64,9 +62,9 @@ export default class LocationNode {
         childMetadata &&
         size(childMetadata.items) === 1 &&
         size(childFeatures) === 1 &&
-        childMetadata.items[first(childFeatures).id]
+        childMetadata.items[childFeatures[0].id]
       ) {
-        const childFeature = first(childFeatures)
+        const childFeature = childFeatures[0]
         const grandChildMetadata = childMetadata.items[childFeature.id]
         LocationNode.fromFeatureAndMetadata(
           childFeature,

@@ -18,22 +18,20 @@ export default class MapDecoder {
   createLabel = geoJSON => {
     const { location } = get(this.stores.data)
     const { name, display_point, rank } = geoJSON.properties
+
     const { coordinates } = display_point
+    const id = `${location.id}/${geoJSON.id}`
 
-    const title = name[location.locale] || name[FALLBACK_LOCAL]
     const coordinate = new mapkit.Coordinate(coordinates[1], coordinates[0])
-    const annotation = new mapkit.TextAnnotation(coordinate, { title })
-    annotation.data.rank = rank
-    annotation.data.name = name
-    annotation.data.id = `${location.id}/${geoJSON.id}`
+    const data = { name, rank, locale: location.locale }
+    const annotation = new mapkit.TextAnnotation(id, coordinate, data)
 
-    this.styler.styleMarkerAnnotation(annotation)
     return annotation
   }
 
   polygonSetup = (overlay, geoJSON) => {
     const { enabled } = geoJSON.properties
-    overlay.enabled = !!enabled
+    overlay.enabled = true //!!enabled
     overlay.style.strokeColor = 'green'
     overlay.style.fillColor = 'green'
     this.styler.styleOverlay(overlay)

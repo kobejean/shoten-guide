@@ -47,27 +47,4 @@ export default class MapItemStyler {
     overlay.style.strokeOpacity = STROKE_OPACITY[state]
     overlay.style.fillOpacity = FILL_OPACITY[state]
   }
-
-  styleMarkerAnnotation(annotation) {
-    const state = this.getStyleState(annotation)
-    if (annotation.data.name) {
-      const locale = document.documentElement.lang
-      annotation.title = annotation.data.name[locale]
-    }
-    if (annotation.data.rank) {
-      annotation.displayPriority = this.getDisplayPriority(
-        state,
-        annotation.data.rank
-      )
-    }
-  }
-
-  style(item) {
-    if (item instanceof mapkit.MarkerAnnotation) {
-      this.styleMarkerAnnotation(item)
-    } else if (!(item instanceof mapkit.Annotation)) {
-      // must be overlay
-      this.styleOverlay(item)
-    }
-  }
 }

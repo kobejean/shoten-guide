@@ -87,7 +87,6 @@ export default class MapController {
     // this.setAnnotations(parameters.annotations)
     if (isNewLocation) {
       this.loadGeoJSON(location.geoJSON)
-      // this.handleHighlightOff()
 
       if (location.region) this.setRegionAnimated(location.region, animated)
     }
@@ -205,33 +204,6 @@ export default class MapController {
     this.prevState.highlightedOverlays = highlightedOverlays
   }
 
-  highlightAnnotaions = id => {
-    if (this.prevState.highlightedAnnotation) {
-      this.prevState.highlightedAnnotation.data.highlighted = false
-      this.decoder.styler.styleMarkerAnnotation(
-        this.prevState.highlightedAnnotation
-      )
-    }
-
-    const highlightedAnnotation =
-      id && find(this.map.annotations, ['data.id', id])
-    console.log('highlightedAnnotation', highlightedAnnotation)
-    if (highlightedAnnotation && highlightedAnnotation.enabled) {
-      highlightedAnnotation.data.highlighted = true
-      this.decoder.styler.styleMarkerAnnotation(highlightedAnnotation)
-
-      if (id !== getValue(this.map, 'selectedAnnotation.data.id')) {
-        this.map.selectedAnnotation = highlightedAnnotation
-      }
-    } else if (highlightedAnnotation instanceof mapkit.TextAnnotation) {
-      highlightedAnnotation.data.highlighted = true
-      this.decoder.styler.styleMarkerAnnotation(highlightedAnnotation)
-    } else {
-      this.map.selectedAnnotation = null
-    }
-    this.prevState.highlightedAnnotation = highlightedAnnotation
-  }
-
   handleHighlight = id => {
     if (
       typeof mapkit === 'undefined' ||
@@ -241,7 +213,7 @@ export default class MapController {
       return
     }
     this.highlightOverlays(id)
-    this.highlightAnnotaions(id)
+    mapkit.TextAnnotation.setHighlightById(id)
     this.prevState.highlighted = id
   }
 
@@ -269,11 +241,7 @@ export default class MapController {
     // setting language is an expensive operation so let's let other updates occur first
     setTimeout(() => (mapkit.language = locale), 0)
     if (this.map) {
-      forEach(this.map.annotations, annotation => {
-        const name = annotation.data.name
-        if (name) annotation.title = name[locale] || name[FALLBACK_LOCAL]
-      })
-      MapDecoder.caches.clear()
+      mapkit.TextAnnotation.setLocale(locale)
     }
   }
 
