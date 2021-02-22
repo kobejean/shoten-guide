@@ -1,24 +1,21 @@
-<script context="module">
-  export const SIDEBAR_KEY = {}
-</script>
-
 <script>
-  import Map, { MAP_KEY } from '../map/Map.svelte'
+  import Map from '../map/Map.svelte'
   import SidebarHeader from './SidebarHeader.svelte'
   import SidebarItems from './SidebarItems.svelte'
-  import { values } from 'lodash-es'
-  import { getContext, setContext } from 'svelte'
+  import { nth } from 'lodash-es'
+  import { getContext } from 'svelte'
+  import { CONTEXT_KEYS } from '../../utils/context'
 
-  const stores = getContext(SIDEBAR_KEY)
-  setContext(MAP_KEY, stores)
-  const { current, stack, highlighted } = stores
+  const { data, highlighted } = getContext(CONTEXT_KEYS.LOCATIONS)
 
-  $: items = values($current.items)
+  $: items = $data.location.children
+  $: current = nth($data.breadcrumbs, -1)
+  $: parent = nth($data.breadcrumbs, -2)
 </script>
 
 <aside>
   <article>
-    <SidebarHeader stack={$stack} />
+    <SidebarHeader {current} {parent} />
     <Map />
     <footer>
       <SidebarItems {items} bind:highlighted={$highlighted} />

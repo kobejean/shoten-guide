@@ -6,7 +6,7 @@
   export let items,
     highlighted = undefined
 
-  $: sorted = orderBy(items, ['enabled', 'title'], ['desc', 'asc'])
+  $: sorted = orderBy(items, ['enabled', 'rank'], ['desc', 'asc'])
 
   function setHighlight(item, on) {
     if (item.enabled) highlighted = on ? item.id : null
@@ -23,7 +23,7 @@
 
 <ol class="sidebar-items">
   {#each sorted as item (item.id)}
-    <li animate:flip transition:fade|local class:disabled={!item.enabled}>
+    <li transition:fade|local class:disabled={!item.enabled}>
       <a
         class="btn"
         href={(item.enabled && item.path) || undefined}
@@ -48,10 +48,12 @@
 
   ol {
     margin: 0;
-    padding: 10px;
+    padding: 10px 10px 0 10px;
     border-top: solid 1px $border-shadow;
     display: flex;
     flex-wrap: wrap;
+    overflow: scroll;
+    max-height: 130px;
 
     li {
       background-color: $neutral-super-light-gray;

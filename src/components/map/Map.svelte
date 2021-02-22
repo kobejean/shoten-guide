@@ -1,23 +1,17 @@
-<script context="module">
-  export const MAP_KEY = {}
-</script>
-
 <script>
-  import { onMount, getContext } from 'svelte'
-  import MapController from './_models/MapController.js'
+  import { getContext } from 'svelte'
+  import { CONTEXT_KEYS } from '../../utils/context.js'
+  import MapController from './models/MapController.js'
 
-  const controller = new MapController(getContext(MAP_KEY))
-  const { current, highlighted } = controller.stores
-
-  let map
-
-  onMount(() => controller.mount($current, map))
-
-  $: controller.handleRegionChange($current)
-  $: controller.handleHighlight($highlighted)
+  const stores = getContext(CONTEXT_KEYS.LOCATIONS)
+  const controller = new MapController(stores)
 </script>
 
-<div bind:this={map} role="application" aria-label="Map of store locations" />
+<div
+  use:controller.mount
+  role="application"
+  aria-label="Map of store locations"
+/>
 
 <style type="scss">
   @import '../../styles/colors';

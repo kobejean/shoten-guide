@@ -1,21 +1,13 @@
-<script context="module">
-  export const BREADCRUMBS_KEY = {}
-</script>
-
 <script>
-  import { getContext } from 'svelte'
-  const { current, stack } = getContext(BREADCRUMBS_KEY)
+  export let title, breadcrumbs
 </script>
 
 <nav>
   <p>
-    {#each $stack as page (page.id)}
-      {#if page.id === $current.id}
-        {page.title}
-      {:else}
-        <a href={page.path} sapper:prefetch sapper:noscroll>{page.title}</a>
-      {/if}
+    {#each breadcrumbs.slice(0, -1) as page (page.id)}
+      <a href={page.path} sapper:prefetch sapper:noscroll>{page.title}</a>
     {/each}
+    {title}
   </p>
 </nav>
 

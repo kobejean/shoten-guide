@@ -1,17 +1,14 @@
 <script>
-  import { LOCATIONS_KEY } from '../_models/LocationsModel.js'
   import { _ } from 'svelte-i18n'
-  import { getContext } from 'svelte'
 
-  export let items = []
-
-  const { current } = getContext(LOCATIONS_KEY)
+  export let items = [],
+    title
 </script>
 
 <section>
   <header>
     <h3>
-      {$_('locations.resultsTitle', { values: { location: $current.title } })}
+      {$_('locations.resultsTitle', { values: { location: title } })}
     </h3>
   </header>
   <ul>

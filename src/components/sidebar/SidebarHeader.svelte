@@ -1,9 +1,5 @@
 <script>
-  import { nth } from 'lodash-es'
-  export let stack
-
-  $: current = nth(stack, -1)
-  $: parent = nth(stack, -2)
+  export let current, parent
 </script>
 
 <header>
