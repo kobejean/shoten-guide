@@ -60,7 +60,7 @@ export default class MapDecoder {
       },
       itemForPolygon: (item, geoJSON) => {
         // call setup function later when we have properties data
-        item.data.setup = this.polygonSetup
+        item.data.setup = this.polygonSetup.bind(this)
         return item
       },
     }
