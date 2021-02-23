@@ -10,12 +10,12 @@ export default class MapDecoder {
     this.styler = new MapItemStyler(stores)
   }
 
-  addToItem = (item, ...add) => {
+  addToItem(item, ...add) {
     const items = map(item.items || [item], i => i)
     return items.concat(add)
   }
 
-  createLabel = geoJSON => {
+  createLabel(geoJSON) {
     const { location } = get(this.stores.data)
     const { name, display_point, rank } = geoJSON.properties
 
@@ -29,7 +29,7 @@ export default class MapDecoder {
     return annotation
   }
 
-  polygonSetup = (overlay, geoJSON) => {
+  polygonSetup(overlay, geoJSON) {
     const { enabled } = geoJSON.properties
     overlay.enabled = true //!!enabled
     overlay.style.strokeColor = 'green'
@@ -37,7 +37,7 @@ export default class MapDecoder {
     this.styler.styleOverlay(overlay)
   }
 
-  processFeatureItems = (item, geoJSON) => {
+  processFeatureItems(item, geoJSON) {
     const { location } = get(this.stores.data)
     const items = item.items || [item]
     forEach(items, item => {
@@ -51,7 +51,7 @@ export default class MapDecoder {
     })
   }
 
-  getGeoJSONDelegate = () => {
+  getGeoJSONDelegate() {
     return {
       itemForFeature: (item, geoJSON) => {
         this.processFeatureItems(item, geoJSON)
@@ -66,7 +66,7 @@ export default class MapDecoder {
     }
   }
 
-  importGeoJSON = async geoJSON => {
+  async importGeoJSON(geoJSON) {
     if (!geoJSON) return null
     const { location } = get(this.stores.data)
     const cacheKey = `importGeoJSON/${location.id}`
@@ -75,7 +75,7 @@ export default class MapDecoder {
     )
   }
 
-  importGeoJSONNoCache = async geoJSON => {
+  async importGeoJSONNoCache(geoJSON) {
     return new Promise((resolve, reject) =>
       mapkit.importGeoJSON(geoJSON, {
         ...this.getGeoJSONDelegate(),

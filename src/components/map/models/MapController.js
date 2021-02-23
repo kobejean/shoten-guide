@@ -74,7 +74,7 @@ export default class MapController {
 
     const mapOptions = {
       mapType,
-      showsCompass: mapkit.FeatureVisibility.Adaptive,
+      showsCompass: mapkit.FeatureVisibility.Hidden,
       showsPointsOfInterest: false,
     }
     this.map = new mapkit.Map(this.element, mapOptions)
@@ -111,27 +111,19 @@ export default class MapController {
     this.map.setRegionAnimated(region, animated)
   }
 
-  addEventListener = (object, type, method) => {
-    object.addEventListener(type, method.bind(this))
-  }
-
-  removeEventListener = (object, type, method) => {
-    object.removeEventListener(type, method.bind(this))
-  }
-
-  subscriptions = () => {
+  subscriptions() {
     const mapView = this.element.querySelector('.mk-map-view')
-    this.addEventListener(this.map, 'select', this.handleSelection)
+    this.map.addEventListener('select', this.handleSelection.bind(this))
     // this.addEventListener(mapView, 'mousemove', this.handleMouseMove)
     // mapView.addEventListener('touchstart', this.handleTouchStart.bind(this))
     // mapView.addEventListener('mouseout', this.handleMouseOut.bind(this))
     // mapView.addEventListener('touchend', this.handleHighlightOff.bind(this))
     // mapView.addEventListener('touchcancel', this.handleHighlightOff.bind(this))
-
+    const { data, highlighted } = this.stores
     const unsubscribers = {
-      locale: locale.subscribe(this.handleLocaleChange),
-      data: this.stores.data.subscribe(() => this.loadMap(true)),
-      highlighted: this.stores.highlighted.subscribe(this.handleHighlight),
+      locale: locale.subscribe(this.handleLocaleChange.bind(this)),
+      data: data.subscribe(this.loadMap.bind(this, true)),
+      highlighted: highlighted.subscribe(this.handleHighlight.bind(this)),
     }
 
     return () => {
@@ -140,7 +132,7 @@ export default class MapController {
       unsubscribers.highlighted()
 
       if (this.map) {
-        this.removeEventListener(this.map, 'select', this.handleSelection)
+        this.map.removeEventListener('select', this.handleSelection.bind(this))
         // this.removeEventListener(mapView, 'mousemove', this.handleMouseMove)
       }
     }
@@ -183,7 +175,7 @@ export default class MapController {
   //   this.lastId = parameters.id
   // }
 
-  highlightOverlays = id => {
+  highlightOverlays(id) {
     forEach(this.prevState.highlightedOverlays, overlay => {
       overlay.data.highlighted = false
       this.decoder.styler.styleOverlay(overlay)
@@ -204,7 +196,7 @@ export default class MapController {
     this.prevState.highlightedOverlays = highlightedOverlays
   }
 
-  handleHighlight = id => {
+  handleHighlight(id) {
     if (
       typeof mapkit === 'undefined' ||
       !this.map ||
@@ -236,7 +228,7 @@ export default class MapController {
   /**
    * Used to keep mapkit's language state up-to-date with the site's language state.
    */
-  handleLocaleChange = async locale => {
+  async handleLocaleChange(locale) {
     if (typeof mapkit === 'undefined') return
     // setting language is an expensive operation so let's let other updates occur first
     setTimeout(() => (mapkit.language = locale), 0)

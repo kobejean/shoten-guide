@@ -1,6 +1,24 @@
 import { forEach } from 'lodash-es'
 import { FALLBACK_LOCAL } from '../../../../services/i18n/constants'
 
+const STATE = {
+  HIGHLIGHTED: 'highlighted',
+  ENABLED: 'enabled',
+  DISABLED: 'disabled',
+}
+
+const FILL_OPACITY = {
+  [STATE.HIGHLIGHTED]: 0.5,
+  [STATE.ENABLED]: 0.3,
+  [STATE.DISABLED]: 0.15,
+}
+
+const STROKE_OPACITY = {
+  [STATE.HIGHLIGHTED]: 1.0,
+  [STATE.ENABLED]: 0.8,
+  [STATE.DISABLED]: 0.0,
+}
+
 export default mapkit => {
   class TextAnnotation extends mapkit.MarkerAnnotation {
     constructor(id, coordinate, data) {
@@ -31,23 +49,7 @@ export default mapkit => {
       super.data.highlighted = highlighted
       this._updated()
     }
-
-    setLocale(locale) {
-      super.data.locale = locale
-      this._updated()
-    }
-
-    _updated() {
-      this.displayPriority = (() => {
-        if (this.data.highlighted) return 1000
-        const min = 900
-        const max = 990
-        return max - this.data.rank * (max - min)
-      })()
-
-      this.title =
-        this.data.name[this.data.locale] || this.data.name[FALLBACK_LOCAL]
-    }
+    _updated() {}
 
     static setHighlightById(id) {
       if (TextAnnotation.highlighted)
