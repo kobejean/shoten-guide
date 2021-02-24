@@ -11,7 +11,8 @@ import {
 } from 'lodash-es'
 import { goto } from '@sapper/app'
 import { FALLBACK_LOCAL } from '../../../services/i18n/constants'
-import TextAnnotation from './custom/TextAnnotation.js'
+import TextAnnotation from './mixins/TextAnnotation.js'
+import HighlightablePolygonOverlay from './mixins/HighlightablePolygonOverlay.js'
 import MapDecoder from './MapDecoder'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
@@ -64,6 +65,7 @@ export default class MapController {
     })
     // custom mapkit classes
     mapkit.TextAnnotation = TextAnnotation(mapkit)
+    mapkit.HighlightablePolygonOverlay = HighlightablePolygonOverlay(mapkit)
   }
 
   /**
@@ -113,12 +115,19 @@ export default class MapController {
 
   subscriptions() {
     const mapView = this.element.querySelector('.mk-map-view')
-    this.map.addEventListener('select', this.handleSelection.bind(this))
-    // this.addEventListener(mapView, 'mousemove', this.handleMouseMove)
-    // mapView.addEventListener('touchstart', this.handleTouchStart.bind(this))
-    // mapView.addEventListener('mouseout', this.handleMouseOut.bind(this))
-    // mapView.addEventListener('touchend', this.handleHighlightOff.bind(this))
-    // mapView.addEventListener('touchcancel', this.handleHighlightOff.bind(this))
+    const eventListeners = [
+      [this.map, 'select', this.handleSelection.bind(this)],
+      [mapView, 'mousemove', this.handleMouseMove.bind(this)],
+      [mapView, 'touchstart', this.handleTouchStart.bind(this)],
+      [mapView, 'mouseout', this.handleMouseOut.bind(this)],
+      [mapView, 'touchend', this.handleHighlightOff.bind(this)],
+      [mapView, 'touchcancel', this.handleHighlightOff.bind(this)],
+    ]
+
+    forEach(eventListeners, ([object, eventType, method]) =>
+      object.addEventListener(eventType, method)
+    )
+
     const { data, highlighted } = this.stores
     const unsubscribers = {
       locale: locale.subscribe(this.handleLocaleChange.bind(this)),
@@ -127,73 +136,14 @@ export default class MapController {
     }
 
     return () => {
+      forEach(eventListeners, ([object, eventType, method]) =>
+        object.removeEventListener(eventType, method)
+      )
       unsubscribers.locale()
       unsubscribers.data()
       unsubscribers.highlighted()
-
-      if (this.map) {
-        this.map.removeEventListener('select', this.handleSelection.bind(this))
-        // this.removeEventListener(mapView, 'mousemove', this.handleMouseMove)
-      }
+      MapDecoder.caches.clear()
     }
-  }
-
-  // setAnnotations(annotations) {
-  //   annotations = annotations.map(({ coordinate, options }) => {
-  //     const annotation = MapDecoder.decodeAnnotation(coordinate, options)
-  //     MapItemStyler.style(annotation)
-  //     return annotation
-  //   })
-  //   this.map.removeAnnotations(this.map.annotations)
-  //   this.map.addAnnotations(annotations)
-  // }
-
-  // async setFeatures(features, id) {
-  //   const items = await MapDecoder.loadFeatures(features, id)
-  //   if (this.lastFeatureItems) this.map.removeItems(this.lastFeatureItems)
-  //   if (items) this.map.addItems(items)
-  //   this.lastFeatureItems = items
-  // }
-
-  // setMapParameters(parameters, animated = false) {
-  //   const isNewLocation = this.lastId !== parameters.id
-  //   this.setAnnotations(parameters.annotations)
-  //   if (isNewLocation) {
-  //     this.handleHighlightOff()
-  //     this.setFeatures(parameters.features, parameters.id)
-  //   }
-  //   if (parameters.region && isNewLocation)
-  //     this.setRegionAnimated(parameters.region, animated)
-
-  //   this.paths = transform(
-  //     parameters.items,
-  //     (result, page, id) => {
-  //       result[id] = page.path
-  //     },
-  //     {}
-  //   )
-  //   this.lastId = parameters.id
-  // }
-
-  highlightOverlays(id) {
-    forEach(this.prevState.highlightedOverlays, overlay => {
-      overlay.data.highlighted = false
-      this.decoder.styler.styleOverlay(overlay)
-    })
-    const highlightedOverlays = id && filter(this.map.overlays, ['data.id', id])
-    if (id) {
-      forEach(highlightedOverlays, overlay => {
-        if (overlay.enabled) {
-          overlay.data.highlighted = true
-          this.decoder.styler.styleOverlay(overlay)
-        }
-      })
-      // move overlays to top
-      this.map.removeOverlays(highlightedOverlays)
-      this.map.addOverlays(highlightedOverlays)
-    }
-
-    this.prevState.highlightedOverlays = highlightedOverlays
   }
 
   handleHighlight(id) {
@@ -204,7 +154,8 @@ export default class MapController {
     ) {
       return
     }
-    this.highlightOverlays(id)
+    // this.highlightOverlays(id)
+    mapkit.HighlightablePolygonOverlay.setHighlightById(id)
     mapkit.TextAnnotation.setHighlightById(id)
     this.prevState.highlighted = id
   }
@@ -216,14 +167,6 @@ export default class MapController {
       goto(path, { noscroll: true })
     }
   }
-
-  // /**
-  //  * Used to keep mapkit's language state up-to-date with the site's language state.
-  //  */
-  // handleRegionChange(scene) {
-  //   if (typeof mapkit === 'undefined' || !this.map) return
-  //   this.setMapParameters(scene, true)
-  // }
 
   /**
    * Used to keep mapkit's language state up-to-date with the site's language state.
@@ -237,44 +180,32 @@ export default class MapController {
     }
   }
 
-  // handleMouseMove(event) {
-  //   const targetOverlay = this.map.topOverlayAtPoint(
-  //     new DOMPoint(event.pageX, event.pageY)
-  //   )
-  //   if (targetOverlay && targetOverlay.enabled) {
-  //     this.stores.highlighted.set(targetOverlay.data.id)
-  //   } else {
-  //     this.stores.highlighted.set(undefined)
-  //   }
-  // }
+  handleMouseMove(event) {
+    const targetOverlay = this.map.topOverlayAtPoint(
+      new DOMPoint(event.pageX, event.pageY)
+    )
+    if (targetOverlay && targetOverlay.enabled) {
+      this.stores.highlighted.set(targetOverlay.data.id)
+    } else {
+      this.stores.highlighted.set(undefined)
+    }
+  }
 
-  // handleTouchStart(event) {
-  //   if (event.touches.length !== 1) return
-  //   const { pageX, pageY } = event.touches[0]
-  //   const targetOverlay = this.map.topOverlayAtPoint(new DOMPoint(pageX, pageY))
-  //   if (targetOverlay && targetOverlay.enabled) {
-  //     this.stores.highlighted.set(targetOverlay.data.id)
-  //   }
-  // }
+  handleTouchStart(event) {
+    if (event.touches.length !== 1) return
+    const { pageX, pageY } = event.touches[0]
+    const targetOverlay = this.map.topOverlayAtPoint(new DOMPoint(pageX, pageY))
+    if (targetOverlay && targetOverlay.enabled) {
+      this.stores.highlighted.set(targetOverlay.data.id)
+    }
+  }
 
-  // handleMouseOut(event) {
-  //   if (!event.currentTarget.contains(event.relatedTarget))
-  //     this.stores.highlighted.set(undefined) // must have truly moused out of map view
-  // }
+  handleMouseOut(event) {
+    if (!event.currentTarget.contains(event.relatedTarget))
+      this.stores.highlighted.set(undefined) // must have truly moused out of map view
+  }
 
-  // handleHighlightOff() {
-  //   this.stores.highlighted.set(undefined)
-  // }
-
-  // _getItemWithId(collection, id) {
-  //   return id && find(collection, item => getValue(item, ['data', 'id']) === id)
-  // }
-
-  // _getItemsWithId(collection, id) {
-  //   return (
-  //     (id &&
-  //       filter(collection, item => getValue(item, ['data', 'id']) === id)) ||
-  //     []
-  //   )
-  // }
+  handleHighlightOff() {
+    this.stores.highlighted.set(undefined)
+  }
 }

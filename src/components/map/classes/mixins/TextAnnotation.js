@@ -5,6 +5,7 @@ export default mapkit => {
   class TextAnnotation extends mapkit.MarkerAnnotation {
     constructor(id, coordinate, data) {
       data = {
+        id,
         name: {},
         rank: 0,
         highlighted: false,

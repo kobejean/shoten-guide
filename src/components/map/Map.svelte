@@ -1,7 +1,7 @@
 <script>
   import { getContext } from 'svelte'
   import { CONTEXT_KEYS } from '../../utils/context.js'
-  import MapController from './models/MapController.js'
+  import MapController from './classes/MapController.js'
 
   const stores = getContext(CONTEXT_KEYS.LOCATIONS)
   const controller = new MapController(stores)
