@@ -154,7 +154,7 @@ export default class MapController {
     ) {
       return
     }
-    // this.highlightOverlays(id)
+
     mapkit.HighlightablePolygonOverlay.setHighlightById(id)
     mapkit.TextAnnotation.setHighlightById(id)
     this.prevState.highlighted = id
@@ -165,6 +165,7 @@ export default class MapController {
     const path = this.paths[id]
     if (path) {
       goto(path, { noscroll: true })
+      this.handleHighlight(null)
     }
   }
 
