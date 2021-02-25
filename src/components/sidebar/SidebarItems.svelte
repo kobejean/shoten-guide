@@ -29,17 +29,20 @@
 
 <ol class="sidebar-items">
   {#each sorted as item (item.id)}
-    <li transition:fade|local class:disabled={!item.enabled}>
+    <li
+      transition:fade|local
+      class:disabled={!item.enabled}
+      on:mouseover={e => setHighlight(item, true)}
+      on:touchstart={setHighlightFactory(item, true)}
+      on:mouseout={handleMouseOut}
+      on:touchcancel={e => setHighlight(item, false)}
+      on:touchend={e => setHighlight(item, false)}
+    >
       <a
         class="btn"
         href={(item.enabled && item.path) || undefined}
         sapper:prefetch
         sapper:noscroll
-        on:mouseover={e => setHighlight(item, true)}
-        on:touchstart={setHighlightFactory(item, true)}
-        on:mouseout={handleMouseOut}
-        on:touchcancel={e => setHighlight(item, false)}
-        on:touchend={e => setHighlight(item, false)}
       >
         {item.title}
       </a>
@@ -54,7 +57,7 @@
 
   ol {
     margin: 0;
-    padding: 10px 10px 0 10px;
+    padding: 6px;
     border-top: solid 1px $border-shadow;
     display: flex;
     flex-wrap: wrap;
@@ -62,19 +65,17 @@
     max-height: 130px;
 
     li {
-      background-color: $neutral-super-light-gray;
       text-decoration: none;
-      margin-right: 8px;
-      margin-bottom: 8px;
+      padding: 4px;
       height: 28px;
       line-height: 28px;
       list-style: none;
-      border-radius: 5px;
-      border: solid 1px $border-shadow;
 
       a {
-        margin: -5px;
-        padding: 5px 15px;
+        background-color: $neutral-super-light-gray;
+        border-radius: 5px;
+        border: solid 1px $border-shadow;
+        padding: 0 10px;
         display: block;
       }
 
