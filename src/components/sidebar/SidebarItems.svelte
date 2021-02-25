@@ -35,11 +35,11 @@
         href={(item.enabled && item.path) || undefined}
         sapper:prefetch
         sapper:noscroll
-        on:mouseover={setHighlightFactory(item, true)}
+        on:mouseover={e => setHighlight(item, true)}
         on:touchstart={setHighlightFactory(item, true)}
         on:mouseout={handleMouseOut}
-        on:touchcancel={setHighlightFactory(item, false)}
-        on:touchend={setHighlightFactory(item, false)}
+        on:touchcancel={e => setHighlight(item, false)}
+        on:touchend={e => setHighlight(item, false)}
       >
         {item.title}
       </a>
