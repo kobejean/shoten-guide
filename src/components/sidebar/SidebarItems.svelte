@@ -13,7 +13,7 @@
   }
   function setHighlightFactory(item, on) {
     return event => {
-      event.preventDefault()
+      event.stopPropagation()
       setHighlight(item, on)
     }
   }
@@ -32,11 +32,11 @@
     <li
       transition:fade|local
       class:disabled={!item.enabled}
-      on:mouseover={e => setHighlight(item, true)}
+      on:mouseover={setHighlightFactory(item, true)}
       on:touchstart={setHighlightFactory(item, true)}
       on:mouseout={handleMouseOut}
-      on:touchcancel={e => setHighlight(item, false)}
-      on:touchend={e => setHighlight(item, false)}
+      on:touchcancel={setHighlightFactory(item, false)}
+      on:touchend={setHighlightFactory(item, false)}
     >
       <a
         class="btn"
