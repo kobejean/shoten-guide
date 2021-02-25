@@ -10,9 +10,9 @@ import {
   get as getValue,
 } from 'lodash-es'
 import { goto } from '@sapper/app'
-import { FALLBACK_LOCAL } from '../../../services/i18n/constants'
-import TextAnnotation from './mixins/TextAnnotation.js'
 import HighlightablePolygonOverlay from './mixins/HighlightablePolygonOverlay.js'
+import TextAnnotation from './mixins/TextAnnotation.js'
+import Totoro from './mixins/Totoro.js'
 import MapDecoder from './MapDecoder'
 
 const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
@@ -64,8 +64,9 @@ export default class MapController {
       language: get(locale),
     })
     // custom mapkit classes
-    mapkit.TextAnnotation = TextAnnotation(mapkit)
     mapkit.HighlightablePolygonOverlay = HighlightablePolygonOverlay(mapkit)
+    mapkit.TextAnnotation = TextAnnotation(mapkit)
+    mapkit.Totoro = Totoro(mapkit)
   }
 
   /**
@@ -80,21 +81,51 @@ export default class MapController {
       showsPointsOfInterest: false,
     }
     this.map = new mapkit.Map(this.element, mapOptions)
+
+    this.spawnTotoro()
+  }
+
+  spawnTotoro() {
+    const { location } = get(this.stores.data)
+    const { latitude, longitude } = location.region.center
+    const coordinate = new mapkit.Coordinate(latitude, longitude)
+    this.totoro = new mapkit.Totoro(coordinate)
+    this.map.addAnnotation(this.totoro)
+  }
+
+  moveTotoro(region) {
+    const { latitude, longitude } = region.center
+    const coordinate = new mapkit.Coordinate(latitude, longitude)
+    return (this.totoro.coordinate = coordinate)
   }
 
   loadMap(animated = false) {
     const { location } = get(this.stores.data)
     const isNewLocation = this.prevState.lastId !== location.id
 
-    // this.setAnnotations(parameters.annotations)
     if (isNewLocation) {
       this.loadGeoJSON(location.geoJSON)
 
-      if (location.region) this.setRegionAnimated(location.region, animated)
+      if (location.region) {
+        this.setRegionAnimated(location.region, animated)
+        this.moveTotoro(location.region)
+      }
+      this.loadChildMetadata(location)
     }
 
-    this.paths = fromPairs(map(location.children, ({ id, path }) => [id, path]))
     this.prevState.lastId = location.id
+  }
+
+  loadChildMetadata(location) {
+    this.paths = fromPairs(map(location.children, ({ id, path }) => [id, path]))
+    const features = getValue(location, 'geoJSON.features')
+    const childCoordinatePairs = map(features, ({ id, properties }) => {
+      const [longitude, latitude] = properties.display_point.coordinates
+      id = `${location.id}/${id}`
+      const coordinate = new mapkit.Coordinate(latitude, longitude)
+      return [id, coordinate]
+    })
+    this.childCoordinates = fromPairs(childCoordinatePairs)
   }
 
   async loadGeoJSON(geoJSON) {
@@ -109,8 +140,8 @@ export default class MapController {
     const { latitudeDelta, longitudeDelta } = region.span
     const center = new mapkit.Coordinate(latitude, longitude)
     const span = new mapkit.CoordinateSpan(latitudeDelta, longitudeDelta)
-    region = new mapkit.CoordinateRegion(center, span)
-    this.map.setRegionAnimated(region, animated)
+    this.region = new mapkit.CoordinateRegion(center, span)
+    this.map.setRegionAnimated(this.region, animated)
   }
 
   subscriptions() {
@@ -157,14 +188,19 @@ export default class MapController {
 
     mapkit.HighlightablePolygonOverlay.setHighlightById(id)
     mapkit.TextAnnotation.setHighlightById(id)
+    if (this.childCoordinates[id] || this.region.center) {
+      this.totoro.coordinate = this.childCoordinates[id]
+        ? this.childCoordinates[id]
+        : this.region.center
+    }
     this.prevState.highlighted = id
   }
 
-  handleSelection(event) {
+  async handleSelection(event) {
     const id = getValue(event, 'overlay.data.id')
     const path = this.paths[id]
     if (path) {
-      goto(path, { noscroll: true })
+      await goto(path, { noscroll: true })
       this.handleHighlight(null)
     }
   }
