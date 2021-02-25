@@ -11,6 +11,12 @@
   function setHighlight(item, on) {
     if (item.enabled) highlighted = on ? item.id : null
   }
+  function setHighlightFactory(item, on) {
+    return event => {
+      event.preventDefault()
+      setHighlight(item, on)
+    }
+  }
 
   function handleMouseOut(event) {
     const isToEnabledButton =
@@ -29,11 +35,11 @@
         href={(item.enabled && item.path) || undefined}
         sapper:prefetch
         sapper:noscroll
-        on:mouseover={() => setHighlight(item, true)}
-        on:touchstart={() => setHighlight(item, true)}
+        on:mouseover={setHighlightFactory(item, true)}
+        on:touchstart={setHighlightFactory(item, true)}
         on:mouseout={handleMouseOut}
-        on:touchcancel={() => setHighlight(item, false)}
-        on:touchend={() => setHighlight(item, false)}
+        on:touchcancel={setHighlightFactory(item, false)}
+        on:touchend={setHighlightFactory(item, false)}
       >
         {item.title}
       </a>
