@@ -111,6 +111,8 @@ export default class MapController {
         this.moveTotoro(location.region)
       }
       this.loadChildMetadata(location)
+      // remove any highlights
+      this.handleHighlight(null)
     }
 
     this.prevState.lastId = location.id
@@ -196,12 +198,11 @@ export default class MapController {
     this.prevState.highlighted = id
   }
 
-  async handleSelection(event) {
+  handleSelection(event) {
     const id = getValue(event, 'overlay.data.id')
     const path = this.paths[id]
     if (path) {
-      await goto(path, { noscroll: true })
-      this.handleHighlight(null)
+      goto(path, { noscroll: true })
     }
   }
 
