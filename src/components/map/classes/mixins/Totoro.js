@@ -1,4 +1,5 @@
-import { tweened, spring } from 'svelte/motion'
+import TotoroComponent from '../components/Totoro.svelte'
+import { tweened } from 'svelte/motion'
 import { cubicOut } from 'svelte/easing'
 
 export default mapkit =>
@@ -12,7 +13,7 @@ export default mapkit =>
       super(coordinate, Totoro.factory, options)
 
       this.coordinateStore = tweened(coordinate, {
-        duration: 500,
+        duration: 1000,
         easing: cubicOut,
       })
       this.coordinateStore.subscribe(coordinate => {
@@ -30,8 +31,7 @@ export default mapkit =>
 
     static factory(coordinate, options) {
       const div = document.createElement('div')
-      div.textContent = '🛸'
-      div.className = 'totoro'
+      new TotoroComponent({ target: div })
       return div
     }
   }

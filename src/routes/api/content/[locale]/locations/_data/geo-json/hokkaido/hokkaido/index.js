@@ -8,7 +8,7 @@ import iburi from './iburi'
 import hidaka from './hidaka'
 import oshima from './oshima'
 import shiribeshi from './shiribeshi'
-import okhotsk from './okhotsk'
+import ohotsukusogo from './ohotsukusogo'
 import sorachi from './sorachi'
 import ishikari from './ishikari'
 import soya from './soya'
@@ -16,5 +16,20 @@ import nemuro from './nemuro'
 
 export default {
   geoJSON,
-  items: { tokachi, kamikawa, hiyama, kushiro, rumoi, iburi, hidaka, oshima, shiribeshi, okhotsk, sorachi, ishikari, soya, nemuro }
+  items: {
+    tokachi,
+    kamikawa,
+    hiyama,
+    kushiro,
+    rumoi,
+    iburi,
+    hidaka,
+    oshima,
+    shiribeshi,
+    ohotsukusogo,
+    sorachi,
+    ishikari,
+    soya,
+    nemuro,
+  },
 }

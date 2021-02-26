@@ -1,6 +1,5 @@
 import { FALLBACK_LOCAL } from '../../../../../../../services/i18n/constants'
-import { forEach, get, map, values, size, first } from 'lodash-es'
-import Annotation from './Annotation'
+import { forEach, get, map, values, size } from 'lodash-es'
 import Coordinate from './Coordinate'
 import CoordinateRegion from './CoordinateRegion'
 import CoordinateSpan from './CoordinateSpan'

@@ -1,14 +1,7 @@
 import { loadScript } from '../../../utils/scriptLoad'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
-import {
-  fromPairs,
-  filter,
-  map,
-  forEach,
-  find,
-  get as getValue,
-} from 'lodash-es'
+import { fromPairs, map, forEach, get as getValue } from 'lodash-es'
 import { goto } from '@sapper/app'
 import HighlightablePolygonOverlay from './mixins/HighlightablePolygonOverlay.js'
 import TextAnnotation from './mixins/TextAnnotation.js'
@@ -190,10 +183,8 @@ export default class MapController {
 
     mapkit.HighlightablePolygonOverlay.setHighlightById(id)
     mapkit.TextAnnotation.setHighlightById(id)
-    if (this.childCoordinates[id] || this.region.center) {
+    if (this.childCoordinates[id]) {
       this.totoro.coordinate = this.childCoordinates[id]
-        ? this.childCoordinates[id]
-        : this.region.center
     }
     this.prevState.highlighted = id
   }

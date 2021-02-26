@@ -1,10 +1,10 @@
 import root from './_data'
 
-export async function get(req, res) {
+export function get(req, res) {
   let { locale, path } = req.params
   path = (path && path.filter(seg => !!seg)) || []
 
-  const data = (await root).getSummary(locale, path)
+  const data = root.getSummary(locale, path)
 
   if (data) {
     res.writeHead(200, {

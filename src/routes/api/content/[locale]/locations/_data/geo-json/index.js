@@ -10,5 +10,5 @@ import kyushu from './kyushu'
 
 export default {
   geoJSON,
-  items: { chugoku, chubu, hokkaido, kanto, tohoku, kinki, shikoku, kyushu }
+  items: { chugoku, chubu, hokkaido, kanto, tohoku, kinki, shikoku, kyushu },
 }
