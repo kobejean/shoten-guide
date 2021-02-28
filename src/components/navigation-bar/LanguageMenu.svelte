@@ -32,6 +32,7 @@
     ul {
       visibility: hidden;
       position: absolute;
+      z-index: 100;
       margin: 0;
       padding: 0;
       border: solid 1px rgba(255, 62, 0, 0.1);
@@ -74,6 +75,7 @@
 
   button {
     text-decoration: none;
+    margin: 0;
     padding: 1em 0.5em;
     display: block;
     background: none;
