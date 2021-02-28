@@ -5,22 +5,85 @@
   const { page } = stores()
 </script>
 
-<ul>
-  {#each $locales as _locale (_locale)}
-    <li>
-      <a
-        class="btn"
-        aria-current={_locale === $locale ? 'page' : undefined}
-        href={pathWithReplacedLocale($page.path, _locale)}
-        sapper:noscroll
-        lang={_locale}
-      >
-        {$_(`locale.${_locale}`)}
-      </a>
-    </li>
-  {/each}
-</ul>
+<li>
+  <button>{$_(`locale.${$locale}`)}</button>
+  <ul>
+    {#each $locales as _locale (_locale)}
+      <li>
+        <a
+          class="btn"
+          aria-current={_locale === $locale ? 'page' : undefined}
+          href={pathWithReplacedLocale($page.path, _locale)}
+          sapper:noscroll
+          lang={_locale}
+        >
+          {$_(`locale.${_locale}`)}
+        </a>
+      </li>
+    {/each}
+  </ul>
+</li>
 
 <style lang="scss">
-  @import './styles/navigation-items.scss';
+  li {
+    min-width: 100px;
+    display: block;
+
+    ul {
+      visibility: hidden;
+      position: absolute;
+      margin: 0;
+      padding: 0;
+      border: solid 1px rgba(255, 62, 0, 0.1);
+    }
+
+    /* clearfix */
+    ul::after {
+      content: '';
+      display: block;
+      clear: both;
+    }
+
+    &:hover ul,
+    ul:hover,
+    &:focus-within ul {
+      visibility: visible;
+    }
+  }
+
+  [aria-current] {
+    position: relative;
+    display: inline-block;
+  }
+
+  [aria-current]::before {
+    position: absolute;
+    content: '';
+    width: 2px;
+    height: calc(100% - 1em);
+    background-color: rgb(255, 62, 0);
+    left: -1px;
+    top: 0.5em;
+  }
+
+  a {
+    text-decoration: none;
+    padding: 1em 0.5em;
+    display: block;
+  }
+
+  button {
+    text-decoration: none;
+    padding: 1em 0.5em;
+    display: block;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    color: inherit;
+    box-sizing: content-box;
+    line-height: inherit;
+  }
 </style>

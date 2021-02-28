@@ -5,7 +5,7 @@
   export let segment
 </script>
 
-<nav>
+<nav role="navigation">
   <NavigationItems {segment} />
   <LanguageMenu />
 </nav>
