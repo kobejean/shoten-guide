@@ -6,8 +6,8 @@
 </script>
 
 <li>
-  <button>{$_(`locale.${$locale}`)}</button>
-  <ul>
+  <button aria-haspopup="true">{$_(`locale.${$locale}`)}</button>
+  <ul aria-label="submenu">
     {#each $locales as _locale (_locale)}
       <li>
         <a
@@ -61,10 +61,10 @@
     position: absolute;
     content: '';
     width: 2px;
-    height: calc(100% - 1em);
+    height: 100%;
     background-color: rgb(255, 62, 0);
     left: -1px;
-    top: 0.5em;
+    top: 0;
   }
 
   a {
