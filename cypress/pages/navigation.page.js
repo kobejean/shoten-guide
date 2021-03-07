@@ -26,6 +26,7 @@ export class NavigationPage {
   }
 
   switchLanguage(language) {
+    cy.wait(500) // needs delay for some reason otherwise gets unfocused
     this.getLanguageMenuButton().focus()
     this.getLanguageMenuOption(language).click()
   }

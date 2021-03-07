@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
-    "build": "APPER_TIMESTAMP=$(date +%s) sapper build --legacy",
+    "build": "SAPPER_TIMESTAMP=$(date +%s) sapper build --legacy",
     "export": "sapper export --legacy",
     "publish": "vercel -e SAPPER_TIMESTAMP=$(date +%s)",
     "start": "node __sapper__/build",
