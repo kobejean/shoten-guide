@@ -12,6 +12,8 @@ jobs:
       # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v2
+        env:
+          MAPKIT_SECRET: ${{ secrets.MAPKIT_SECRET }}
         with:
           build: npm run build
           start: npm start
