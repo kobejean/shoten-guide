@@ -25,9 +25,9 @@
   export let segment
 </script>
 
-<ul>
+<ul data-test="navigation-items">
   {#each navTabs as tab (tab.segment)}
-    <li>
+    <li data-test={tab.segment || 'home'}>
       <a
         class="btn"
         sapper:prefetch={tab.prefetch}

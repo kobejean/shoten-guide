@@ -5,7 +5,7 @@
   const { page } = stores()
 </script>
 
-<li>
+<li data-test="language-menu">
   <button aria-haspopup="true">{$_(`locale.${$locale}`)}</button>
   <ul aria-label="submenu">
     {#each $locales as _locale (_locale)}
