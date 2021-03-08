@@ -45,7 +45,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   originalFn(url, options)
 })
 
-const ACTION_TIMEOUT = 250
+const ACTION_TIMEOUT = 500
 
 Cypress.Commands.overwrite(
   'click',
