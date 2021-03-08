@@ -24,7 +24,6 @@ export class NavigationPage {
   }
 
   switchLanguage(language) {
-    cy.wait(500)
     this.getLanguageMenuButton().should('be.visible').focus()
     this.getLanguageMenuOption(language).should('be.visible').click()
   }

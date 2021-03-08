@@ -7,8 +7,9 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
-//
-//
+
+const ACTION_TIMEOUT = 250
+
 // -- This is a parent command --
 // Cypress.Commands.add("login", (email, password) => { ... })
 //
@@ -43,9 +44,8 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   }
 
   originalFn(url, options)
+  cy.wait(ACTION_TIMEOUT)
 })
-
-const ACTION_TIMEOUT = 500
 
 Cypress.Commands.overwrite(
   'click',
