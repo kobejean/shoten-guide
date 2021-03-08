@@ -1,6 +1,6 @@
 <script context="module">
   import { preloadLocale } from '../../services/i18n/preload.js'
-  import { waitLocale, locale } from 'svelte-i18n'
+  import { waitLocale } from 'svelte-i18n'
 
   export async function preload(page, session) {
     await preloadLocale(this, page, session)
@@ -9,8 +9,9 @@
 </script>
 
 <script>
-  import NavigationBar from '../../components/NavigationBar.svelte'
+  import NavigationBar from '../../components/navigation-bar/NavigationBar.svelte'
   import { stores } from '@sapper/app'
+  import { locale } from 'svelte-i18n'
 
   export let segment
 
@@ -26,7 +27,9 @@
 </header>
 <slot />
 
-<style>
+<style lang="scss">
+  @import '../../styles/colors';
+
   :global(main) {
     position: relative;
     max-width: 56em;
@@ -37,7 +40,7 @@
   }
 
   :global(main h1) {
-    color: #ff3e00;
+    color: $primary;
     text-transform: uppercase;
     font-size: 4em;
     font-weight: 100;

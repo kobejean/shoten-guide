@@ -22,7 +22,12 @@ const onwarn = (warning, onwarn) =>
     /[/\\]@sapper[/\\]/.test(warning.message)) ||
   onwarn(warning)
 
-const preprocess = sveltePreprocess()
+const preprocess = sveltePreprocess({
+  // replace: [['@styles', path.resolve(__dirname, 'src/styles')]],
+  scss: {
+    includePaths: ['theme'],
+  },
+})
 
 const mapkitSecret =
   process.env.MAPKIT_SECRET ||
@@ -48,8 +53,10 @@ export default {
         ...commonReplacements,
       }),
       svelte({
-        dev,
-        hydratable: true,
+        compilerOptions: {
+          dev,
+          hydratable: true,
+        },
         preprocess,
         emitCss: true,
       }),
@@ -108,10 +115,12 @@ export default {
         ...commonReplacements,
       }),
       svelte({
-        generate: 'ssr',
-        hydratable: true,
+        compilerOptions: {
+          dev,
+          generate: 'ssr',
+          hydratable: true,
+        },
         preprocess,
-        dev,
       }),
       url({
         sourceDir: path.resolve(__dirname, 'src/node_modules/images'),

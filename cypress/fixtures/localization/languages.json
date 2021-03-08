@@ -1,0 +1,35 @@
+{
+  "languages": {
+    "ja": {
+      "name": "日本語"
+    },
+    "en": {
+      "name": "English"
+    },
+    "ko": {
+      "name": "한국어"
+    }
+  },
+  "cases": [
+    {
+      "language": "ja",
+      "matchedLanguage": "ja"
+    },
+    {
+      "language": "en",
+      "matchedLanguage": "en"
+    },
+    {
+      "language": "ko",
+      "matchedLanguage": "ko"
+    },
+    {
+      "language": "en-US",
+      "matchedLanguage": "en"
+    },
+    {
+      "language": "de",
+      "matchedLanguage": "ja"
+    }
+  ]
+}

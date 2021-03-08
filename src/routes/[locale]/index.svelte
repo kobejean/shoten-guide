@@ -25,6 +25,8 @@
 </main>
 
 <style lang="scss">
+  @import '../../styles/colors';
+
   h1,
   figure,
   p {
@@ -33,7 +35,7 @@
   }
 
   h1 {
-    color: #ff3e00;
+    color: $primary;
     text-transform: uppercase;
     font-size: 4em;
     font-weight: 100;

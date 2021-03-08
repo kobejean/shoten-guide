@@ -4,14 +4,14 @@ export function get(req, res) {
   let { locale } = req.params
   const path = []
 
-  const locations = root.getPathSummary(locale, path)
+  const data = root.getSummary(locale, path)
 
-  if (locations) {
+  if (data) {
     res.writeHead(200, {
       'Content-Type': 'application/json',
     })
 
-    res.end(JSON.stringify({ locations }))
+    res.end(JSON.stringify({ data }))
   } else {
     res.writeHead(404, {
       'Content-Type': 'application/json',

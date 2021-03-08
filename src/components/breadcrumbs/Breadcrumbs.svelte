@@ -1,21 +1,17 @@
-<script context="module">
-  export const BREADCRUMBS_KEY = {}
-</script>
-
 <script>
-  import { getContext } from 'svelte'
-  const { current, stack } = getContext(BREADCRUMBS_KEY)
+  import { last } from 'lodash-es'
+  export let breadcrumbs
+  $: current = last(breadcrumbs)
 </script>
 
-<nav>
+<nav aria-label="breadcrumbs">
   <p>
-    {#each $stack as page (page.id)}
-      {#if page.id === $current.id}
-        {page.title}
-      {:else}
-        <a href={page.path} rel={'prefetch'} sapper:noscroll>{page.title}</a>
-      {/if}
+    {#each breadcrumbs.slice(0, -1) as page (page.id)}
+      <a href={page.path} sapper:prefetch sapper:noscroll data-test={page.id}
+        >{page.title}</a
+      >
     {/each}
+    <span aria-current="location">{current.title}</span>
   </p>
 </nav>
 
@@ -39,7 +35,7 @@
       scrollbar-width: none; /* Firefox */
     }
 
-    a::after {
+    a:not(:last-child)::after {
       display: inline-block;
       color: #000;
       content: '>';

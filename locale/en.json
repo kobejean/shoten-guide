@@ -15,17 +15,23 @@
     "welcome": "Welcome to the <b>Home Page</b>!"
   },
   "locale": {
-    "en": "English",
-    "ja": "日本語",
-    "ko": "한국어"
+    "en": "🇺🇸 English",
+    "ja": "🇯🇵 日本語",
+    "ko": "🇰🇷 한국어"
   },
   "locations": {
-    "title": "Shoten Guide | Locations",
+    "title": "Shoten Guide | {title}",
     "titlePrefix": "Shoten Guide | ",
     "pageName": "Locations",
     "sidebar": {
       "emptyMessage": "No more selections."
-    }
+    },
+    "noDescription": "No Description Available",
+    "selectInstructions": "Please select a location in the sidebar.",
+    "noResults": "No results to show.",
+    "resultsTitle": "Stores in {location}",
+    "showMore": "Show more...",
+    "hideMore": "...Hide"
   },
   "nav": {
     "about": "About",

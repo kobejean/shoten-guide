@@ -1,41 +1,57 @@
 <script context="module">
-  import LocationsModel, { LOCATIONS_KEY } from './_models/LocationsModel.js'
-
   export async function preload(page, session) {
-    return LocationsModel.preload(this, page, session)
+    const res = await this.fetch(`api/content${page.path}`)
+
+    if (res.status === 200) {
+      const { data } = await res.json()
+      return { data }
+    }
+    this.error(res.status, res.message)
+    return null
   }
 </script>
 
 <script>
-  import Map, { MAP_KEY } from '../../../components/map/Map.svelte'
-  import Sidebar, {
-    SIDEBAR_KEY,
-  } from '../../../components/sidebar/Sidebar.svelte'
-  import Breadcrumbs, {
-    BREADCRUMBS_KEY,
-  } from '../../../components/breadcrumbs/Breadcrumbs.svelte'
   import { _ } from 'svelte-i18n'
   import { setContext } from 'svelte'
+  import { writable } from 'svelte/store'
+  import { CONTEXT_KEYS } from '../../../utils/context'
+  import Sidebar from './_components/sidebar/Sidebar.svelte'
+  import Breadcrumbs from '../../../components/breadcrumbs/Breadcrumbs.svelte'
+  import Description from './_components/Description.svelte'
+  import Results from './_components/Results.svelte'
 
-  export let segment, model
+  export let segment, data
   segment // silence warning
 
-  const stores = LocationsModel.initStores(model)
-  setContext(LOCATIONS_KEY, stores.shared)
-  setContext(BREADCRUMBS_KEY, stores.breadcrumbs)
-  setContext(SIDEBAR_KEY, stores.sidebar)
-  setContext(MAP_KEY, stores.map)
-  $: LocationsModel.updateStores(stores, model)
+  const highlighted = writable(null)
+  const dataStore = writable(data)
+  $: dataStore.set(data)
+
+  setContext(CONTEXT_KEYS.LOCATIONS, {
+    data: dataStore,
+    highlighted,
+  })
+
+  $: breadcrumbs = data.breadcrumbs || []
+  $: title = data.location.title
+  $: description = data.location.description
 </script>
 
+<svelte:head>
+  <title>{$_('locations.title', { values: { title } })}</title>
+</svelte:head>
+
 <header>
-  <Breadcrumbs />
+  <Breadcrumbs {breadcrumbs} />
 </header>
 <main>
   <Sidebar />
-  <section id="content">
+  <article id="content">
+    <Description {title} {description} />
     <slot />
-  </section>
+    <Results {title} />
+  </article>
 </main>
 
 <style lang="scss">
