@@ -1,13 +1,17 @@
 <script>
-  export let title, breadcrumbs
+  import { last } from 'lodash-es'
+  export let breadcrumbs
+  $: current = last(breadcrumbs)
 </script>
 
-<nav>
+<nav aria-label="breadcrumbs">
   <p>
     {#each breadcrumbs.slice(0, -1) as page (page.id)}
-      <a href={page.path} sapper:prefetch sapper:noscroll>{page.title}</a>
+      <a href={page.path} sapper:prefetch sapper:noscroll data-test={page.id}
+        >{page.title}</a
+      >
     {/each}
-    {title}
+    <span aria-current="location">{current.title}</span>
   </p>
 </nav>
 
@@ -31,7 +35,7 @@
       scrollbar-width: none; /* Firefox */
     }
 
-    a::after {
+    a:not(:last-child)::after {
       display: inline-block;
       color: #000;
       content: '>';

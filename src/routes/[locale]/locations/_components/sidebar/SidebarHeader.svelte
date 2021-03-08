@@ -5,7 +5,13 @@
 <header>
   <span class="left">
     {#if parent}
-      <a class="btn" href={parent.path} sapper:prefetch sapper:noscroll>
+      <a
+        class="btn"
+        href={parent.path}
+        sapper:prefetch
+        sapper:noscroll
+        data-test="back-button"
+      >
         <svg width="13px" height="19px" viewBox="0 0 13 21">
           <title>back-button-icon</title>
           <defs />
@@ -32,7 +38,7 @@
 </header>
 
 <style lang="scss">
-  @import '../../styles/colors';
+  @import '../../../../../styles/colors';
   header {
     display: flex;
     justify-content: space-between;

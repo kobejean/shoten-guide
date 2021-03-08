@@ -42,6 +42,24 @@ const CASES = [
 describe('Localization', () => {
   const navigationPage = new NavigationPage()
 
+  function specifyPage(path, matchedLanguage, translation) {
+    specify(`Path is "${path}"`, () => {
+      cy.url().should('contain', path)
+    })
+
+    specify(`Html lang attribute is "${matchedLanguage}"`, () => {
+      cy.get('html').should('have.attr', 'lang', matchedLanguage)
+    })
+
+    specify(`Language option "${translation.name}" is selected`, () => {
+      navigationPage.getLanguageMenuButton().should('contain', translation.name)
+    })
+
+    specify(`About tab is named "${translation.about}"`, () => {
+      navigationPage.getTabLink('about').should('contain', translation.about)
+    })
+  }
+
   describe('Browser Languages', () => {
     CASES.forEach(({ language, matchedLanguage }) => {
       const translation = TRANSLATIONS[matchedLanguage]
@@ -51,56 +69,21 @@ describe('Localization', () => {
           navigationPage.visit('/', language)
         })
 
-        specify(
-          `Home page redirects to "/${matchedLanguage}/locations"`,
-          () => {
-            cy.url().should('include', `/${matchedLanguage}/locations`)
-          }
+        specifyPage(
+          `/${matchedLanguage}/locations`,
+          matchedLanguage,
+          translation
         )
-
-        specify(`Html lang attribute is "${matchedLanguage}"`, () => {
-          cy.get('html').should('have.attr', 'lang', matchedLanguage)
-        })
-
-        specify(`Language option "${translation.name}" is selected`, () => {
-          navigationPage
-            .getLanguageMenuButton()
-            .should('contain', translation.name)
-        })
-
-        specify(`About tab is named "${translation.about}"`, () => {
-          navigationPage
-            .getTabLink('about')
-            .should('contain', translation.about)
-        })
       })
     })
   })
 
-  context('About Page Switched from Japanese to English', () => {
+  context('Switching from "ja" to "en"', () => {
     before(() => {
       navigationPage.visit('/ja/about')
       navigationPage.switchLanguage('en')
     })
 
-    specify(`Path is "/en/about"`, () => {
-      cy.url().should('include', `/en/about`)
-    })
-
-    specify(`Html lang attribute is "en"`, () => {
-      cy.get('html').should('have.attr', 'lang', 'en')
-    })
-
-    specify(`Language option "${TRANSLATIONS.en.name}" is selected`, () => {
-      navigationPage
-        .getLanguageMenuButton()
-        .should('contain', TRANSLATIONS.en.name)
-    })
-
-    specify(`About tab is named "${TRANSLATIONS.en.about}"`, () => {
-      navigationPage
-        .getTabLink('about')
-        .should('contain', TRANSLATIONS.en.about)
-    })
+    specifyPage('/en/about', 'en', TRANSLATIONS.en)
   })
 })

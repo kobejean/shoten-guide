@@ -1,8 +1,6 @@
 <script>
   import { _ } from 'svelte-i18n'
   import { orderBy } from 'lodash-es'
-  import { flip } from 'svelte/animate'
-  import { fade } from 'svelte/transition'
   export let items,
     highlighted = undefined
 
@@ -11,6 +9,7 @@
   function setHighlight(item, on) {
     if (item.enabled) highlighted = on ? item.id : null
   }
+
   function setHighlightFactory(item, on) {
     return event => {
       event.stopPropagation()
@@ -30,13 +29,13 @@
 <ol class="sidebar-items">
   {#each sorted as item (item.id)}
     <li
-      transition:fade|local
       class:disabled={!item.enabled}
       on:mouseover={setHighlightFactory(item, true)}
       on:touchstart={setHighlightFactory(item, true)}
       on:mouseout={handleMouseOut}
       on:touchcancel={setHighlightFactory(item, false)}
       on:touchend={setHighlightFactory(item, false)}
+      data-test={item.id}
     >
       <a
         class="btn"
@@ -53,7 +52,7 @@
 </ol>
 
 <style lang="scss">
-  @import '../../styles/colors';
+  @import '../../../../../styles/colors';
 
   ol {
     margin: 0;

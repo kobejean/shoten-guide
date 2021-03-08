@@ -16,7 +16,7 @@
   import { setContext } from 'svelte'
   import { writable } from 'svelte/store'
   import { CONTEXT_KEYS } from '../../../utils/context'
-  import Sidebar from '../../../components/sidebar/Sidebar.svelte'
+  import Sidebar from './_components/sidebar/Sidebar.svelte'
   import Breadcrumbs from '../../../components/breadcrumbs/Breadcrumbs.svelte'
   import Description from './_components/Description.svelte'
   import Results from './_components/Results.svelte'
@@ -43,7 +43,7 @@
 </svelte:head>
 
 <header>
-  <Breadcrumbs {title} {breadcrumbs} />
+  <Breadcrumbs {breadcrumbs} />
 </header>
 <main>
   <Sidebar />

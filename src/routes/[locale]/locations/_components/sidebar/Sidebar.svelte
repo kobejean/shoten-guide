@@ -1,10 +1,10 @@
 <script>
-  import Map from '../map/Map.svelte'
+  import Map from '../../../../../components/map/Map.svelte'
   import SidebarHeader from './SidebarHeader.svelte'
   import SidebarItems from './SidebarItems.svelte'
   import { nth } from 'lodash-es'
   import { getContext } from 'svelte'
-  import { CONTEXT_KEYS } from '../../utils/context'
+  import { CONTEXT_KEYS } from '../../../../../utils/context'
 
   const { data, highlighted } = getContext(CONTEXT_KEYS.LOCATIONS)
 
@@ -14,7 +14,7 @@
 </script>
 
 <aside>
-  <article>
+  <article data-test="map-navigation">
     <SidebarHeader {current} {parent} />
     <Map />
     <footer>
@@ -24,7 +24,7 @@
 </aside>
 
 <style lang="scss">
-  @import '../../styles/colors';
+  @import '../../../../../styles/colors';
 
   aside {
     min-width: 320px;

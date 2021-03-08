@@ -2,15 +2,39 @@
   import { locale, locales, _ } from 'svelte-i18n'
   import { pathWithReplacedLocale } from '../../utils/path.js'
   import { stores } from '@sapper/app'
+  import { onMount } from 'svelte'
   const { page } = stores()
+
+  let expanded = false
+  let languageMenu
+
+  function focusChanged() {
+    expanded = languageMenu.matches(':focus-within')
+  }
+
+  onMount(() => {
+    focusChanged()
+    document.addEventListener('focus', focusChanged, true)
+  })
 </script>
 
-<li data-test="language-menu">
-  <button aria-haspopup="true">{$_(`locale.${$locale}`)}</button>
-  <ul aria-label="submenu">
+<svelte:window on:focus={() => focusChanged()} />
+
+<li
+  bind:this={languageMenu}
+  data-test="language-menu"
+  on:mouseenter={() => (expanded = true)}
+  on:mouseleave={() => (expanded = false)}
+  aria-expanded={expanded}
+>
+  <button aria-haspopup="true" aria-label="Language Options"
+    >{$_(`locale.${$locale}`)}</button
+  >
+  <ul role="menu" aria-label="Language Options">
     {#each $locales as _locale (_locale)}
       <li>
         <a
+          role="menuitem"
           class="btn"
           aria-current={_locale === $locale ? 'page' : undefined}
           href={pathWithReplacedLocale($page.path, _locale)}
