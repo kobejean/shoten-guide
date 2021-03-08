@@ -8,7 +8,7 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
-const ACTION_TIMEOUT = 500
+const ACTION_TIMEOUT = 300
 
 // -- This is a parent command --
 // Cypress.Commands.add("login", (email, password) => { ... })
