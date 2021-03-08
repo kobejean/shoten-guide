@@ -27,7 +27,9 @@
 </header>
 <slot />
 
-<style>
+<style lang="scss">
+  @import '../../styles/colors';
+
   :global(main) {
     position: relative;
     max-width: 56em;
@@ -38,7 +40,7 @@
   }
 
   :global(main h1) {
-    color: #ff3e00;
+    color: $primary;
     text-transform: uppercase;
     font-size: 4em;
     font-weight: 100;

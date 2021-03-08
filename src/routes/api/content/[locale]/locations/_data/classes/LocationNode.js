@@ -90,7 +90,7 @@ export default class LocationNode {
     }
     return {
       ...localization,
-      path: `${locale}${this.id}`,
+      path: `/${locale}${this.id}`,
       locale,
     }
   }

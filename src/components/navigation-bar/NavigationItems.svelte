@@ -41,6 +41,8 @@
 </ul>
 
 <style lang="scss">
+  @import '../../styles/colors';
+
   ul {
     margin: 0;
     padding: 0;
@@ -68,7 +70,7 @@
     content: '';
     width: calc(100% - 1em);
     height: 2px;
-    background-color: rgb(255, 62, 0);
+    background-color: $primary;
     display: block;
     bottom: -1px;
   }

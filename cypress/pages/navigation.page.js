@@ -24,12 +24,12 @@ export class NavigationPage {
   }
 
   switchLanguage(language) {
-    cy.wait(1000) // needs delay for some reason otherwise gets unfocused
-    this.getLanguageMenuButton().focus()
-    this.getLanguageMenuOption(language).click()
+    cy.wait(500)
+    this.getLanguageMenuButton().should('be.visible').focus()
+    this.getLanguageMenuOption(language).should('be.visible').click()
   }
 
   switchTab(tab) {
-    this.getTabLink(tab).click()
+    this.getTabLink(tab).should('be.visible').click()
   }
 }

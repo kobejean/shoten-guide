@@ -45,7 +45,7 @@ describe('Locations', () => {
     context(`Navigate back to "tohoku" from "fukushima"`, () => {
       before(() => {
         locationsPage.visit('/ja/locations/tohoku/fukushima')
-        locationsPage.mapNavigation.goBack()
+        locationsPage.mapNavigation.goBack('/ja/locations/tohoku')
       })
 
       specifyPage({

@@ -44,3 +44,18 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
 
   originalFn(url, options)
 })
+
+const ACTION_TIMEOUT = 250
+
+Cypress.Commands.overwrite(
+  'click',
+  (originalFn, element, position, x, y, options) => {
+    cy.wait(ACTION_TIMEOUT)
+    originalFn(element, position, x, y, options)
+  }
+)
+
+Cypress.Commands.overwrite('focus', (originalFn, element, options) => {
+  cy.wait(ACTION_TIMEOUT)
+  originalFn(element, options)
+})

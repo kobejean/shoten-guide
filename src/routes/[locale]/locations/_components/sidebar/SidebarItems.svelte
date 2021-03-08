@@ -9,7 +9,6 @@
   function setHighlight(item, on) {
     if (item.enabled) highlighted = on ? item.id : null
   }
-
   function setHighlightFactory(item, on) {
     return event => {
       event.stopPropagation()

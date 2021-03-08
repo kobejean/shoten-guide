@@ -49,6 +49,8 @@
 </li>
 
 <style lang="scss">
+  @import '../../styles/colors';
+
   li {
     min-width: 100px;
     display: block;
@@ -86,7 +88,7 @@
     content: '';
     width: 2px;
     height: 100%;
-    background-color: rgb(255, 62, 0);
+    background-color: $primary;
     left: -1px;
     top: 0;
   }

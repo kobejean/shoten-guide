@@ -17,14 +17,15 @@ class MapNavigation {
     return this.getMapNavigation().get(`footer [data-test="${id}"] a`)
   }
 
-  goBack() {
-    cy.wait(1000)
-    this.getMapNavigationBackLink().click()
+  goBack(path) {
+    this.getMapNavigationBackLink()
+      .should('have.attr', 'href', path)
+      .should('be.visible')
+      .click()
   }
 
   goToSubregion(id) {
-    cy.wait(1000)
-    this.getSubregionLink(id).click()
+    this.getSubregionLink(id).should('be.visible').click()
   }
 }
 
