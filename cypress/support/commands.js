@@ -10,19 +10,6 @@
 
 const ACTION_TIMEOUT = 300
 
-// -- This is a parent command --
-// Cypress.Commands.add("login", (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add("drag", { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add("dismiss", { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-
-// -- This will overwrite an existing command --
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   if (options && options.language) {
     // add in language options
@@ -34,7 +21,7 @@ Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
       onBeforeLoad(win) {
         Object.defineProperty(win.navigator, 'language', { value: language })
         Object.defineProperty(win.navigator, 'languages', { value: [language] })
-        onBeforeLoad()
+        onBeforeLoad(win)
       },
       headers: {
         ...headers,
