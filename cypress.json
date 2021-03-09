@@ -3,6 +3,6 @@
   "baseUrl": "http://localhost:3000",
   "retries": {
     "runMode": 2,
-    "openMode": 0
+    "openMode": 2
   }
 }
