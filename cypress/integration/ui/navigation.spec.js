@@ -24,52 +24,51 @@ const CASES = {
 describe('Navigation', () => {
   const navigationPage = new NavigationPage()
 
-  function specifyPage(page) {
-    specify(`Path is "${page.path}"`, () => {
-      cy.url().should('contain', page.path)
-    })
-
-    specify(`Document title is "${page.title}"`, () => {
-      cy.title().should('contain', page.title)
-    })
-
-    specify(
-      `Current tab "${page.id}" should have attribute aria-current="page"`,
-      () => {
-        navigationPage
-          .getTabLink(page.id)
-          .should('have.attr', 'aria-current', 'page')
-      }
-    )
-
-    specify(`Non-active tabs should not have attribute aria-current`, () => {
-      forEach(CASES, otherPage => {
-        if (otherPage.id === page.id) return // skip page.id because it is active
-        navigationPage
-          .getTabLink(otherPage.id)
-          .should('not.have.attr', 'aria-current')
-      })
+  function shouldDisplayPage(page) {
+    cy.url().should('contain', page.path)
+    cy.title().should('contain', page.title)
+    navigationPage
+      .getTabLink(page.id)
+      .should('have.attr', 'aria-current', 'page')
+    forEach(CASES, otherPage => {
+      if (otherPage.id === page.id) return // skip page.id because it is active
+      navigationPage
+        .getTabLink(otherPage.id)
+        .should('not.have.attr', 'aria-current')
     })
   }
 
   describe('Tabs by Route', () => {
     forEach(CASES, page => {
-      context(`Path "${page.path}"`, () => {
-        before(() => {
+      specify(
+        `When route "${page.path}" is hit
+        Then "${page.id}" page is displayed`,
+        () => {
+          // When
           navigationPage.visit(page.path)
-        })
-
-        specifyPage(page)
-      })
+          // Then
+          shouldDisplayPage(page)
+        }
+      )
     })
   })
 
-  context('Switching tabs from "blog" to "about"', () => {
-    before(() => {
+  describe('Switching Tabs', () => {
+    beforeEach(() => {
       navigationPage.visit('/ja/blog')
       navigationPage.switchTab('about')
     })
 
-    specifyPage(CASES.about)
+    specify(
+      `When page is switched from "blog" to "about"
+      Then "about" page is displayed`,
+      () => {
+        // When
+        navigationPage.visit('/ja/blog')
+        navigationPage.switchTab('about')
+        // Then
+        shouldDisplayPage(CASES.about)
+      }
+    )
   })
 })
