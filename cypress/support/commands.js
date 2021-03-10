@@ -8,7 +8,7 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
-const ACTION_TIMEOUT = 300
+const ACTION_TIMEOUT = 250
 
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   if (options && options.language) {
