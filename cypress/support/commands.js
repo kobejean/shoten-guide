@@ -10,24 +10,28 @@
 
 const ACTION_TIMEOUT = 250
 
+function getBrowserLanguageOptions(options, language) {
+  const onBeforeLoad = options.onBeforeLoad || function () {}
+  const headers = options.headers || {}
+  return {
+    ...options,
+    onBeforeLoad(win) {
+      Object.defineProperty(win.navigator, 'language', { value: language })
+      Object.defineProperty(win.navigator, 'languages', { value: [language] })
+      onBeforeLoad(win)
+    },
+    headers: {
+      ...headers,
+      'Accept-Language': language,
+    },
+  }
+}
+
 Cypress.Commands.overwrite('visit', (originalFn, url, options) => {
   if (options && options.language) {
-    // add in language options
-    const onBeforeLoad = options.onBeforeLoad || function () {}
-    const headers = options.headers || {}
+    // add in language options if specified
     const { language } = options
-    options = {
-      ...options,
-      onBeforeLoad(win) {
-        Object.defineProperty(win.navigator, 'language', { value: language })
-        Object.defineProperty(win.navigator, 'languages', { value: [language] })
-        onBeforeLoad(win)
-      },
-      headers: {
-        ...headers,
-        'Accept-Language': language,
-      },
-    }
+    options = getBrowserLanguageOptions(options, language)
   }
 
   originalFn(url, options)

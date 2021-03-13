@@ -13,12 +13,13 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         env:
+          # used for generating apple MapKitJS Tokens
           MAPKIT_SECRET: ${{ secrets.MAPKIT_SECRET }}
           # pass the Dashboard record key as an environment variable
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # pass GitHub token to allow accurately detecting a build vs a re-run build
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          record: true
+          record: false
           build: npm run build
           start: npm start
