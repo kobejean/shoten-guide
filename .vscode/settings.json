@@ -6,10 +6,7 @@
   },
   "editor.tabSize": 2,
   "editor.detectIndentation": false,
-  "i18n-ally.localesPaths": [
-    "locale",
-    "src/services/i18n"
-  ],
+  "i18n-ally.localesPaths": ["src/services/i18n/locale", "src/services/i18n"],
   "i18n-ally.sourceLanguage": "en",
   "i18n-ally.keystyle": "nested"
 }

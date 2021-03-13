@@ -6,7 +6,7 @@ import url from '@rollup/plugin-url'
 import svelte from 'rollup-plugin-svelte'
 import sveltePreprocess from 'svelte-preprocess'
 import babel from '@rollup/plugin-babel'
-import json from './plugins/json.js'
+import json from './rollup/plugins/json.js'
 import { terser } from 'rollup-plugin-terser'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
@@ -49,6 +49,7 @@ export default {
     plugins: [
       json(jsonOptions),
       replace({
+        preventAssignment: true,
         'process.browser': true,
         ...commonReplacements,
       }),
@@ -111,6 +112,7 @@ export default {
     plugins: [
       json(jsonOptions),
       replace({
+        preventAssignment: true,
         'process.browser': false,
         ...commonReplacements,
       }),
@@ -149,6 +151,7 @@ export default {
     plugins: [
       resolve(),
       replace({
+        preventAssignment: true,
         'process.browser': true,
         ...commonReplacements,
       }),

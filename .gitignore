@@ -6,3 +6,6 @@ yarn-error.log
 /dev/
 /certificates/
 .vercel
+/cypress/videos
+/cypress/screenshots
+/out/
