@@ -1,5 +1,3 @@
-import { stores } from '@sapper/app'
-
 // Constants
 const LOCALE_PATHNAME_REPLACE_REGEX = /^.+?([/]|$)/
 
