@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      Home - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li  class="active" >
+        <a href="index.html">
+          
+          
+            <svg fill="#0095dd" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      Braintree SDK Client Reference
+    </h3>
+
+    
+
+    <h3 id="global-nav">Global</h3><ul><li><a href="global.html#fetchAndCache">fetchAndCache</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAvailableLocaleFromPathname">getAvailableLocaleFromPathname</a></li><li><a href="global.html#getAvailableLocaleFromUserLanguage">getAvailableLocaleFromUserLanguage</a></li><li><a href="global.html#getClientPathname">getClientPathname</a></li><li><a href="global.html#getClientUserLanguage">getClientUserLanguage</a></li><li><a href="global.html#getInitialLocale">getInitialLocale</a></li><li><a href="global.html#getPathname">getPathname</a></li><li><a href="global.html#getServerPathname">getServerPathname</a></li><li><a href="global.html#getServerUserLanguage">getServerUserLanguage</a></li><li><a href="global.html#getUserLanguage">getUserLanguage</a></li><li><a href="global.html#handleLocaleChange">handleLocaleChange</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initMapKit">initMapKit</a></li><li><a href="global.html#loadScript">loadScript</a></li><li><a href="global.html#pathWithReplacedLocale">pathWithReplacedLocale</a></li><li><a href="global.html#preloadAllLanguageData">preloadAllLanguageData</a></li><li><a href="global.html#preloadLocale">preloadLocale</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+
+    
+      
+
+
+
+    
+
+      
+
+
+  <section class="readme">
+    <article>
+      <h1>sapper-template</h1>
+<p>The default template for setting up a <a href="https://github.com/sveltejs/sapper">Sapper</a> project. Can use either Rollup or webpack as bundler.</p>
+<h2>Getting started</h2>
+<h3>Using <code>degit</code></h3>
+<p>To create a new Sapper project based on Rollup locally, run</p>
+<pre class="prettyprint source lang-bash"><code>npx degit &quot;sveltejs/sapper-template#rollup&quot; my-app
+</code></pre>
+<p>For a webpack-based project, instead run</p>
+<pre class="prettyprint source lang-bash"><code>npx degit &quot;sveltejs/sapper-template#webpack&quot; my-app
+</code></pre>
+<p><a href="https://github.com/Rich-Harris/degit"><code>degit</code></a> is a scaffolding tool that lets you create a directory from a branch in a repository.</p>
+<p>Replace <code>my-app</code> with the path where you wish to create the project.</p>
+<h3>Using GitHub templates</h3>
+<p>Alternatively, you can create the new project as a GitHub repository using GitHub's template feature.</p>
+<p>Go to either <a href="https://github.com/sveltejs/sapper-template-rollup">sapper-template-rollup</a> or <a href="https://github.com/sveltejs/sapper-template-webpack">sapper-template-webpack</a> and click on &quot;Use this template&quot; to create a new project repository initialized by the template.</p>
+<h3>Running the project</h3>
+<p>Once you have created the project, install dependencies and run the project in development mode:</p>
+<pre class="prettyprint source lang-bash"><code>cd my-app
+npm install # or yarn
+npm run dev
+</code></pre>
+<p>This will start the development server on <a href="http://localhost:3000">localhost:3000</a>. Open it and click around.</p>
+<p>You now have a fully functional Sapper project! To get started developing, consult <a href="https://sapper.svelte.dev">sapper.svelte.dev</a>.</p>
+<h3>Using TypeScript</h3>
+<p>By default, the template uses plain JavaScript. If you wish to use TypeScript instead, you need some changes to the project:</p>
+<ul>
+<li>Add <code>typescript</code> as well as typings as dependences in <code>package.json</code></li>
+<li>Configure the bundler to use <a href="https://github.com/sveltejs/svelte-preprocess"><code>svelte-preprocess</code></a> and transpile the TypeScript code.</li>
+<li>Add a <code>tsconfig.json</code> file</li>
+<li>Update the project code to TypeScript</li>
+</ul>
+<p>The template comes with a script that will perform these changes for you by running</p>
+<pre class="prettyprint source lang-bash"><code>node scripts/setupTypeScript.js
+</code></pre>
+<p><code>@sapper</code> dependencies are resolved through <code>src/node_modules/@sapper</code>, which is created during the build. You therefore need to run or build the project once to avoid warnings about missing dependencies.</p>
+<p>The script does not support webpack at the moment.</p>
+<h2>Directory structure</h2>
+<p>Sapper expects to find two directories in the root of your project —  <code>src</code> and <code>static</code>.</p>
+<h3>src</h3>
+<p>The <a href="src">src</a> directory contains the entry points for your app — <code>client.js</code>, <code>server.js</code> and (optionally) a <code>service-worker.js</code> — along with a <code>template.html</code> file and a <code>routes</code> directory.</p>
+<h4>src/routes</h4>
+<p>This is the heart of your Sapper app. There are two kinds of routes — <em>pages</em>, and <em>server routes</em>.</p>
+<p><strong>Pages</strong> are Svelte components written in <code>.svelte</code> files. When a user first visits the application, they will be served a server-rendered version of the route in question, plus some JavaScript that 'hydrates' the page and initialises a client-side router. From that point forward, navigating to other pages is handled entirely on the client for a fast, app-like feel. (Sapper will preload and cache the code for these subsequent pages, so that navigation is instantaneous.)</p>
+<p><strong>Server routes</strong> are modules written in <code>.js</code> files, that export functions corresponding to HTTP methods. Each function receives Express <code>request</code> and <code>response</code> objects as arguments, plus a <code>next</code> function. This is useful for creating a JSON API, for example.</p>
+<p>There are three simple rules for naming the files that define your routes:</p>
+<ul>
+<li>A file called <code>src/routes/about.svelte</code> corresponds to the <code>/about</code> route. A file called <code>src/routes/blog/[slug].svelte</code> corresponds to the <code>/blog/:slug</code> route, in which case <code>params.slug</code> is available to the route</li>
+<li>The file <code>src/routes/index.svelte</code> (or <code>src/routes/index.js</code>) corresponds to the root of your app. <code>src/routes/about/index.svelte</code> is treated the same as <code>src/routes/about.svelte</code>.</li>
+<li>Files and directories with a leading underscore do <em>not</em> create routes. This allows you to colocate helper modules and components with the routes that depend on them — for example you could have a file called <code>src/routes/_helpers/datetime.js</code> and it would <em>not</em> create a <code>/_helpers/datetime</code> route.</li>
+</ul>
+<h4>src/node_modules/images</h4>
+<p>Images added to <code>src/node_modules/images</code> can be imported into your code using <code>import 'images/&lt;filename&gt;'</code>. They will be given a dynamically generated filename containing a hash, allowing for efficient caching and serving the images on a CDN.</p>
+<p>See <a href="src/routes/index.svelte"><code>index.svelte</code></a> for an example.</p>
+<h4>src/node_modules/@sapper</h4>
+<p>This directory is managed by Sapper and generated when building. It contains all the code you import from <code>@sapper</code> modules.</p>
+<h3>static</h3>
+<p>The <a href="static">static</a> directory contains static assets that should be served publicly. Files in this directory will be available directly under the root URL, e.g. an <code>image.jpg</code> will be available as <code>/image.jpg</code>.</p>
+<p>The default <a href="src/service-worker.js">service-worker.js</a> will preload and cache these files, by retrieving a list of <code>files</code> from the generated manifest:</p>
+<pre class="prettyprint source lang-js"><code>import { files } from '@sapper/service-worker';
+</code></pre>
+<p>If you have static files you do not want to cache, you should exclude them from this list after importing it (and before passing it to <code>cache.addAll</code>).</p>
+<p>Static files are served using <a href="https://github.com/lukeed/sirv">sirv</a>.</p>
+<h2>Bundler configuration</h2>
+<p>Sapper uses Rollup or webpack to provide code-splitting and dynamic imports, as well as compiling your Svelte components. With webpack, it also provides hot module reloading. As long as you don't do anything daft, you can edit the configuration files to add whatever plugins you'd like.</p>
+<h2>Production mode and deployment</h2>
+<p>To start a production version of your app, run <code>npm run build &amp;&amp; npm start</code>. This will disable live reloading, and activate the appropriate bundler plugins.</p>
+<p>You can deploy your application to any environment that supports Node 10 or above. As an example, to deploy to <a href="https://vercel.com">Vercel Now</a> when using <code>sapper export</code>, run these commands:</p>
+<pre class="prettyprint source lang-bash"><code>npm install -g vercel
+vercel
+</code></pre>
+<p>If your app can't be exported to a static site, you can use the <a href="https://github.com/thgh/now-sapper">now-sapper</a> builder. You can find instructions on how to do so in its <a href="https://github.com/thgh/now-sapper#basic-usage">README</a>.</p>
+<h2>Using external components</h2>
+<p>When using Svelte components installed from npm, such as <a href="https://github.com/sveltejs/svelte-virtual-list">@sveltejs/svelte-virtual-list</a>, Svelte needs the original component source (rather than any precompiled JavaScript that ships with the component). This allows the component to be rendered server-side, and also keeps your client-side app smaller.</p>
+<p>Because of that, it's essential that the bundler doesn't treat the package as an <em>external dependency</em>. You can either modify the <code>external</code> option under <code>server</code> in <a href="rollup.config.js">rollup.config.js</a> or the <code>externals</code> option in <a href="webpack.config.js">webpack.config.js</a>, or simply install the package to <code>devDependencies</code> rather than <code>dependencies</code>, which will cause it to get bundled (and therefore compiled) with your app:</p>
+<pre class="prettyprint source lang-bash"><code>npm install -D @sveltejs/svelte-virtual-list
+</code></pre>
+<h2>Bugs and feedback</h2>
+<p>Sapper is in early development, and may have the odd rough edge here and there. Please be vocal over on the <a href="https://github.com/sveltejs/sapper/issues">Sapper issue tracker</a>.</p>
+    </article>
+  </section>
+
+
+    
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
+</body>
+</html>

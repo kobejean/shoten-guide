@@ -1,0 +1,354 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>
+      components/map/classes/MapController.js - Documentation
+  </title>
+
+  <link href="https://www.braintreepayments.com/images/favicon-ccda0b14.png" rel="icon" type="image/png">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.7.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+  <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+  
+
+  
+
+  <!-- start Mixpanel -->
+  <script type="text/javascript">(function(e,a){if(!a.__SV){var b=window;try{var c,l,i,j=b.location,g=j.hash;c=function(a,b){return(l=a.match(RegExp(b+"=([^&]*)")))?l[1]:null};g&&c(g,"state")&&(i=JSON.parse(decodeURIComponent(c(g,"state"))),"mpeditor"===i.action&&(b.sessionStorage.setItem("_mpcehash",g),history.replaceState(i.desiredHash||"",e.title,j.pathname+j.search)))}catch(m){}var k,h;window.mixpanel=a;a._i=[];a.init=function(b,c,f){function e(b,a){var c=a.split(".");2==c.length&&(b=b[c[0]],a=c[1]);b[a]=function(){b.push([a].concat(Array.prototype.slice.call(arguments,
+  0)))}}var d=a;"undefined"!==typeof f?d=a[f]=[]:f="mixpanel";d.people=d.people||[];d.toString=function(b){var a="mixpanel";"mixpanel"!==f&&(a+="."+f);b||(a+=" (stub)");return a};d.people.toString=function(){return d.toString(1)+".people (stub)"};k="disable time_event track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config reset people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+  for(h=0;h<k.length;h++)e(d,k[h]);a._i.push([b,c,f])};a.__SV=1.2;b=e.createElement("script");b.type="text/javascript";b.async=!0;b.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"file:"===e.location.protocol&&"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js".match(/^\/\//)?"https://cdn.mxpnl.com/libs/mixpanel-2-latest.min.js":"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";c=e.getElementsByTagName("script")[0];c.parentNode.insertBefore(b,c)}})(document,window.mixpanel||[]);
+  mixpanel.init("1919205b2da72e4da3b9b6639b444d59");</script>
+  <!-- end Mixpanel -->
+</head>
+
+<body>
+  <svg style="display: none;">
+    <defs>
+      <symbol id="linkIcon" fill="#706d77" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M0 0h24v24H0z" fill="none"/>
+          <path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger" class="navicon-button x">
+    <div class="navicon"></div>
+  </label>
+
+  <label for="nav-trigger" class="overlay"></label>
+
+  <div class="top-nav-wrapper">
+    <ul>
+      <li >
+        <a href="index.html">
+          
+            <svg fill="#6D6D6D" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+              <path d="M0 0h24v24H0z" fill="none"/>
+            </svg>
+          
+          
+        </a>
+      </li>
+
+      
+
+    </ul>
+  </div>
+
+  <nav>
+    <h3 class="reference-title">
+      Braintree SDK Client Reference
+    </h3>
+
+    
+
+    <h3 id="global-nav">Global</h3><ul><li><a href="global.html#fetchAndCache">fetchAndCache</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAvailableLocaleFromPathname">getAvailableLocaleFromPathname</a></li><li><a href="global.html#getAvailableLocaleFromUserLanguage">getAvailableLocaleFromUserLanguage</a></li><li><a href="global.html#getClientPathname">getClientPathname</a></li><li><a href="global.html#getClientUserLanguage">getClientUserLanguage</a></li><li><a href="global.html#getInitialLocale">getInitialLocale</a></li><li><a href="global.html#getPathname">getPathname</a></li><li><a href="global.html#getServerPathname">getServerPathname</a></li><li><a href="global.html#getServerUserLanguage">getServerUserLanguage</a></li><li><a href="global.html#getUserLanguage">getUserLanguage</a></li><li><a href="global.html#handleLocaleChange">handleLocaleChange</a></li><li><a href="global.html#initMap">initMap</a></li><li><a href="global.html#initMapKit">initMapKit</a></li><li><a href="global.html#loadScript">loadScript</a></li><li><a href="global.html#pathWithReplacedLocale">pathWithReplacedLocale</a></li><li><a href="global.html#preloadAllLanguageData">preloadAllLanguageData</a></li><li><a href="global.html#preloadLocale">preloadLocale</a></li></ul>
+  </nav>
+
+  <div id="main">
+    
+      <h1 class="page-title">
+        components/map/classes/MapController.js
+      </h1>
+    
+
+    
+      
+
+<section>
+  <article>
+    <pre class="prettyprint source linenums"><code>import { loadScript } from '../../../utils/scriptLoad'
+import { locale } from 'svelte-i18n'
+import { get } from 'svelte/store'
+import { fromPairs, map, forEach, get as getValue } from 'lodash-es'
+import { goto } from '@sapper/app'
+import HighlightablePolygonOverlay from './mixins/HighlightablePolygonOverlay.js'
+import TextAnnotation from './mixins/TextAnnotation.js'
+import Totoro from './mixins/Totoro.js'
+import MapDecoder from './MapDecoder'
+
+const MAPKIT_SOURCE = 'https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js'
+
+export default class MapController {
+  constructor(stores) {
+    this.stores = stores
+    this.prevState = {}
+    this.decoder = new MapDecoder(stores)
+  }
+
+  mount(element) {
+    this.element = element
+
+    // unsubscriber is a promise that resolves once sunscriptions are complete
+    // we do it this way to keep the mount method syncrounous
+    const unsubscriber = (async () => {
+      await this.initLoad()
+      return this.subscriptions()
+    })()
+
+    return {
+      destroy() {
+        // unsubscribe after promise resolves if it hasn't been resolved yet
+        unsubscriber.then(unsubscribe => unsubscribe())
+      },
+    }
+  }
+
+  async initLoad() {
+    if (typeof mapkit === 'undefined') {
+      await loadScript(MAPKIT_SOURCE)
+      this.initMapKit()
+    }
+    this.initMap()
+    this.loadMap(false)
+  }
+
+  /**
+   * Handles initializing mapkit.
+   */
+  async initMapKit() {
+    mapkit.init({
+      authorizationCallback: function (done) {
+        fetch('/api/jwt/mapkit-token')
+          .then(response => response.json())
+          .then(result => done(result.token))
+      },
+      language: get(locale),
+    })
+    // custom mapkit classes
+    mapkit.HighlightablePolygonOverlay = HighlightablePolygonOverlay(mapkit)
+    mapkit.TextAnnotation = TextAnnotation(mapkit)
+    mapkit.Totoro = Totoro(mapkit)
+  }
+
+  /**
+   * Handles loading the map with the desired region and annotations.
+   */
+  async initMap() {
+    const mapType = mapkit.Map.MapTypes.MutedStandard
+
+    const mapOptions = {
+      mapType,
+      showsCompass: mapkit.FeatureVisibility.Hidden,
+      showsPointsOfInterest: false,
+    }
+    this.map = new mapkit.Map(this.element, mapOptions)
+
+    this.spawnTotoro()
+  }
+
+  spawnTotoro() {
+    const { location } = get(this.stores.data)
+    const { latitude, longitude } = location.region.center
+    const coordinate = new mapkit.Coordinate(latitude, longitude)
+    this.totoro = new mapkit.Totoro(coordinate)
+    this.map.addAnnotation(this.totoro)
+  }
+
+  moveTotoro(region) {
+    const { latitude, longitude } = region.center
+    const coordinate = new mapkit.Coordinate(latitude, longitude)
+    return (this.totoro.coordinate = coordinate)
+  }
+
+  loadMap(animated = false) {
+    const { location } = get(this.stores.data)
+    const isNewLocation = this.prevState.lastId !== location.id
+
+    if (isNewLocation) {
+      this.loadGeoJSON(location.geoJSON)
+
+      if (location.region) {
+        this.setRegionAnimated(location.region, animated)
+        this.moveTotoro(location.region)
+      }
+      this.loadChildMetadata(location)
+      // remove any highlights
+      this.handleHighlight(null)
+    }
+
+    this.prevState.lastId = location.id
+  }
+
+  loadChildMetadata(location) {
+    this.paths = fromPairs(map(location.children, ({ id, path }) => [id, path]))
+    const features = getValue(location, 'geoJSON.features')
+    const childCoordinatePairs = map(features, ({ id, properties }) => {
+      const [longitude, latitude] = properties.display_point.coordinates
+      id = `${location.id}/${id}`
+      const coordinate = new mapkit.Coordinate(latitude, longitude)
+      return [id, coordinate]
+    })
+    this.childCoordinates = fromPairs(childCoordinatePairs)
+  }
+
+  async loadGeoJSON(geoJSON) {
+    const items = await this.decoder.importGeoJSON(geoJSON)
+    if (this.prevState.items) this.map.removeItems(this.prevState.items)
+    if (items) this.map.addItems(items)
+    this.prevState.items = items
+  }
+
+  setRegionAnimated(region, animated = false) {
+    const { latitude, longitude } = region.center
+    const { latitudeDelta, longitudeDelta } = region.span
+    const center = new mapkit.Coordinate(latitude, longitude)
+    const span = new mapkit.CoordinateSpan(latitudeDelta, longitudeDelta)
+    this.region = new mapkit.CoordinateRegion(center, span)
+    this.map.setRegionAnimated(this.region, animated)
+  }
+
+  subscriptions() {
+    const mapView = this.element.querySelector('.mk-map-view')
+    const eventListeners = [
+      [this.map, 'select', this.handleSelection.bind(this)],
+      [mapView, 'mousemove', this.handleMouseMove.bind(this)],
+      [mapView, 'touchstart', this.handleTouchStart.bind(this)],
+      [mapView, 'mouseout', this.handleMouseOut.bind(this)],
+      [mapView, 'touchend', this.handleHighlightOff.bind(this)],
+      [mapView, 'touchcancel', this.handleHighlightOff.bind(this)],
+    ]
+
+    forEach(eventListeners, ([object, eventType, method]) =>
+      object.addEventListener(eventType, method)
+    )
+
+    const { data, highlighted } = this.stores
+    const unsubscribers = {
+      locale: locale.subscribe(this.handleLocaleChange.bind(this)),
+      data: data.subscribe(this.loadMap.bind(this, true)),
+      highlighted: highlighted.subscribe(this.handleHighlight.bind(this)),
+    }
+
+    return () => {
+      forEach(eventListeners, ([object, eventType, method]) =>
+        object.removeEventListener(eventType, method)
+      )
+      unsubscribers.locale()
+      unsubscribers.data()
+      unsubscribers.highlighted()
+      MapDecoder.caches.clear()
+    }
+  }
+
+  handleHighlight(id) {
+    if (
+      typeof mapkit === 'undefined' ||
+      !this.map ||
+      id === this.prevState.highlighted
+    ) {
+      return
+    }
+
+    mapkit.HighlightablePolygonOverlay.setHighlightById(id)
+    mapkit.TextAnnotation.setHighlightById(id)
+    if (this.childCoordinates[id]) {
+      this.totoro.coordinate = this.childCoordinates[id]
+    }
+    this.prevState.highlighted = id
+  }
+
+  handleSelection(event) {
+    const id = getValue(event, 'overlay.data.id')
+    const path = this.paths[id]
+    if (path) {
+      goto(path, { noscroll: true })
+    }
+  }
+
+  /**
+   * Used to keep mapkit's language state up-to-date with the site's language state.
+   */
+  async handleLocaleChange(locale) {
+    if (typeof mapkit === 'undefined') return
+    // setting language is an expensive operation so let's let other updates occur first
+    setTimeout(() => (mapkit.language = locale), 0)
+    if (this.map) {
+      mapkit.TextAnnotation.setLocale(locale)
+    }
+  }
+
+  handleMouseMove(event) {
+    const targetOverlay = this.map.topOverlayAtPoint(
+      new DOMPoint(event.pageX, event.pageY)
+    )
+    if (targetOverlay &amp;&amp; targetOverlay.enabled) {
+      this.stores.highlighted.set(targetOverlay.data.id)
+    } else {
+      this.stores.highlighted.set(undefined)
+    }
+  }
+
+  handleTouchStart(event) {
+    if (event.touches.length !== 1) return
+    const { pageX, pageY } = event.touches[0]
+    const targetOverlay = this.map.topOverlayAtPoint(new DOMPoint(pageX, pageY))
+    if (targetOverlay &amp;&amp; targetOverlay.enabled) {
+      this.stores.highlighted.set(targetOverlay.data.id)
+    }
+  }
+
+  handleMouseOut(event) {
+    if (!event.currentTarget.contains(event.relatedTarget))
+      this.stores.highlighted.set(undefined) // must have truly moused out of map view
+  }
+
+  handleHighlightOff() {
+    this.stores.highlighted.set(undefined)
+  }
+}
+</code></pre>
+  </article>
+</section>
+
+    
+
+
+  </div>
+
+  <br class="clear">
+
+  <footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.4</a>
+  </footer>
+
+  <script src="scripts/linenumber.js"></script>
+  <script src="scripts/pagelocation.js"></script>
+
+  
+
+</body>
+</html>
