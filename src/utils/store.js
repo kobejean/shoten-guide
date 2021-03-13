@@ -1,3 +1,4 @@
+/** @module utils/store */
 import { debounce } from 'lodash-es'
 import { derived } from 'svelte/store'
 

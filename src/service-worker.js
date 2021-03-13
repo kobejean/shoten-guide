@@ -1,3 +1,4 @@
+/** @module service-worker */
 import { files, shell, routes } from '@sapper/service-worker'
 const timestamp = process.env.SAPPER_TIMESTAMP
 

@@ -1,3 +1,4 @@
+/** @module services/i18n/initialization */
 import { FALLBACK_LOCAL, SUPPORTED_LOCALE } from './constants.js'
 const LOCALE_PATHNAME_REGEX = /^\/(.*?)([/]|$)/
 

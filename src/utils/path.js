@@ -1,3 +1,4 @@
+/** @module utils/path */
 // Constants
 const LOCALE_PATHNAME_REPLACE_REGEX = /^.+?([/]|$)/
 

@@ -2,7 +2,7 @@ import * as POSTS from './_posts'
 import {
   SUPPORTED_LOCALE,
   FALLBACK_LOCAL,
-} from '../../../../../services/i18n/constants'
+} from '../../../services/i18n/constants'
 
 const lookup = new Map()
 SUPPORTED_LOCALE.forEach(locale => {

@@ -1,3 +1,4 @@
+/** @module services/i18n/middleware */
 import { getInitialLocale } from './initialization.js'
 
 const DOCUMENT_REGEX = /(^([^.?#@]+)?([?#](.+)?)?|service-worker.*?\.html)$/

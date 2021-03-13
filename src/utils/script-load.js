@@ -1,3 +1,4 @@
+/** @module utils/script-load */
 /**
  * Loads an extarnal javascript file by adding a script tag to head.
  *
