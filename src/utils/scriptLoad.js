@@ -1,8 +1,9 @@
 /**
  * Loads an extarnal javascript file by adding a script tag to head.
  *
+ * @async
  * @param {string} src - The url/path to the javascript resource
- * @param {(ProgressEvent) => void} handler - A callback to be called onload
+ * @returns {Promise<ProgressEvent>} a promise returning the onload event
  *
  * @example <caption>Example: Loading MapKit JS</caption>
  * loadScript('https://cdn.apple-mapkit.com/mk/5.x.x/mapkit.js', event => alert('Done loading!'))

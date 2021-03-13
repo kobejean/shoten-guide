@@ -8,3 +8,4 @@ yarn-error.log
 .vercel
 /cypress/videos
 /cypress/screenshots
+/out/
