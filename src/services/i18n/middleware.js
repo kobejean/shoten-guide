@@ -1,8 +1,7 @@
 import { getInitialLocale } from './initialization.js'
-import { FALLBACK_LOCAL } from './constants'
-import { locale as localeStore, init, locales } from 'svelte-i18n'
 
 const DOCUMENT_REGEX = /(^([^.?#@]+)?([?#](.+)?)?|service-worker.*?\.html)$/
+
 // currently we have to use a hacky monkey patching solution to replacing the lang attribute with correct locale
 export const i18nMiddleware = (req, res, next) => {
   if (!DOCUMENT_REGEX.test(req.originalUrl)) {

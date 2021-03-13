@@ -49,6 +49,7 @@ export default {
     plugins: [
       json(jsonOptions),
       replace({
+        preventAssignment: true,
         'process.browser': true,
         ...commonReplacements,
       }),
@@ -111,6 +112,7 @@ export default {
     plugins: [
       json(jsonOptions),
       replace({
+        preventAssignment: true,
         'process.browser': false,
         ...commonReplacements,
       }),
@@ -149,6 +151,7 @@ export default {
     plugins: [
       resolve(),
       replace({
+        preventAssignment: true,
         'process.browser': true,
         ...commonReplacements,
       }),
