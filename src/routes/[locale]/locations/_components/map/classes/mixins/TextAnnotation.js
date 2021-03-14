@@ -1,5 +1,5 @@
 import { forEach } from 'lodash-es'
-import { FALLBACK_LOCAL } from '../../../../services/i18n/constants'
+import { FALLBACK_LOCAL } from '../../../../../../../services/i18n/constants'
 
 export default mapkit => {
   class TextAnnotation extends mapkit.MarkerAnnotation {

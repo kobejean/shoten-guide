@@ -1,5 +1,5 @@
 <script>
-  import Map from '../../../../../components/map/Map.svelte'
+  import Map from '../map/Map.svelte'
   import SidebarHeader from './SidebarHeader.svelte'
   import SidebarItems from './SidebarItems.svelte'
   import { nth } from 'lodash-es'

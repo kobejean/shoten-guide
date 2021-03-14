@@ -1,5 +1,5 @@
 /** @module components/map/classes */
-import { loadScript } from '../../../utils/script-load'
+import { loadScript } from '../../../../../../utils/script-load'
 import { locale } from 'svelte-i18n'
 import { get } from 'svelte/store'
 import { fromPairs, map, forEach, get as getValue } from 'lodash-es'
