@@ -1,0 +1,18 @@
+<svg
+  width="512px"
+  height="512px"
+  viewBox="0 0 192 192"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <g class="logo">
+    <title>Aizu Deep Learning Logo</title>
+    <rect x="0" y="0" rx="36" ry="36" width="192" height="192" fill="#000" />
+    <circle fill="#fff" stroke="#fff" stroke-width="18" cx="96" cy="48" r="12"></circle>
+    <circle fill="#fff" stroke="#fff" stroke-width="18" cx="48" cy="144" r="12"></circle>
+    <circle fill="#fff" stroke="#fff" stroke-width="18" cx="144" cy="144" r="12"></circle>
+    <line stroke-width="18" x1="96" y1="48" x2="48" y2="144" stroke="#fff"></line>
+    <line stroke-width="18" x1="96" y1="48" x2="144" y2="144" stroke="#fff"></line>
+  </g>
+</svg>
+    
