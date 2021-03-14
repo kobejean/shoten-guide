@@ -56,6 +56,7 @@
     display: block;
 
     ul {
+      background-color: white;
       visibility: hidden;
       position: absolute;
       z-index: 100;
