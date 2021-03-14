@@ -1,6 +1,6 @@
 <script context="module">
   export async function preload(page, session) {
-    const res = await this.fetch(`api/content${page.path}`)
+    const res = await this.fetch(`${page.path}.json`)
 
     if (res.status === 200) {
       const { data } = await res.json()

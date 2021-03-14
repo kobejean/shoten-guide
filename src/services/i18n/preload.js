@@ -1,3 +1,4 @@
+/** @module services/i18n/preload */
 import { get } from 'svelte/store'
 import { locale as localeStore, init, register } from 'svelte-i18n'
 import {

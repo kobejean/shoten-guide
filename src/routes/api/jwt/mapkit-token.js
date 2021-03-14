@@ -1,3 +1,4 @@
+/** @module routes/api/jwt/mapkit-token */
 import jwt from 'jsonwebtoken'
 
 // Constants

@@ -1,4 +1,4 @@
-import { FALLBACK_LOCAL } from '../../../../../../../services/i18n/constants'
+import { FALLBACK_LOCAL } from '../../../../../services/i18n/constants'
 import { forEach, get, map, values, size } from 'lodash-es'
 import Coordinate from './Coordinate'
 import CoordinateRegion from './CoordinateRegion'

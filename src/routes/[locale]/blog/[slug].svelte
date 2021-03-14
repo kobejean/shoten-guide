@@ -1,10 +1,10 @@
 <script context="module">
   import { _ } from 'svelte-i18n'
-  export async function preload({ params }) {
+  export async function preload({ params, path }) {
     // the `slug` parameter is available because
     // this file is called [slug].svelte
     const res = await this.fetch(
-      `api/content/${params.locale}/blog/${params.slug}`
+      `${path}.json`
     )
 
     if (res.status === 200) {
