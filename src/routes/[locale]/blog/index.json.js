@@ -26,7 +26,7 @@ function lookupContents(locale) {
 export function get(req, res) {
   const { locale } = req.params
   res.writeHead(200, {
-    'Content-Type': 'application/json;charset=utf-8',
+    'Content-Type': 'application/json',
   })
 
   const contents = lookupContents(locale)

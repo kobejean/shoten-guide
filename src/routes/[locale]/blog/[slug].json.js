@@ -26,13 +26,13 @@ export function get(req, res, next) {
 
   if (result) {
     res.writeHead(200, {
-      'Content-Type': 'application/json;charset=utf-8',
+      'Content-Type': 'application/json',
     })
 
     res.end(result)
   } else {
     res.writeHead(404, {
-      'Content-Type': 'application/json;charset=utf-8',
+      'Content-Type': 'application/json',
     })
 
     res.end(
