@@ -8,13 +8,13 @@ export function get(req, res) {
 
   if (data) {
     res.writeHead(200, {
-      'Content-Type': 'application/json;charset=utf-8',
+      'Content-Type': 'application/json',
     })
 
     res.end(JSON.stringify({ data }))
   } else {
     res.writeHead(404, {
-      'Content-Type': 'application/json;charset=utf-8',
+      'Content-Type': 'application/json',
     })
 
     res.end(
