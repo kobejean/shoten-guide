@@ -17,7 +17,7 @@ export function get(req, res, next) {
   const { locale } = req.params
   const translations = DICTIONARY[locale] || {}
   res.writeHead(200, {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json;charset=utf-8',
     'Cache-Control': 'no-store',
   })
   res.end(
