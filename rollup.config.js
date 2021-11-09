@@ -145,21 +145,21 @@ export default {
     onwarn,
   },
 
-  serviceworker: {
-    input: config.serviceworker.input(),
-    output: config.serviceworker.output(),
-    plugins: [
-      resolve(),
-      replace({
-        preventAssignment: true,
-        'process.browser': true,
-        ...commonReplacements,
-      }),
-      commonjs(),
-      !dev && terser(),
-    ],
+  // serviceworker: {
+  //   input: config.serviceworker.input(),
+  //   output: config.serviceworker.output(),
+  //   plugins: [
+  //     resolve(),
+  //     replace({
+  //       preventAssignment: true,
+  //       'process.browser': true,
+  //       ...commonReplacements,
+  //     }),
+  //     commonjs(),
+  //     !dev && terser(),
+  //   ],
 
-    preserveEntrySignatures: false,
-    onwarn,
-  },
+  //   preserveEntrySignatures: false,
+  //   onwarn,
+  // },
 }
