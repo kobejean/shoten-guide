@@ -37,12 +37,12 @@ export default class MapController {
   }
 
   async initLoad() {
-    // if (typeof mapkit === 'undefined') {
-    //   await loadScript(MAPKIT_SOURCE)
-    //   this.initMapKit()
-    // }
-    // this.initMap()
-    // this.loadMap(false)
+    if (typeof mapkit === 'undefined') {
+      await loadScript(MAPKIT_SOURCE)
+      this.initMapKit()
+    }
+    this.initMap()
+    this.loadMap(false)
   }
 
   /**
