@@ -1,5 +1,4 @@
 import { forEach } from 'lodash-es'
-import { FALLBACK_LOCAL } from '../../../../services/i18n/constants'
 
 const STATE = {
   HIGHLIGHTED: 'highlighted',

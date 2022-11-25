@@ -1,6 +1,6 @@
 <script>
   import { getContext } from 'svelte'
-  import { CONTEXT_KEYS } from '../../utils/context.js'
+  import { CONTEXT_KEYS } from '../../../../../utils/context.js'
   import MapController from './classes/MapController.js'
 
   const stores = getContext(CONTEXT_KEYS.LOCATIONS)
@@ -14,7 +14,7 @@
 />
 
 <style type="scss">
-  @import '../../styles/colors';
+  @import '../../../../../styles/colors';
 
   div {
     min-width: 320px;

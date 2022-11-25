@@ -1,7 +1,7 @@
 /** @module components/map/classes */
 import { forEach, map } from 'lodash-es'
 import { get } from 'svelte/store'
-import { getFromCacheOrFetch } from '../../../utils/cache.js'
+import { getFromCacheOrFetch } from '../../../../../../utils/cache.js'
 
 export default class MapDecoder {
   constructor(stores) {
